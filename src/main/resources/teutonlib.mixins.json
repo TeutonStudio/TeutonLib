@@ -1,0 +1,32 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.TeutonStudio.TeutonLib.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ServerConfigLocationMixin",
+    "cso.DockingConnectorMixin",
+    "cso.KineticBlockEntityMixin",
+    "cso.RotationPropagatorMixin",
+    "peripheral.LinkIdentityMixin",
+    "peripheral.LinkAvailableMixin",
+    "peripheral.console.ConsoleGraphMixin",
+    "peripheral.console.ConsoleRuntimeMixin",
+    "peripheral.console.ConsoleTreeMixin",
+    "peripheral.console.ConsoleBindingMixin",
+    "peripheral.LinkSystemAccessMixin",
+    "peripheral.console.ConsoleApiLifecycleMixin",
+    "computer.ChannelHostMixin",
+    "computer.ComputerChannelSyncMixin",
+    "computer.console.ConsoleSourcesMixin"
+  ],
+  "client": [
+    "cso.client.KineticBlockEntityVisualMixin",
+    "computer.client.ComputerScreenMixin",
+    "computer.client.DbwClientMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "plugin": "de.TeutonStudio.TeutonLib.integration.CsoMixinPlugin"
+}

@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "teutonlib:block/peripheral_link"
+    },
+    "facing=down": {
+      "model": "teutonlib:block/peripheral_link",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "teutonlib:block/peripheral_link",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "teutonlib:block/peripheral_link",
+      "x": 90,
+      "y": 180
+    },
+    "facing=west": {
+      "model": "teutonlib:block/peripheral_link",
+      "x": 90,
+      "y": 270
+    },
+    "facing=east": {
+      "model": "teutonlib:block/peripheral_link",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

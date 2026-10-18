@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "teutonlib:peripheral_link",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "required": true,
+  "package": "de.TeutonStudio.TeutonLib.peripheraltest.client",
+  "compatibilityLevel": "JAVA_21",
+  "client": ["NoWorldScreenMixin"]
+}

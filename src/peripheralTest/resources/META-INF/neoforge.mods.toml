@@ -1,0 +1,11 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="teutonlib_peripheral_test"
+version="1.0.0"
+displayName="TeutonLib Peripheral Verification (development only)"
+
+[[mixins]]
+config="teutonlib-peripheral-test.mixins.json"

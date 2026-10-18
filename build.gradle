@@ -1,0 +1,181 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.143'
+    id 'org.jetbrains.kotlin.jvm' version '2.2.20'
+    id 'idea'
+}
+
+version = mod_version
+group = mod_group_id
+
+base {
+    archivesName = mod_id
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+kotlin.jvmToolchain(21)
+
+// Separate verification mod: available only in explicitly requested development runs,
+// never packaged into the published TeutonLib JAR.
+sourceSets {
+    test {
+        compileClasspath += sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.compileClasspath
+    }
+    energyTest {
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+    peripheralTest {
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+}
+
+repositories {
+    mavenCentral()
+    maven { name = 'NeoForge'; url = 'https://maven.neoforged.net/releases' }
+}
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    runs {
+        client {
+            if (providers.gradleProperty('computerUiTests').isPresent()) systemProperty 'teutonlib.computerUiTests', 'true'
+            client()
+            gameDirectory = project.file('run/client')
+        }
+        server {
+            server()
+            gameDirectory = project.file('run/server')
+            programArgument '--nogui'
+        }
+        smokeServer {
+            server()
+            gameDirectory = project.file(providers.gradleProperty('peripheralTestDir').getOrElse("run/smoke/${providers.gradleProperty('csoRuntime').getOrElse('all')}"))
+            programArgument '--nogui'
+        }
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.INFO
+        }
+    }
+
+    mods {
+        "${mod_id}" { sourceSet(sourceSets.main) }
+        if (providers.gradleProperty('motorEnergyTests').isPresent()) {
+            teutonlib_energy_test { sourceSet(sourceSets.energyTest) }
+        }
+        if (providers.gradleProperty('peripheralTests').isPresent()) {
+            teutonlib_peripheral_test { sourceSet(sourceSets.peripheralTest) }
+        }
+    }
+}
+
+def localCompileJars = fileTree(dir: 'dependencies/compile', include: ['*.jar'])
+def localRuntimeJars = fileTree(dir: 'dependencies/runtime', include: ['*.jar'])
+def csoRuntime = providers.gradleProperty('csoRuntime').getOrElse('all')
+if (!(csoRuntime in ['all', 'none', 'create'])) {
+    throw new GradleException('csoRuntime must be all, none or create')
+}
+
+dependencies {
+    // These are the unmodified binaries from TerrArchitecture.  Sable and Simulated do not
+    // publish the required artifacts to a public Maven repository.  The latter is compiled
+    // from Aeronautics' embedded JarJar entry, while runtime uses the Aeronautics bundle so
+    // NeoForge discovers Simulated exactly once.
+    compileOnly localCompileJars
+
+    // Runtime JARs are intentionally not bundled or versioned. Provide the original
+    // TerrArchitecture binaries locally before runClient/runServer, or test the built
+    // TeutonLib JAR directly in TerrArchitecture.
+    runtimeOnly localRuntimeJars.matching { include 'kotlinforforge-*.jar' }
+    // The regular development pack includes CC; reduced smoke profiles stay isolated.
+    if (csoRuntime == 'all' || providers.gradleProperty('peripheralRuntime').isPresent()) {
+        runtimeOnly localCompileJars.matching { include 'cc-tweaked-*.jar' }
+        if (providers.gradleProperty('peripheralRuntime').getOrElse('cc') == 'console') {
+            runtimeOnly localCompileJars.matching { include 'cc-aeroworks-*.jar', 'aeroworks-*.jar' }
+        }
+    }
+    if (providers.gradleProperty("dbwTests").isPresent()) {
+        runtimeOnly localCompileJars.matching { include "drivebywire-*.jar" }
+    }
+    if (csoRuntime == 'all') {
+        runtimeOnly localRuntimeJars.matching { exclude 'kotlinforforge-*.jar' }
+    } else if (csoRuntime == 'create') {
+        runtimeOnly localRuntimeJars.matching { include 'create-1.21.1-*.jar' }
+    }
+
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'com.mojang:brigadier:1.3.10'
+    testImplementation 'org.ow2.asm:asm:9.8'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.test {
+    useJUnitPlatform()
+    // Check the original binaries without loading Minecraft classes in a plain JVM.
+    inputs.files(localCompileJars)
+    systemProperty 'teutonlib.compatibilityJars', localCompileJars.asPath
+}
+
+def generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    def props = [
+            minecraft_version              : minecraft_version,
+            minecraft_version_range        : minecraft_version_range,
+            neo_version                    : neo_version,
+            kotlin_for_forge_version       : kotlin_for_forge_version,
+            loader_version_range           : loader_version_range,
+            create_mod_version             : create_mod_version,
+            sable_mod_version              : sable_mod_version,
+            simulated_mod_version_range    : simulated_mod_version_range,
+            mod_id                         : mod_id,
+            mod_name                       : mod_name,
+            mod_version                    : mod_version,
+            mod_group_id                   : mod_group_id,
+            mod_authors                    : mod_authors,
+            mod_license                    : mod_license,
+            mod_description                : mod_description,
+    ]
+    inputs.properties props
+    expand props
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
+}
+
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+// The optional console integration is Java-only. Its Kotlin 2.4 metadata is not
+// needed by TeutonLib's Kotlin 2.2 CSO sources.
+tasks.named('compileKotlin') {
+    libraries.setFrom(libraries.filter { !it.name.startsWith('cc-aeroworks-') })
+}
+
+jar {
+    manifest {
+        attributes('MixinConfigs': 'teutonlib.mixins.json')
+    }
+}
+
+// Keep the library publishable for other TeutonStudio mods.
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) { from components.java }
+    }
+    repositories {
+        maven { url = layout.projectDirectory.dir('repo').asFile.toURI() }
+    }
+}

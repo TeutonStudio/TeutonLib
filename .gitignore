@@ -1,0 +1,30 @@
+# Gradle, compiled artifacts and development runs
+.gradle/
+build/
+out/
+run/
+logs/
+crash-reports/
+*.log
+
+# IDE and editor state
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Local TerrArchitecture binaries created by the sync script
+dependencies/compile/*.jar
+dependencies/runtime/*.jar
+
+# Operating-system clutter
+.DS_Store
+Thumbs.db
+
+# Local helper scripts are intentionally kept outside version control.
+scripts/
+
+# Python verification helper caches
+__pycache__/
+*.pyc
