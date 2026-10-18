@@ -14,11 +14,17 @@ base {
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.withSourcesJar()
 kotlin.jvmToolchain(21)
 
 // Separate verification mod: available only in explicitly requested development runs,
 // never packaged into the published TeutonLib JAR.
 sourceSets {
+    computerUiExample {
+        java.srcDir 'examples/computer-ui/src/main/java'
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
     test {
         compileClasspath += sourceSets.main.compileClasspath
         runtimeClasspath += sourceSets.main.compileClasspath
@@ -28,8 +34,8 @@ sourceSets {
         runtimeClasspath += sourceSets.main.runtimeClasspath
     }
     peripheralTest {
-        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
-        runtimeClasspath += sourceSets.main.runtimeClasspath
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath + sourceSets.computerUiExample.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.computerUiExample.output
     }
 }
 
@@ -74,9 +80,27 @@ neoForge {
             teutonlib_energy_test { sourceSet(sourceSets.energyTest) }
         }
         if (providers.gradleProperty('peripheralTests').isPresent()) {
-            teutonlib_peripheral_test { sourceSet(sourceSets.peripheralTest) }
+            teutonlib_peripheral_test {
+                sourceSet(sourceSets.peripheralTest)
+                sourceSet(sourceSets.computerUiExample)
+            }
         }
     }
+}
+
+tasks.named('check') { dependsOn tasks.named('compileComputerUiExampleJava') }
+
+// A self-contained hand-off for addon authors; no local dependency binaries or test mods.
+tasks.register('releaseBundle', Zip) {
+    dependsOn tasks.named('build')
+    archiveClassifier = 'computer-ui-template'
+    destinationDirectory = layout.buildDirectory.dir('distributions')
+    from(tasks.named('jar')) { into 'mods' }
+    from(tasks.named('sourcesJar')) { into 'sources' }
+    from('README.md')
+    from('TEMPLATE_LICENSE.txt')
+    from('docs') { into 'docs' }
+    from('examples/computer-ui') { into 'examples/computer-ui' }
 }
 
 def localCompileJars = fileTree(dir: 'dependencies/compile', include: ['*.jar'])
@@ -173,7 +197,10 @@ jar {
 // Keep the library publishable for other TeutonStudio mods.
 publishing {
     publications {
-        register('mavenJava', MavenPublication) { from components.java }
+        register('mavenJava', MavenPublication) {
+            artifactId = mod_id
+            from components.java
+        }
     }
     repositories {
         maven { url = layout.projectDirectory.dir('repo').asFile.toURI() }

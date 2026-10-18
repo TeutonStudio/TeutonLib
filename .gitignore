@@ -1,6 +1,7 @@
 # Gradle, compiled artifacts and development runs
 .gradle/
 build/
+repo/
 out/
 run/
 logs/

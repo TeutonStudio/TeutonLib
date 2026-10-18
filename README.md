@@ -3,6 +3,15 @@
 TeutonStudio-Bibliothek für **Minecraft 1.21.1 / NeoForge 21.1.234 / Java 21**.
 KotlinForForge **5.11.0** ist erforderlich. TeutonLib muss auf Server und Clients installiert sein.
 
+## PC-UI als Vorlage
+
+Das Release **1.0.0** enthält eine kompilierte, kopierbare
+[PC-UI-Integrationsvorlage](examples/computer-ui/README.md) für CC Aeroworks und
+andere Addons: Terminal, gemeinsame Quellen-/Kanalreiter, Fokus und Resize.
+`./gradlew releaseBundle --offline` erzeugt das ZIP mit Mod-JAR, Quellen und
+Dokumentation unter `build/distributions/`.
+[Releaseumfang und Voraussetzungen](docs/release-1.0.0.md).
+
 ## Optionales Create/Sable-Modul
 
 TeutonLib übernimmt die vollständige Zahnrad-Brückenlogik von Create Sable Optimization:
