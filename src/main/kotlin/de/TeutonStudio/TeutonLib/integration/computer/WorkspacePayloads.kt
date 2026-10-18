@@ -62,7 +62,7 @@ object WorkspacePayloads {
     private fun handle(p: Request, player: ServerPlayer) {
         val menu = player.containerMenu as? AbstractComputerMenu ?: return
         if (menu.containerId != p.menu || !menu.stillValid(player)) return
-        if (p.command.page !in 1..2 || player.isSpectator) return
+        if (p.command.page !in 1..2 || (player.isSpectator && p.command.action != "snapshot")) return
         val computer: ServerComputer = menu.computer
         val backend = BACKENDS.get(p.backend)
         if (computer == null || backend == null || !computer.checkUsable(player) || !backend.owns(computer)) return
@@ -85,7 +85,7 @@ object WorkspacePayloads {
                     mutableListOf<ComputerWorkspace.Entry>(),
                     mutableListOf<ComputerWorkspace.Action>()
                 )
-            val data = snapshot.encode()
+            val data = (if (computer.isOn() && p.command.page == 1) RedstoneSources.append(snapshot, computer) else snapshot).encode()
             data.putString("error", error.substring(0, min(256, error.length)))
             PacketDistributor.sendToPlayer(player, Response(p.menu, p.session, p.backend, p.command.page, data))
         } catch (e: RuntimeException) {

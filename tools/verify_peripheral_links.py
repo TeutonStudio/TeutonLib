@@ -101,6 +101,8 @@ try:
   channel_wait('READY'); channel_wait('DIMENSION_PASS','dimension')
   for phase in ('target_modem','reconnected','local_modem','reconnected','link_modem','offline'):
    command('teutonlib_link_test channels_'+phase); channel_wait('PASS '+phase)
+  command('teutonlib_link_test channels_ui_prepare')
+  channel_wait('UI_READY', 'ui_ready')
   assert 'PASS inspect' in command('teutonlib_link_test channels_inspect')
  if channels_only:
   command('teutonlib_link_test channels_unload'); channel_wait('PASS unloaded','unloaded')

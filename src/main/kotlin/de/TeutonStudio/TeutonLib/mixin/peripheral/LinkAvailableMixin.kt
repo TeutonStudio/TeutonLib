@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 
 /** Makes transfer targets visible to local peripherals, wired wrappers, and API factories alike.  */
 @Mixin(
-    targets = ["dan200.computercraft.shared.computer.core.ComputerSystem", "dan200.computercraft.core.apis.PeripheralAPI\$PeripheralWrapper", "dan200.computercraft.shared.peripheral.modem.wired/WiredModemPeripheral\$RemotePeripheralWrapper"],
+    targets = ["dan200.computercraft.core.apis.PeripheralAPI\$PeripheralWrapper", "dan200.computercraft.shared.peripheral.modem.wired/WiredModemPeripheral\$RemotePeripheralWrapper"],
     remap = false
 )
 abstract class LinkAvailableMixin {

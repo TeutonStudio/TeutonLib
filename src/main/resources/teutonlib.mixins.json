@@ -17,6 +17,7 @@
     "peripheral.LinkSystemAccessMixin",
     "peripheral.console.ConsoleApiLifecycleMixin",
     "computer.ChannelHostMixin",
+    "computer.ServerComputerAccessor",
     "computer.ComputerChannelSyncMixin",
     "computer.console.ConsoleSourcesMixin"
   ],

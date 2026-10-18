@@ -11,7 +11,7 @@ import dan200.computercraft.shared.computer.terminal.TerminalState
 import dan200.computercraft.shared.network.container.ComputerContainerData
 import de.TeutonStudio.TeutonLib.ClientConfig
 import de.TeutonStudio.TeutonLib.TeutonLib
-import de.TeutonStudio.TeutonLib.client.computer.ComputerPanels
+import de.TeutonStudio.TeutonLib.client.computer.WorkspacePanels
 import de.TeutonStudio.TeutonLib.client.computer.ComputerSidebarTabs
 import example.teutonlib.client.TemplateComputerScreen
 import java.lang.AssertionError
@@ -73,7 +73,7 @@ object ComputerUiConfigVerification {
                 ClientConfig.COMPUTER_UI_ENABLED.set(true)
                 screen.containerTick()
                 check(screen, true)
-                val panels = (screen as ComputerPanels.Owner).`teutonlib$panels`()!!
+                val panels = (screen as WorkspacePanels.Owner).`teutonlib$workspace`()!!
                 val tab: ComputerSidebarTabs.Tab = screen.children().stream()
                     .filter { o: kotlin.Any? -> ComputerSidebarTabs.Tab::class.java.isInstance(o) }
                     .map<ComputerSidebarTabs.Tab> { obj: kotlin.Any? -> ComputerSidebarTabs.Tab::class.java.cast(obj) }
@@ -109,7 +109,7 @@ object ComputerUiConfigVerification {
         val tabs =
             screen.children().stream().filter { o: Any? -> ComputerSidebarTabs.Tab::class.java.isInstance(o) }.count()
         if (tabs != (if (enabled) 2 else 0).toLong()) throw AssertionError("Unexpected tabs: " + tabs)
-        if (((screen as ComputerPanels.Owner).`teutonlib$panels`() != null) != enabled) throw AssertionError("Stale controller")
+        if (((screen as WorkspacePanels.Owner).`teutonlib$workspace`() != null) != enabled) throw AssertionError("Stale controller")
         val terminal: TerminalWidget =
             screen.children().stream().filter { o: kotlin.Any? -> TerminalWidget::class.java.isInstance(o) }
                 .map<TerminalWidget> { obj: kotlin.Any? -> TerminalWidget::class.java.cast(obj) }.findFirst()

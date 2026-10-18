@@ -5,12 +5,12 @@ KotlinForForge **5.11.0** ist erforderlich. TeutonLib muss auf Server und Client
 
 ## PC-UI als Vorlage
 
-Das Release **1.1.0** enthält eine kompilierte, kopierbare
+Das Release **1.2.0** enthält eine kompilierte, kopierbare
 [PC-UI-Integrationsvorlage](examples/computer-ui/README.md) für CC Aeroworks und
 andere Addons: Terminal, gemeinsame Quellen-/Kanalreiter, Fokus und Resize.
 `./gradlew releaseBundle --offline` erzeugt das ZIP mit Mod-JAR, Quellen und
 Dokumentation unter `build/distributions/`.
-[Releaseumfang und Voraussetzungen](docs/release-1.1.0.md).
+[Releaseumfang und Voraussetzungen](docs/release-1.2.0.md).
 
 Die automatische UI-Erweiterung lässt sich clientseitig in `config/teutonlib-client.toml`
 unter `[computerUi]` mit `enabled = false` abschalten (Standard: `true`).

@@ -5,7 +5,8 @@ import dan200.computercraft.client.gui.widgets.TerminalWidget
 import dan200.computercraft.shared.computer.core.ComputerFamily
 import dan200.computercraft.shared.computer.inventory.AbstractComputerMenu
 import de.TeutonStudio.TeutonLib.ClientConfig
-import de.TeutonStudio.TeutonLib.client.computer.ComputerPanels
+import de.TeutonStudio.TeutonLib.client.computer.WorkspacePanels
+import de.TeutonStudio.TeutonLib.integration.computer.StandardComputerWorkspace
 import de.TeutonStudio.TeutonLib.client.computer.ComputerSidebarTabs
 import java.util.function.BooleanSupplier
 import java.util.function.Consumer
@@ -32,7 +33,7 @@ abstract class ComputerScreenMixin protected constructor(
     menu: AbstractComputerMenu,
     inventory: Inventory,
     title: Component
-) : AbstractContainerScreen<AbstractComputerMenu>(menu, inventory, title), ComputerPanels.Owner {
+) : AbstractContainerScreen<AbstractComputerMenu>(menu, inventory, title), WorkspacePanels.Host {
     @Shadow
     @JvmField
     protected var terminal: TerminalWidget? = null
@@ -48,24 +49,33 @@ abstract class ComputerScreenMixin protected constructor(
     protected val family: ComputerFamily? = null
 
     @Unique
-    private var `teutonlib$panels`: ComputerPanels? = null
+    private var `teutonlib$panels`: WorkspacePanels? = null
+
+    @Unique
+    private var `teutonlib$addonWorkspace` = false
+
+    override fun `teutonlib$setWorkspace`(workspace: WorkspacePanels) {
+        `teutonlib$addonWorkspace` = true
+        `teutonlib$panels` = workspace
+    }
 
     @Unique
     private var `teutonlib$uiEnabled` = false
-    override fun `teutonlib$panels`(): ComputerPanels? {
+    override fun `teutonlib$workspace`(): WorkspacePanels? {
         return `teutonlib$panels`
     }
 
     @Inject(method = ["init()V"], at = [At("TAIL")])
     private fun `teutonlib$init`(ci: CallbackInfo?) {
+        val deskComponent =
+            BuiltInRegistries.DATA_COMPONENT_TYPE.get(ResourceLocation.fromNamespaceAndPath("cc_aeroworks", "desk_id"))
+        if (deskComponent != null && menu.displayStack.has(deskComponent)) return
+        `teutonlib$addonWorkspace` = false
         `teutonlib$uiEnabled` = ClientConfig.COMPUTER_UI_ENABLED.get()
         if (!`teutonlib$uiEnabled`) {
             `teutonlib$panels` = null
             return
         }
-        val deskComponent =
-            BuiltInRegistries.DATA_COMPONENT_TYPE.get(ResourceLocation.fromNamespaceAndPath("cc_aeroworks", "desk_id"))
-        if (deskComponent != null && menu.displayStack.has(deskComponent)) return
         val block = menu.displayStack.item as? BlockItem ?: return
         if (terminal == null || (BuiltInRegistries.BLOCK.getKey(
                 block.block
@@ -73,15 +83,16 @@ abstract class ComputerScreenMixin protected constructor(
                 .startsWith("computer_")
         ) return
         val page = if (`teutonlib$panels` == null) 0 else `teutonlib$panels`!!.page()
-        `teutonlib$panels` = ComputerPanels(
+        `teutonlib$panels` = WorkspacePanels(
             menu.containerId,
+            StandardComputerWorkspace.ID,
             terminal!!.x,
             terminal!!.y,
             terminal!!.width,
             terminal!!.height,
             font,
             Consumer { w: AbstractWidget? -> addRenderableWidget<AbstractWidget>(w) },
-            Runnable { setFocused(terminal) })
+            Runnable { setFocused(terminal) }, java.util.function.BiConsumer { _, _ -> })
         `teutonlib$panels`!!.family(family)
         for (i in 1..2) {
             val target = i
@@ -105,7 +116,7 @@ abstract class ComputerScreenMixin protected constructor(
 
     @Unique
     private fun `teutonlib$focus`() {
-        if (`teutonlib$panels` == null) return
+        if (`teutonlib$addonWorkspace` || `teutonlib$panels` == null) return
         val requested = `teutonlib$panels`!!.takeRequestedFocus()
         if (requested != null) {
             setFocused(requested)
@@ -125,17 +136,19 @@ abstract class ComputerScreenMixin protected constructor(
 
     @Inject(method = ["containerTick()V"], at = [At("TAIL")])
     private fun `teutonlib$tick`(ci: CallbackInfo?) {
+        if (`teutonlib$addonWorkspace`) return
         if (`teutonlib$uiEnabled` != ClientConfig.COMPUTER_UI_ENABLED.get()) {
             init(minecraft, width, height)
             return
         }
-        if (`teutonlib$panels` != null) `teutonlib$panels`!!.tick()
+        if (`teutonlib$panels` != null) { `teutonlib$panels`!!.tick(); `teutonlib$focus`() }
     }
 
     @Inject(method = ["keyPressed(III)Z"], at = [At("HEAD")], cancellable = true)
     private fun `teutonlib$keys`(key: Int, scan: Int, mods: Int, cir: CallbackInfoReturnable<Boolean>) {
-        if (`teutonlib$panels` == null || `teutonlib$panels`!!.page() == 0) return
+        if (`teutonlib$addonWorkspace` || `teutonlib$panels` == null || `teutonlib$panels`!!.page() == 0) return
         if (key == 256) {
+            if (`teutonlib$panels`!!.closeSourceApi()) { cir.setReturnValue(true); return }
             `teutonlib$show`(0)
             cir.setReturnValue(true)
         } else if (getFocused() is EditBox && minecraft!!.options.keyInventory.matches(key, scan)) cir.setReturnValue(

@@ -308,6 +308,22 @@ object ChannelsVerification {
                 "shutdown lost output"
             )
         }
+        if (action == "ui_prepare") {
+            level.setBlockAndUpdate(A.east(), block("computercraft:wired_modem_full").defaultBlockState())
+            level.setBlockAndUpdate(A.west(), block("computercraft:wireless_modem_advanced").defaultBlockState()
+                .setValue(BlockStateProperties.FACING, Direction.EAST))
+            level.setBlockAndUpdate(A.north(), Blocks.CHEST.defaultBlockState())
+            val host = level.getBlockEntity(A) as ComputerBlockEntity
+            Direction.entries.forEach { host.neighborChanged(A.relative(it)) }
+            host.updateInputsImmediately()
+            return "REQUESTED"
+        }
+        if (action == "ui_ready") {
+            val views = ComputerIntegration.runtime(reader!!)!!.sourceViews()
+            val kinds = views.mapNotNull { SourceIntrospection.describe(ComputerIntegration.runtime(reader!!)!!, it).modem?.kind }.toSet()
+            return if (kinds == setOf("wired", "radio", "ender") && views.any { "inventory" in it.types }) "UI_READY" else "WAITING $kinds ${views.map { it.name + ":" + it.types.joinToString() }} " +
+                dan200.computercraft.core.computer.ComputerSide.entries.map { it.toString() + ":" + reader!!.getPeripheral(it)?.type }
+        }
         if (action == "inspect") {
             val runtime = ComputerIntegration.runtime(reader!!)!!
             require(runtime != null, "missing runtime")
@@ -315,6 +331,38 @@ object ChannelsVerification {
                 runtime.sourceViews().stream().anyMatch { s: SourceView? -> s!!.types.contains("modem") },
                 "modem source missing"
             )
+            val viewer = net.neoforged.neoforge.common.util.FakePlayerFactory.getMinecraft(level)
+            val sourceSnapshot = StandardComputerWorkspace.snapshot(viewer, reader!!, 1)
+            val devices = sourceSnapshot.entries.flatMap { it.children }
+            val modemApis = devices.filter { it.metadata.getCompound("api").contains("modem") }
+            require(modemApis.isNotEmpty(), "shared workspace modem missing")
+            val modemKinds = modemApis.map { it.metadata.getCompound("api").getCompound("modem").getString("kind") }.toSet()
+            require(modemKinds == setOf("wired", "radio", "ender"), "missing modem kinds: $modemKinds")
+            require(devices.any { entry ->
+                val api = de.TeutonStudio.TeutonLib.api.computer.SourceApi.decode(entry.metadata.getCompound("api"))
+                "inventory" in api.types && api.methods.any { it.name == "list" } && api.methods.any { it.name == "pushItems" }
+            }, "generic inventory API missing")
+            modemApis.forEach { entry ->
+                val api = de.TeutonStudio.TeutonLib.api.computer.SourceApi.decode(entry.metadata.getCompound("api"))
+                if (api.modem?.kind == "wired")
+                    require(api.methods.any { it.name == "getNamesRemote" }, "wired-specific API missing")
+                require(api.methods.any { it.name == "transmit" }, "base modem API missing")
+            }
+            fun ui(action: String, selected: String = "", text: String = "", target: String = "") =
+                StandardComputerWorkspace.execute(viewer, reader!!,
+                    de.TeutonStudio.TeutonLib.api.computer.ComputerWorkspace.Command(2, action, selected, "", target, text))
+            ui("create", text = "ui_signal", target = "output")
+            ui("plus", "ui_signal"); ui("public", "ui_signal")
+            require(runtime.bank()!!.get("ui_signal").value == 1 && runtime.bank()!!.get("ui_signal").published, "workspace value/privacy")
+            ui("rename", "ui_signal", "ui_renamed")
+            ui("minus", "ui_renamed")
+            require(runtime.bank()!!.get("ui_renamed").value == 0, "workspace rename/decrement")
+            ui("remove", "ui_renamed")
+            val rejectedInput = runCatching { ui("create", text = "ui_input", target = "input:top") }.exceptionOrNull()
+            require(rejectedInput is IllegalArgumentException, "workspace must reject input creation")
+            runtime.createChannel("ui_input", "input", "top")
+            require(runtime.bank()!!.get("ui_input").side == "top", "runtime input side")
+            ui("remove", "ui_input")
             val data = ComputerPayloads.snapshot(runtime, "")
             require(data.getList("channels", Tag.TAG_COMPOUND.toInt()).size == 2, "channel snapshot")
             val host = level.getBlockEntity(B)

@@ -50,6 +50,7 @@
   "teutonlib.computer.channel": "Channel",
   "teutonlib.computer.outputs": "Outputs",
   "teutonlib.computer.inputs": "Inputs",
+  "teutonlib.computer.redstone": "Redstone · internal",
   "teutonlib.computer.extensions": "Extensions",
   "teutonlib.computer.scanning": "Scanning connections …",
   "teutonlib.computer.read_only": "Read only",
@@ -57,5 +58,15 @@
   "teutonlib.computer.link": "Link",
   "teutonlib.computer.device": "Device",
   "teutonlib.computer.live": "Live directory · automatic refresh",
-  "teutonlib.computer.scanning_short": "Scanning …"
+  "teutonlib.computer.scanning_short": "Scanning …",
+  "teutonlib.computer.show_api": "Show API",
+  "teutonlib.computer.close_api": "Close · Esc",
+  "teutonlib.computer.api_unavailable": "No API information is available for this source.",
+  "teutonlib.computer.modem_wired": "Wired modem",
+  "teutonlib.computer.modem_radio": "Wireless modem",
+  "teutonlib.computer.modem_ender": "Ender modem",
+  "teutonlib.computer.range": "Range (blocks)",
+  "teutonlib.computer.interdimensional": "Interdimensional",
+  "teutonlib.computer.yes": "Yes",
+  "teutonlib.computer.no": "No"
 }

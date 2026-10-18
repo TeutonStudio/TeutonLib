@@ -5,6 +5,8 @@ import dan200.computercraft.shared.computer.core.ComputerFamily
 import de.TeutonStudio.TeutonLib.api.computer.ComputerWorkspace
 import de.TeutonStudio.TeutonLib.api.computer.ComputerWorkspace.*
 import de.TeutonStudio.TeutonLib.api.computer.WorkspaceSession
+import de.TeutonStudio.TeutonLib.api.computer.SourceApi
+import de.TeutonStudio.TeutonLib.integration.computer.StandardComputerWorkspace
 import de.TeutonStudio.TeutonLib.integration.computer.WorkspacePayloads
 import java.util.ArrayList
 import java.util.HashMap
@@ -42,6 +44,11 @@ class WorkspacePanels(
         fun `teutonlib$workspace`(): WorkspacePanels?
     }
 
+    /** A single owner on CC's base screen lets addons install their controller without mixin method conflicts. */
+    interface Host : Owner {
+        fun `teutonlib$setWorkspace`(workspace: WorkspacePanels)
+    }
+
     private val widgets: MutableList<AbstractWidget> = ArrayList<AbstractWidget>()
     private val actions: MutableList<Button> = ArrayList<Button>()
     private val name: EditBox
@@ -54,6 +61,10 @@ class WorkspacePanels(
         mutableListOf<ComputerWorkspace.Entry>(),
         mutableListOf<ComputerWorkspace.Action>()
     )
+    private var api: SourceApi? = null
+    private var apiEntryId = ""
+    private var apiOffset = 0
+    private var pendingSelection = ""
     private var selected = ""
     private var group = ""
     private var target = ""
@@ -102,6 +113,8 @@ class WorkspacePanels(
     fun show(next: Int) {
         require(!(next < 0 || next > 2)) { "Invalid page" }
         if (next != page) {
+            api = null
+            pendingSelection = ""
             page = next
             session = UUID.randomUUID()
             error = ""
@@ -155,8 +168,16 @@ class WorkspacePanels(
     }
 
     private fun available(): MutableList<ComputerWorkspace.Action> {
-        val all = ArrayList<ComputerWorkspace.Action>(snapshot.actions)
         val entry = selection()
+        if (backend == StandardComputerWorkspace.ID && page == 2) {
+            val all = ArrayList<ComputerWorkspace.Action>()
+            if (entry == null) {
+                all.add(ComputerWorkspace.Action("create", "teutonlib.computer.create", true, false, false))
+            } else all.add(ComputerWorkspace.Action("new_channel", "teutonlib.computer.new_channel", false, false, true))
+            if (entry != null) all.addAll(entry.actions)
+            return all
+        }
+        val all = ArrayList<ComputerWorkspace.Action>(snapshot.actions)
         if (entry != null) all.addAll(entry.actions)
         return all
     }
@@ -165,11 +186,11 @@ class WorkspacePanels(
         rows.active = page != 0
         rows.visible = rows.active
         val available = available()
-        name.active = page == 2 && available.stream().anyMatch(ComputerWorkspace.Action::needsText)
+        name.active = api == null && page == 2 && available.stream().anyMatch(ComputerWorkspace.Action::needsText)
         name.visible = name.active
         for (i in actions.indices) {
             val b = actions.get(i)
-            b.visible = page == 2 && i < available.size
+            b.visible = api == null && page == 2 && i < available.size
             b.active = b.visible
             if (!b.visible) continue
             val action = available.get(i)
@@ -192,16 +213,26 @@ class WorkspacePanels(
             return
         }
         armed = ""
+        if (backend == StandardComputerWorkspace.ID) {
+            when (action.id) {
+                "new_channel" -> { selected = ""; pendingSelection = ""; name.value = ""; requestFocus = true; refresh(); return }
+            }
+        }
         if (action.clientSide) clientAction.accept(action, entry)
         else send(action.id)
     }
 
     private fun send(action: String) {
         if (Minecraft.getInstance().connection == null) return
+        if (backend == StandardComputerWorkspace.ID && action in listOf("create", "rename"))
+            pendingSelection = name.value.trim()
         PacketDistributor.sendToServer(
             WorkspacePayloads.Request(
                 menu, session, backend,
-                ComputerWorkspace.Command(page, action, selected, group, target, name.value.trim { it <= ' ' })
+                ComputerWorkspace.Command(page, action, selected, group,
+                    if (backend == StandardComputerWorkspace.ID && action == "create")
+                        "output" else target,
+                    name.value.trim { it <= ' ' })
             )
         )
         lastRequest = if (Minecraft.getInstance().level == null) 0 else Minecraft.getInstance().level!!.gameTime
@@ -222,6 +253,25 @@ class WorkspacePanels(
         snapshot = ComputerWorkspace.Snapshot.Companion.decode(response.data)
         error = response.data.getString("error")
         received = true
+        if (error.isNotEmpty()) pendingSelection = ""
+        if (pendingSelection.isNotEmpty() && find(snapshot.entries, pendingSelection) != null) {
+            selected = pendingSelection
+            pendingSelection = ""
+            requestFocus = true
+        }
+        api?.let { current ->
+            fun findApi(entries: List<ComputerWorkspace.Entry>): SourceApi? {
+                for (entry in entries) {
+                    if (entry.id == apiEntryId && entry.metadata.contains("api")) {
+                        val value = SourceApi.decode(entry.metadata.getCompound("api"))
+                        if (value.name == current.name) return value
+                    }
+                    findApi(entry.children)?.let { return it }
+                }
+                return null
+            }
+            api = findApi(snapshot.entries) ?: current.copy(methods = emptyList())
+        }
         if (!selected.isEmpty() && selection() == null) {
             selected = ""
             armed = ""
@@ -229,6 +279,16 @@ class WorkspacePanels(
         if (!group.isEmpty() && !hasGroup(snapshot.entries, group)) group = ""
         refresh()
     }
+
+    /** Returns true when Escape should close only the source API overlay. */
+    fun closeSourceApi(): Boolean {
+        if (api == null) return false
+        api = null
+        refresh()
+        return true
+    }
+
+    fun sourceApiOpen(): Boolean = api != null
 
     private fun accent(): Int {
         return ComputerSidebarTabs.accent(family)
@@ -271,6 +331,10 @@ class WorkspacePanels(
                 false
             )
             g.fill(getX() + 5, getY() + 23, getX() + width - 5, getY() + 24, -0xd4d4d5)
+            if (api != null) {
+                renderApi(g, mx, my)
+                return
+            }
             val rows = entries()
             offset = Math.clamp(offset.toLong(), 0, max(0, rows.size - capacity()))
             val left = getX() + 6
@@ -291,10 +355,12 @@ class WorkspacePanels(
                             entry.collapsed
                         )
                     ) "> " else "v "
+                    val hasApi = page == 1 && entry.metadata.contains("api")
+                    val contentRight = right - if (hasApi) 21 else 6
                     val label = arrow + text(entry.label).string
                     g.drawString(
                         font,
-                        font.plainSubstrByWidth(label, max(1, right - x - 6)),
+                        font.plainSubstrByWidth(label, max(1, contentRight - x)),
                         x,
                         y + 2,
                         if (selected == entry.id) accent() else -0x1f1f20,
@@ -302,13 +368,21 @@ class WorkspacePanels(
                     )
                     g.drawString(
                         font,
-                        font.plainSubstrByWidth(entry.detail, max(1, right - x - 6)),
+                        font.plainSubstrByWidth(if (hasApi && entry.metadata.getCompound("api").contains("modem"))
+                            text("teutonlib.computer.modem_" + entry.metadata.getCompound("api").getCompound("modem").getString("kind")).string +
+                                " · " + entry.detail else entry.detail, max(1, contentRight - x)),
                         x,
                         y + 11,
                         -0x777778,
                         false
                     )
-                    if (hover) tooltip = label + (if (entry.detail.isEmpty()) "" else "\n" + entry.detail)
+                    if (hasApi) {
+                        val infoHover = hover && mx >= right - 20 && mx < right - 4
+                        g.fill(right - 20, y + 2, right - 4, y + 18, if (infoHover) -0xcfcfd0 else -0xe3e3e4)
+                        g.drawString(font, "i", right - 14, y + 6, accent(), false)
+                        if (infoHover) tooltip = text("teutonlib.computer.show_api").string
+                        else if (hover) tooltip = label + "\n" + entry.detail
+                    } else if (hover) tooltip = label + (if (entry.detail.isEmpty()) "" else "\n" + entry.detail)
                 }
             } finally {
                 g.disableScissor()
@@ -321,7 +395,7 @@ class WorkspacePanels(
                 g.fill(right - 2, y, right - 1, y + thumb, -0x777778)
             }
             val status =
-                if (!error.isEmpty()) error else if (received) snapshot.status else text("teutonlib.computer.scanning").string
+                if (!error.isEmpty()) error else if (received) text(snapshot.status).string else text("teutonlib.computer.scanning").string
             g.drawString(
                 font,
                 font.plainSubstrByWidth(status, width - 14),
@@ -333,15 +407,82 @@ class WorkspacePanels(
             setTooltip(if (tooltip == null) null else Tooltip.create(Component.literal(tooltip)))
         }
 
+        private fun renderApi(g: GuiGraphics, mx: Int, my: Int) {
+            val source = api ?: return
+            val left = getX() + 8
+            val right = getX() + width - 8
+            val top = getY() + 49
+            g.fill(left, getY() + 27, right, getY() + 45, -0xe3e3e4)
+            g.drawString(font, font.plainSubstrByWidth(source.name, width - 49), left + 3, getY() + 32, accent(), false)
+            g.drawString(font, "×", right - 12, getY() + 32, accent(), false)
+            val lines = ArrayList<String>()
+            fun line(value: String) {
+                font.split(Component.literal(value), max(20, width - 24)).forEach { wrapped ->
+                    val builder = StringBuilder()
+                    wrapped.accept { _, _, code -> builder.appendCodePoint(code); true }
+                    lines.add(builder.toString())
+                }
+            }
+            line(source.types.joinToString(", "))
+            line(text("teutonlib.computer." + source.connection).string)
+            source.devicePosition?.takeIf { it.isNotEmpty() }?.let { line(text("teutonlib.computer.device").string + ": " + it) }
+            source.linkPosition?.takeIf { it.isNotEmpty() }?.let { line(text("teutonlib.computer.link").string + ": " + it) }
+            source.modem?.let { modem ->
+                line(text("teutonlib.computer.modem_" + modem.kind).string)
+                line(modem.dimension)
+                modem.range?.let { line(text("teutonlib.computer.range").string + ": " + it) }
+                line(text("teutonlib.computer.interdimensional").string + ": " +
+                    text("teutonlib.computer." + if (modem.interdimensional) "yes" else "no").string)
+            }
+            lines.add("")
+            if (source.methods.isEmpty()) line(text("teutonlib.computer.api_unavailable").string)
+            source.methods.forEach { method ->
+                line(if (method.signature.isEmpty()) method.name else method.signature)
+                if (method.description.isNotEmpty()) line(method.description)
+                lines.add("")
+            }
+            val capacity = max(1, (getY() + height - 20 - top) / 11)
+            apiOffset = apiOffset.coerceIn(0, max(0, lines.size - capacity))
+            g.enableScissor(left, top, right, getY() + height - 18)
+            try {
+                lines.drop(apiOffset).take(capacity).forEachIndexed { i, value ->
+                    g.drawString(font, value, left + 2, top + i * 11, -0x1f1f20, false)
+                }
+            } finally { g.disableScissor() }
+            if (lines.size > capacity) {
+                val rail = capacity * 11
+                val thumb = max(8, rail * capacity / lines.size)
+                val y = top + apiOffset * (rail - thumb) / max(1, lines.size - capacity)
+                g.fill(right - 2, y, right - 1, y + thumb, -0x777778)
+            }
+            g.drawString(font, text("teutonlib.computer.close_api"), left, getY() + height - 11, -0x777778, false)
+            setTooltip(if (mx >= right - 18 && my in getY() + 27..getY() + 45)
+                Tooltip.create(text("teutonlib.computer.close_api")) else null)
+        }
+
         override fun mouseClicked(x: Double, y: Double, button: Int): Boolean {
             if (!visible || !active || button != 0 || x < getX() + 6 || x >= getX() + 6 + listWidth() || y < getY() + 28 || y >= getY() + 28 + capacity() * 20) return false
+            if (api != null) {
+                if (x >= getX() + width - 26 && y < getY() + 47) closeSourceApi()
+                return true
+            }
             val rows = entries()
             val index = offset + ((y - getY() - 28) / 20).toInt()
             if (index >= rows.size) return true
             val entry = rows.get(index).entry
+            val right = getX() + 6 + listWidth()
+            if (page == 1 && entry.metadata.contains("api") && x >= right - 20 && x < right - 4) {
+                api = SourceApi.decode(entry.metadata.getCompound("api"))
+                apiEntryId = entry.id
+                apiOffset = 0
+                refresh()
+                playDownSound(Minecraft.getInstance().soundManager)
+                return true
+            }
             if (!entry.children.isEmpty()) collapsed.put(entry.id, !collapsed.getOrDefault(entry.id, entry.collapsed)!!)
             if (entry.selectable) {
                 selected = entry.id
+                if (page == 2) { name.value = text(entry.label).string; requestFocus = true }
                 armed = ""
                 if (!entry.group.isEmpty()) group = entry.group
                 if (!entry.target.isEmpty()) target = entry.target
@@ -353,6 +494,7 @@ class WorkspacePanels(
 
         override fun mouseScrolled(x: Double, y: Double, h: Double, v: Double): Boolean {
             if (!visible || !active || !isMouseOver(x, y)) return false
+            if (api != null) { apiOffset = max(0, apiOffset - sign(v).toInt() * 3); return true }
             offset = Math.clamp((offset - sign(v).toInt()).toLong(), 0, max(0, entries().size - capacity()))
             return true
         }

@@ -2,7 +2,15 @@
 
 TeutonLib adds **Sources** and **Channels** icon tabs in the native CC sidebar to normal and advanced block computers. CC:Tweaked is sufficient; Create is only required for Peripheral Links. Sources group local, wired and linked devices in collapsible sections without creating new attachments. Click a device to expand its details; linked devices use a short type/link label with their full Lua address retained in the tooltip and details. Known positions and types appear in the details and tooltip. CC Aeroworks 1.4.0 also receives these peripherals in its existing sources directory, preserving display links, GPS and scripts.
 
-The workspace matches the Aeroworks sidebar and CC computer casing: monochrome on normal computers, with restrained colour accents on advanced computers. Channels use a grouped list with signal bars and a contextual editor on the right. The header **+** starts a new channel; selecting an existing channel exposes rename, public/private, value and confirmed delete actions. Escape returns to the terminal.
+The workspace matches the Aeroworks sidebar and CC computer casing: monochrome on normal computers, with restrained colour accents on advanced computers. Both ordinary computers and Aeroworks control desks use the same collapsible workspace lists and contextual actions. **New channel** starts a channel; selecting an existing channel exposes rename, public/private, value and confirmed delete actions. Control desks add their control channels, display links, GPS and scripts. Escape returns to the terminal.
+
+Each source has an info icon on the right. It opens a scrollable API window with actual Lua methods and any registered documentation. Groups and detail rows have no info icon. Escape or the close icon restores the previous list. Wired, wireless and Ender modems appear individually with their address and modem kind; their API windows include connection, known position, dimension, wireless range and interdimensional capability. Wired peripherals remain separate. Inspection never executes a Lua method or sends discovery packets.
+
+Method signatures include argument names, Lua types and return types from registered documentation or annotated Java/Kotlin methods. Internal context parameters are omitted. Dynamic arguments and returns without documentation are marked `unknown`.
+
+The channel editor creates named outputs. Existing side inputs remain visible and can still be defined through Lua.
+
+The separate **Redstone · internal** source category automatically lists all six standard CC Redstone inputs with their current analog values (0–15), matching `redstone.getAnalogInput(side)`. These inputs require neither Drive By Wire nor named input channels. Its **Outputs** section lists existing user-defined output channels, including addon-provided outputs; manage them in the channel tab. This category is also included in addon workspaces.
 
 Set `computerUi.enabled = false` in `config/teutonlib-client.toml` to hide the automatic
 CC block-computer tabs and the example screen's tabs. The default is `true`. Reloading

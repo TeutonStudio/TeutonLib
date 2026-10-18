@@ -1,6 +1,9 @@
 package de.TeutonStudio.TeutonLib.mixin.peripheral
 
 import dan200.computercraft.api.peripheral.IPeripheral
+import dan200.computercraft.api.peripheral.IComputerAccess
+import de.TeutonStudio.TeutonLib.integration.peripheral.LinkLuaApi
+import net.neoforged.fml.ModList
 import dan200.computercraft.core.apis.IAPIEnvironment
 import dan200.computercraft.core.computer.ComputerSide
 import dan200.computercraft.shared.peripheral.modem.wired.WiredModemElement
@@ -32,6 +35,8 @@ abstract class LinkSystemAccessMixin {
             val element = (peripheral as? WiredModemPeripheral)?.node?.element as? WiredModemElement
             if (element != null) result.putAll(element.remotePeripherals)
         }
+        if (ModList.get().isLoaded("create"))
+            result.putAll(LinkLuaApi.available((this as IComputerAccess).mainThreadMonitor))
         return result
     }
 

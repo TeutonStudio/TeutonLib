@@ -1,6 +1,6 @@
 # PC-UI-Vorlage für Addons
 
-Diese Kotlin-Vorlage wird mit TeutonLib 1.1.0 kompiliert und im opt-in Clienttest
+Diese Kotlin-Vorlage wird mit TeutonLib 1.2.0 kompiliert und im opt-in Clienttest
 gerendert. Zielplattform: Minecraft 1.21.1, NeoForge 21.1.234, Java 21,
 KotlinForForge 5.11.0 und CC:Tweaked 1.120.2.
 
@@ -16,13 +16,13 @@ Die Release-JAR auf Client und Server installieren. Im Addon-Projekt beispielswe
 
 ```kotlin
 dependencies {
-    implementation(files("libs/teutonlib-1.1.0.jar"))
+    implementation(files("libs/teutonlib-1.2.0.jar"))
 }
 ```
 
 Alternativ in TeutonLib `./gradlew publish` ausführen und das erzeugte lokale
 Maven-Repository `repo/` im Addon eintragen. Die Koordinate lautet
-`de.TeutonStudio.TeutonLib:teutonlib:1.1.0`. Minecraft, NeoForge, KotlinForForge und
+`de.TeutonStudio.TeutonLib:teutonlib:1.2.0`. Minecraft, NeoForge, KotlinForForge und
 die Original-JAR von CC:Tweaked muss das Addon selbst bereitstellen; sie werden
 nicht transitiv durch die lokale TeutonLib-Publikation installiert.
 
@@ -32,7 +32,7 @@ Das Addon deklariert TeutonLib in seiner `neoforge.mods.toml`:
 [[dependencies.my_mod]]
 modId="teutonlib"
 type="required"
-versionRange="[1.1.0,1.2.0)"
+versionRange="[1.2.0,1.3.0)"
 ordering="AFTER"
 side="BOTH"
 ```
@@ -58,7 +58,7 @@ begrenzt die Übernahme auf die hier geprüfte API-Linie.
 Der Bildschirm übernimmt Widgetaufbau, Seitenwechsel, Terminal-Sichtbarkeit,
 Fokus nach Klicks und Tastaturaktionen, die Inventartaste im Namensfeld, Escape
 zum Terminal und den Neuaufbau bei Fenster-/GUI-Skalierungsänderungen.
-Die Netzwerkantworten gelangen über `ComputerPanels.Owner` an den aktuellen
+Die Netzwerkantworten gelangen über `WorkspacePanels.Owner` an den aktuellen
 Controller. Keine eigenen Request-/Snapshot-Handler duplizieren.
 
 ## Eigenen Computer an die gemeinsame Laufzeit anbinden
@@ -132,3 +132,22 @@ Die Bildschirmvorlage beachtet `ClientConfig.COMPUTER_UI_ENABLED` aus
 Beim Neuladen kann sie ihre zusätzlichen Reiter auch im offenen Bildschirm entfernen
 und wiederherstellen. Eigene Workspace-Bildschirme müssen ihre UI-Einstellung selbst
 berücksichtigen.
+
+## Quellen-API und zusätzliche Peripherie
+
+Die Standardvorlage verwendet `WorkspacePanels` mit `StandardComputerWorkspace.ID`.
+Eigene Workspace-Backends verwenden denselben Renderer. Eine eigentliche Quellenzeile
+erhält das Info-Symbol, wenn `Entry.metadata["api"]` ein mit `SourceApi.encode()`
+erzeugtes Tag enthält. `StandardComputerWorkspace.sourceEntry(...)` erstellt diese
+Metadaten für verbundene Peripherie einschließlich Modems.
+
+`ComputerExtensions.registerSourceDocumentation` ergänzt bekannte Methodensignaturen
+und Beschreibungen. Bei Peripheriegeräten werden ausschließlich tatsächlich
+erkannte Lua-Methoden angezeigt. `registerPeripheralSources` ergänzt bereits
+vorhandene Addon-Verbindungen samt Anschlussart und Position, ohne sie erneut
+anzuhängen. Provider laufen auf dem Serverthread und dürfen nicht rekursiv
+`computer.peripherals()` aufrufen. Beide Registrierungen liefern einen schließbaren
+Handle zum Abmelden. `SourceView` und vorhandene Workspace-Registrierungen bleiben kompatibel.
+
+Bei Escape zuerst `panels.closeSourceApi()` aufrufen; nur wenn kein API-Fenster
+offen war, zum Terminal wechseln.

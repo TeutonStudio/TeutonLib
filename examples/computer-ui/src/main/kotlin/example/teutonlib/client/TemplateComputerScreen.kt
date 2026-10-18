@@ -6,7 +6,8 @@ import dan200.computercraft.client.gui.widgets.ComputerSidebar
 import dan200.computercraft.client.gui.widgets.TerminalWidget
 import dan200.computercraft.shared.computer.inventory.AbstractComputerMenu
 import de.TeutonStudio.TeutonLib.ClientConfig
-import de.TeutonStudio.TeutonLib.client.computer.ComputerPanels
+import de.TeutonStudio.TeutonLib.client.computer.WorkspacePanels
+import de.TeutonStudio.TeutonLib.integration.computer.StandardComputerWorkspace
 import de.TeutonStudio.TeutonLib.client.computer.ComputerSidebarTabs
 import java.util.function.BooleanSupplier
 import java.util.function.Consumer
@@ -20,8 +21,8 @@ import org.lwjgl.glfw.GLFW
 /** Copy into your addon's client package. The menu must use your own display item.  */
 class TemplateComputerScreen<T : AbstractComputerMenu>
     (menu: T, inventory: Inventory, title: Component) : AbstractComputerScreen<T>(menu, inventory, title, 12),
-    ComputerPanels.Owner {
-    private var panels: ComputerPanels? = null
+    WorkspacePanels.Owner {
+    private var panels: WorkspacePanels? = null
 
     init {
         imageWidth = TerminalWidget.getWidth(terminalData.width) + 24 + AbstractComputerMenu.SIDEBAR_WIDTH
@@ -43,15 +44,16 @@ class TemplateComputerScreen<T : AbstractComputerMenu>
             return
         }
         // Rebuild after resize. A fresh controller gets a fresh response session ID.
-        panels = ComputerPanels(
+        panels = WorkspacePanels(
             menu.containerId,
+            StandardComputerWorkspace.ID,
             terminal!!.x,
             terminal!!.y,
             terminal!!.width,
             terminal!!.height,
             font,
             Consumer { widget: AbstractWidget? -> addRenderableWidget<AbstractWidget>(widget) },
-            Runnable { setFocused(terminal) })
+            Runnable { setFocused(terminal) }, java.util.function.BiConsumer { _, _ -> })
         panels!!.family(family)
         for (page in 1..2) {
             val target = page
@@ -93,7 +95,7 @@ class TemplateComputerScreen<T : AbstractComputerMenu>
     override fun keyPressed(key: Int, scan: Int, modifiers: Int): Boolean {
         if (panels != null && panels!!.page() != 0) {
             if (key == GLFW.GLFW_KEY_ESCAPE) {
-                showPage(0)
+                if (!panels!!.closeSourceApi()) showPage(0)
                 return true
             }
             // Let charTyped deliver inventory-key characters to the name field.
@@ -109,7 +111,7 @@ class TemplateComputerScreen<T : AbstractComputerMenu>
         if (panels != null) panels!!.tick()
     }
 
-    override fun `teutonlib$panels`(): ComputerPanels? {
+    override fun `teutonlib$workspace`(): WorkspacePanels? {
         return panels
     }
 

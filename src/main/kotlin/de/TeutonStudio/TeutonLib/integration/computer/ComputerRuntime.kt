@@ -79,7 +79,9 @@ class ComputerRuntime(private val system: IComputerSystem) : ILuaAPI, ComputerCo
     }
 
     override fun peripherals(): MutableMap<String, IPeripheral> {
-        return java.util.Map.copyOf<String, IPeripheral>(system.availablePeripherals)
+        val result = java.util.LinkedHashMap(system.availablePeripherals)
+        ComputerExtensions.peripheralSources(this).forEach { (name, source) -> result.putIfAbsent(name, source.peripheral) }
+        return java.util.Map.copyOf<String, IPeripheral>(result)
     }
 
     override fun queueEvent(event: String, vararg arguments: Any?) {
@@ -282,6 +284,7 @@ class ComputerRuntime(private val system: IComputerSystem) : ILuaAPI, ComputerCo
 
     fun sourceViews(): MutableList<SourceView> {
         val result = TreeMap<String, SourceView>()
+        val addonSources = ComputerExtensions.peripheralSources(this)
         for (e in peripherals()!!.entries) {
             val p = e.value
             val types = LinkedHashSet<String>()
@@ -305,6 +308,11 @@ class ComputerRuntime(private val system: IComputerSystem) : ILuaAPI, ComputerCo
                     device = link.link.devicePosition().toShortString()
                     linkPosition = position(link.link)
                 }
+            }
+            addonSources[e.key]?.let { source ->
+                connection = source.connection
+                device = source.devicePosition ?: device
+                linkPosition = source.linkPosition ?: linkPosition
             }
             result.put(e.key, SourceView(e.key, java.util.List.copyOf<String>(types), connection, device, linkPosition))
         }

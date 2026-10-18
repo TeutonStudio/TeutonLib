@@ -24,7 +24,11 @@ Die Quellen sind nach lokalem Anschluss, Kabelverbindung und Peripheral Link gru
 
 Die Liste zeigt dieselben Peripheral-Adressen wie die Computer-API: lokale Seiten, Kabelgeräte und Peripheral Links. Geräte werden nicht erneut angehängt. Typen, Verbindungsart und bekannte Block-/Linkpositionen stehen in der Detailzeile und im Tooltip. Verschiedene Adressen bleiben getrennt. Änderungen werden bei geöffnetem Reiter einmal pro Sekunde abgefragt.
 
-Die vorhandene Quellenansicht von CC Aeroworks 1.4.0 wird ebenfalls um Peripherals ergänzt; Display Links, GPS und Display-Skripte bleiben erhalten. Mit TeutonLib 1.1.0 kann Aeroworks seine gemeinsamen Reiter über den autoritativen Workspace-Adapter verwenden; Details stehen in der Integrationsvorlage.
+Die eigene Quellenkategorie **Redstone · intern** enthält automatisch die sechs normalen CC-Redstone-Eingänge `front`, `back`, `left`, `right`, `top` und `bottom` mit ihren aktuellen Analogwerten (0–15). Sie entsprechen `redstone.getAnalogInput(side)` und benötigen weder Drive By Wire noch benannte Eingangskanäle. Unter **Ausgänge** stehen ausschließlich die vorhandenen benutzerdefinierten Ausgangskanäle, einschließlich der vom Addon bereitgestellten Ausgänge. Diese werden weiterhin im Kanal-Reiter verwaltet. Die Kategorie erscheint auch in Addon-Workspaces.
+
+Normale Computer und CC-Aeroworks-Steuerungseinheiten verwenden dieselben aufklappbaren Listen und API-Fenster. Die Steuerungseinheit ergänzt Display-Links, GPS, Display-Skripte und ihre Steuerungsdaten. Das Info-Symbol rechts an einer Quelle öffnet deren Lua-Methoden mit vorhandener Dokumentation. Gruppen und Detailzeilen erhalten kein Info-Symbol. Escape oder das Schließsymbol kehren zur bisherigen Liste zurück.
+
+Kabel-, Funk- und Endermodems erscheinen einzeln mit Adresse und Modemart. Ihr API-Fenster zeigt Anschluss, bekannte Position, Dimension sowie bei Funk/Ender Reichweite und dimensionsübergreifende Fähigkeit. Kabelperipherie bleibt separat. Die Anzeige führt keine Lua-Methode aus und sendet keine Erkennungspakete.
 
 ## Kanäle
 
@@ -33,9 +37,11 @@ Ein Computer besitzt bis zu 64 benannte Kanäle. Namen enthalten 1–32 ASCII-Bu
 - **Ausgang:** Ganzzahliger Wert 0–15, lokal per Lua oder mit den Werttasten veränderbar. DbW-Kabel können ihn als Quelle auswählen; Scrollen mit dem Kabelwerkzeug wechselt zwischen Ausgängen.
 - **Eingang:** Benannter Lesezugriff auf das DbW-Signal einer Computerseite (`front`, `back`, `left`, `right`, `top`, `bottom`). Mehrere Namen auf derselben Seite lesen dasselbe physische Signal. Eingänge lassen sich nicht beschreiben.
 
-Der Kanal-Reiter zeigt links die aufklappbaren Gruppen **Ausgänge**, **Eingänge** und gegebenenfalls Erweiterungen. Werte erscheinen als Zahl und Signalbalken. Rechts befindet sich der Editor: **+** in der Kopfzeile beginnt einen neuen Kanal; Namen, Richtung und bei Eingängen die Seite wählen, anschließend **Anlegen** drücken.
+Der Kanal-Reiter zeigt links die aufklappbaren Gruppen **Ausgänge**, bestehende **Eingänge** und gegebenenfalls Erweiterungen. Werte erscheinen als Zahl. Rechts befindet sich der gemeinsame Aktionsbereich: **Neuer Kanal** beginnt einen benannten Ausgang; Namen eingeben, anschließend **Anlegen** drücken. Bei leerer Auswahl ist das Anlegen direkt verfügbar. Seiteneingänge können weiterhin über Lua definiert werden.
 
-Ein Klick auf einen vorhandenen Kanal öffnet dessen Einstellungen. Zum Umbenennen den Namen im Editor ändern und **Umbenennen** drücken. Die Schaltfläche **öffentlich** beziehungsweise **privat** schaltet die Sichtbarkeit um. **−/+** ändert den Ausgangswert. **×** löscht erst beim zweiten Klick; physische Verbindungen des gelöschten Ausgangs werden entfernt. Umbenennen übernimmt dessen DbW-Verbindungen.
+Das API-Fenster zeigt Argumentnamen, Lua-Typen und Rückgabetypen aus registrierter Dokumentation oder den annotierten Java-/Kotlin-Methoden. Dynamische Argumente und Rückgaben ohne Typdokumentation erscheinen als `unknown`; interne Kontextparameter werden ausgeblendet. Die Erkennung ruft keine Gerätemethode auf.
+
+Ein Klick auf einen vorhandenen Kanal öffnet dessen Einstellungen. Zum Umbenennen den Namen im Editor ändern und **Umbenennen** drücken. Die Schaltfläche **öffentlich** beziehungsweise **privat** schaltet die Sichtbarkeit um. **−/+** ändert den Ausgangswert. **Löschen** löscht erst beim zweiten Klick; physische Verbindungen des gelöschten Ausgangs werden entfernt. Umbenennen übernimmt dessen DbW-Verbindungen.
 
 Die Gestaltung verwendet CCs Computergehäuse und die Bildsymbole der Aeroworks-Seitenleiste. Die Monitoransicht bleibt bei normalen Computern monochrom; erweiterte Computer verwenden dezente Farbakzente. Escape führt zum Terminal zurück.
 

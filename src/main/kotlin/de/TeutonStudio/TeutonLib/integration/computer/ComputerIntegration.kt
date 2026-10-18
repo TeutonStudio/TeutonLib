@@ -19,7 +19,7 @@ object ComputerIntegration {
     private val active = IdentityHashMap<WorkMonitor, ComputerRuntime>()
     private val restore = Collections.newSetFromMap(IdentityHashMap<BlockEntity, Boolean>())
     @JvmStatic fun register(bus: IEventBus) {
-        bus.addListener { event: FMLCommonSetupEvent -> event.enqueueWork { ComputerCraftAPI.registerAPIFactory { ComputerRuntime(it) } } }
+        bus.addListener { event: FMLCommonSetupEvent -> event.enqueueWork { WorkspacePayloads.register(StandardComputerWorkspace.ID, StandardComputerWorkspace); ComputerCraftAPI.registerAPIFactory { ComputerRuntime(it) } } }
         bus.addListener { event: RegisterPayloadHandlersEvent -> ComputerPayloads.register(event) }
         bus.addListener { event: RegisterPayloadHandlersEvent -> WorkspacePayloads.registerPayloads(event) }
         NeoForge.EVENT_BUS.addListener { event: ServerTickEvent.Post -> tick(event) }

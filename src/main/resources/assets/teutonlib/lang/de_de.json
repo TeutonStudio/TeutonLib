@@ -50,6 +50,7 @@
   "teutonlib.computer.channel": "Kanal",
   "teutonlib.computer.outputs": "Ausgänge",
   "teutonlib.computer.inputs": "Eingänge",
+  "teutonlib.computer.redstone": "Redstone · intern",
   "teutonlib.computer.extensions": "Erweiterungen",
   "teutonlib.computer.scanning": "Verbindungen werden erfasst …",
   "teutonlib.computer.read_only": "Schreibgeschützt",
@@ -57,5 +58,15 @@
   "teutonlib.computer.link": "Link",
   "teutonlib.computer.device": "Gerät",
   "teutonlib.computer.live": "Live-Verzeichnis · automatische Aktualisierung",
-  "teutonlib.computer.scanning_short": "Suche …"
+  "teutonlib.computer.scanning_short": "Suche …",
+  "teutonlib.computer.show_api": "API anzeigen",
+  "teutonlib.computer.close_api": "Schließen · Esc",
+  "teutonlib.computer.api_unavailable": "Für diese Quelle sind keine API-Informationen verfügbar.",
+  "teutonlib.computer.modem_wired": "Kabelmodem",
+  "teutonlib.computer.modem_radio": "Funkmodem",
+  "teutonlib.computer.modem_ender": "Endermodem",
+  "teutonlib.computer.range": "Reichweite (Blöcke)",
+  "teutonlib.computer.interdimensional": "Dimensionsübergreifend",
+  "teutonlib.computer.yes": "Ja",
+  "teutonlib.computer.no": "Nein"
 }
