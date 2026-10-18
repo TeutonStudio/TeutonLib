@@ -5,12 +5,12 @@ KotlinForForge **5.11.0** ist erforderlich. TeutonLib muss auf Server und Client
 
 ## PC-UI als Vorlage
 
-Das Release **1.2.0** enthält eine kompilierte, kopierbare
+Das Release **1.2.1** enthält eine kompilierte, kopierbare
 [PC-UI-Integrationsvorlage](examples/computer-ui/README.md) für CC Aeroworks und
 andere Addons: Terminal, gemeinsame Quellen-/Kanalreiter, Fokus und Resize.
 `./gradlew releaseBundle --offline` erzeugt das ZIP mit Mod-JAR, Quellen und
 Dokumentation unter `build/distributions/`.
-[Releaseumfang und Voraussetzungen](docs/release-1.2.0.md).
+[Releaseumfang und Voraussetzungen](docs/release-1.2.1.md).
 
 Die automatische UI-Erweiterung lässt sich clientseitig in `config/teutonlib-client.toml`
 unter `[computerUi]` mit `enabled = false` abschalten (Standard: `true`).
@@ -135,11 +135,12 @@ KotlinForForge sowie die API-Abhängigkeiten des vorhandenen CSO-Compile-Satzes 
 Flywheel, Ponder, Registrate und Sables eingebettete Abhängigkeiten).
 `runtime/` enthält die unveränderten Create-, Sable-, Aeronautics-Bundle-, KotlinForForge- und JEI-JARs.
 Die normale Testumgebung (`./gradlew runClient` bzw. `runServer`, Profil `all`) lädt außerdem
-CC:Tweaked 1.120.2 aus `dependencies/compile/` und JEI 19.39.0.372 aus `dependencies/runtime/`.
+CC:Tweaked 1.120.2 und Drive by Wire 0.3.0 aus `dependencies/compile/` sowie JEI 19.39.0.372,
+Create New Age 1.1.7c und Flux Networks 8.0.0 aus `dependencies/runtime/`.
 Ein zusätzlicher `-PperipheralRuntime=cc`-Parameter ist dafür nicht nötig.
 Simulated zur Laufzeit ausschließlich über das Bundle laden, um doppelte Mod-IDs zu vermeiden.
-Für die Motor-Energieprüfung zusätzlich die originalen JARs von Create New Age 1.1.7c und
-Flux Networks 8.0.0 in `dependencies/runtime/` bereitstellen. Für die Kompilierung der
+Die originalen JARs von Create New Age und Flux Networks müssen dafür in `dependencies/runtime/`
+liegen; sie werden im Standardprofil automatisch geladen. Für die Kompilierung der
 Energieintegration werden diese beiden Mods nicht benötigt.
 
 ```bash

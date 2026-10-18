@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ServerConfigLocationMixin",
+    "flux.FluxPointConnectionMixin",
     "cso.DockingConnectorMixin",
     "cso.KineticBlockEntityMixin",
     "cso.RotationPropagatorMixin",

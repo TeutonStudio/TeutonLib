@@ -130,7 +130,7 @@ dependencies {
             runtimeOnly localCompileJars.matching { include 'cc-aeroworks-*.jar', 'aeroworks-*.jar' }
         }
     }
-    if (providers.gradleProperty("dbwTests").isPresent()) {
+    if (csoRuntime == 'all' || providers.gradleProperty("dbwTests").isPresent()) {
         runtimeOnly localCompileJars.matching { include "drivebywire-*.jar" }
     }
     if (csoRuntime == 'all') {

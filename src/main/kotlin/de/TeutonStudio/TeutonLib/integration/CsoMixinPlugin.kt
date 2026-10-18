@@ -13,6 +13,10 @@ class CsoMixinPlugin : IMixinConfigPlugin {
     }
 
     override fun shouldApplyMixin(targetClassName: String, mixinClassName: String): Boolean {
+        if (mixinClassName.contains(".mixin.flux.")) {
+            val mods = LoadingModList.get()
+            return mods != null && mods.getModFileById("fluxnetworks") != null
+        }
         if (mixinClassName.contains(".mixin.computer.") || mixinClassName.endsWith(".LinkSystemAccessMixin")) {
             val mods = LoadingModList.get()
             return mods != null && mods.getModFileById("computercraft") != null && (!mixinClassName.contains(".computer.console.") || mods.getModFileById(

@@ -78,6 +78,27 @@ object NewAgeMotorEnergy {
         )
     }
 
+    /** True when a Flux Point side is backed by a live New Age motor extension. */
+    @JvmStatic
+    fun isMotorExtensionConnection(level: Level, pointPos: BlockPos, side: Direction): Boolean {
+        if (!ModList.get().isLoaded("create_new_age") || !ServerConfig.SPEC.isLoaded() || !ServerConfig.MOTOR_EXTENSION_ENERGY_TRANSFER.asBoolean) return false
+        val extensionPos = pointPos.relative(side)
+        val extension = level.getBlockState(extensionPos)
+        if (!EXTENSIONS.contains(BuiltInRegistries.BLOCK.getKey(extension.block)) ||
+            !extension.hasProperty<Direction>(BlockStateProperties.FACING)
+        ) return false
+        val facing = extension.getValue<Direction>(BlockStateProperties.FACING)
+        val motorPos = extensionPos.relative(facing)
+        val motor = level.getBlockState(motorPos)
+        if (!MOTORS.contains(BuiltInRegistries.BLOCK.getKey(motor.block)) ||
+            !motor.hasProperty<Direction>(BlockStateProperties.FACING) ||
+            motor.getValue<Direction>(BlockStateProperties.FACING) != facing
+        ) return false
+        if (level.isClientSide()) return true
+        val entity = level.getBlockEntity(extensionPos) ?: return false
+        return resolveMotor(entity) != null
+    }
+
     @JvmStatic
     private fun id(path: String): ResourceLocation {
         return ResourceLocation.fromNamespaceAndPath("create_new_age", path)
