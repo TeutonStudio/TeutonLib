@@ -1,12 +1,14 @@
 modLoader="kotlinforforge"
 loaderVersion="[${kotlin_for_forge_version},6)"
 license="${mod_license}"
+issueTrackerURL="https://github.com/TeutonStudio/TeutonLib/issues"
 
 [[mods]]
 modId="${mod_id}"
 version="${mod_version}"
 displayName="${mod_name}"
 authors="${mod_authors}"
+displayURL="https://github.com/TeutonStudio/TeutonLib"
 description='''${mod_description}'''
 
 [[mixins]]
@@ -79,8 +81,8 @@ side="BOTH"
 [[dependencies.${mod_id}]]
 modId="cc_aeroworks"
 type="optional"
-versionRange="[1.4.0]"
-ordering="AFTER"
+versionRange="[1.4.0,1.5.0)"
+ordering="NONE"
 side="BOTH"
 
 [[dependencies.${mod_id}]]

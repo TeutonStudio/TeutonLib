@@ -127,6 +127,7 @@ try:
    for family in ('normal','advanced'):
     assert 'STARTED' in command('teutonlib_link_test console_'+family)
     wait_for('READY',True)
+    assert 'PASS workspace' in command('teutonlib_link_test console_workspace')
     command('teutonlib_link_test console_split');wait_for('DETACHED',True)
     command('teutonlib_link_test console_merge');wait_for('PASS',True)
     assert 'PASS one_attachment' in command('teutonlib_link_test console_attachments')

@@ -21,7 +21,7 @@ kotlin.jvmToolchain(21)
 // never packaged into the published TeutonLib JAR.
 sourceSets {
     computerUiExample {
-        java.srcDir 'examples/computer-ui/src/main/java'
+        // Kotlin source root is configured below.
         compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
         runtimeClasspath += sourceSets.main.runtimeClasspath
     }
@@ -55,6 +55,7 @@ neoForge {
     runs {
         client {
             if (providers.gradleProperty('computerUiTests').isPresent()) systemProperty 'teutonlib.computerUiTests', 'true'
+            if (providers.gradleProperty('computerUiConfigTests').isPresent()) systemProperty 'teutonlib.computerUiConfigTests', 'true'
             client()
             gameDirectory = project.file('run/client')
         }
@@ -88,7 +89,7 @@ neoForge {
     }
 }
 
-tasks.named('check') { dependsOn tasks.named('compileComputerUiExampleJava') }
+tasks.named('check') { dependsOn tasks.named('compileComputerUiExampleKotlin') }
 
 // A self-contained hand-off for addon authors; no local dependency binaries or test mods.
 tasks.register('releaseBundle', Zip) {
@@ -98,6 +99,7 @@ tasks.register('releaseBundle', Zip) {
     from(tasks.named('jar')) { into 'mods' }
     from(tasks.named('sourcesJar')) { into 'sources' }
     from('README.md')
+    from('LICENSE')
     from('TEMPLATE_LICENSE.txt')
     from('docs') { into 'docs' }
     from('examples/computer-ui') { into 'examples/computer-ui' }
@@ -182,10 +184,13 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
-// The optional console integration is Java-only. Its Kotlin 2.4 metadata is not
-// needed by TeutonLib's Kotlin 2.2 CSO sources.
-tasks.named('compileKotlin') {
-    libraries.setFrom(libraries.filter { !it.name.startsWith('cc-aeroworks-') })
+kotlin.sourceSets.named('computerUiExample') { kotlin.srcDir 'examples/computer-ui/src/main/kotlin' }
+// Optional Aeroworks binaries use newer Kotlin metadata; their JVM APIs remain compatible.
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    compilerOptions {
+        freeCompilerArgs.add('-Xskip-metadata-version-check')
+        jvmDefault = org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode.NO_COMPATIBILITY
+    }
 }
 
 jar {
@@ -206,3 +211,22 @@ publishing {
         maven { url = layout.projectDirectory.dir('repo').asFile.toURI() }
     }
 }
+
+// Preserve attribution in every published archive.
+tasks.withType(Jar).configureEach {
+    from(files('LICENSE', 'TEMPLATE_LICENSE.txt')) { into 'META-INF' }
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+tasks.withType(Zip).configureEach {
+    preserveFileTimestamps = false
+    reproducibleFileOrder = true
+}
+
+tasks.register('verifyKotlinSources') {
+    doLast {
+        def javaSources = fileTree('src') { include '**/*.java' } + fileTree('examples') { include '**/*.java' }
+        if (!javaSources.isEmpty()) throw new GradleException("Java sources remain: ${javaSources.files}")
+    }
+}
+tasks.named('check') { dependsOn 'verifyKotlinSources' }

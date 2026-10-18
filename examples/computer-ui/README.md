@@ -1,6 +1,6 @@
 # PC-UI-Vorlage für Addons
 
-Diese Java-Vorlage wird mit TeutonLib 1.0.0 kompiliert und im opt-in Clienttest
+Diese Kotlin-Vorlage wird mit TeutonLib 1.1.0 kompiliert und im opt-in Clienttest
 gerendert. Zielplattform: Minecraft 1.21.1, NeoForge 21.1.234, Java 21,
 KotlinForForge 5.11.0 und CC:Tweaked 1.120.2.
 
@@ -14,15 +14,15 @@ bleiben Aufgaben des Addons.
 
 Die Release-JAR auf Client und Server installieren. Im Addon-Projekt beispielsweise:
 
-```groovy
+```kotlin
 dependencies {
-    implementation files('libs/teutonlib-1.0.0.jar')
+    implementation(files("libs/teutonlib-1.1.0.jar"))
 }
 ```
 
 Alternativ in TeutonLib `./gradlew publish` ausführen und das erzeugte lokale
 Maven-Repository `repo/` im Addon eintragen. Die Koordinate lautet
-`de.TeutonStudio.TeutonLib:teutonlib:1.0.0`. Minecraft, NeoForge, KotlinForForge und
+`de.TeutonStudio.TeutonLib:teutonlib:1.1.0`. Minecraft, NeoForge, KotlinForForge und
 die Original-JAR von CC:Tweaked muss das Addon selbst bereitstellen; sie werden
 nicht transitiv durch die lokale TeutonLib-Publikation installiert.
 
@@ -32,7 +32,7 @@ Das Addon deklariert TeutonLib in seiner `neoforge.mods.toml`:
 [[dependencies.my_mod]]
 modId="teutonlib"
 type="required"
-versionRange="[1.0.0,1.1.0)"
+versionRange="[1.1.0,1.2.0)"
 ordering="AFTER"
 side="BOTH"
 ```
@@ -43,11 +43,11 @@ begrenzt die Übernahme auf die hier geprüfte API-Linie.
 
 ## Bildschirm übernehmen
 
-1. `src/main/java/example/teutonlib/client/TemplateComputerScreen.java` ins eigene
+1. `src/main/kotlin/example/teutonlib/client/TemplateComputerScreen.kt` ins eigene
    Clientpaket kopieren und den Paketnamen ändern.
 2. Den Bildschirm im clientseitigen `RegisterMenuScreensEvent` für den eigenen
    Menütyp registrieren, zum Beispiel mit
-   `event.register(MY_COMPUTER_MENU.get(), TemplateComputerScreen::new)`.
+   `event.register(MY_COMPUTER_MENU.get(), ::TemplateComputerScreen)`.
 3. Der Menütyp muss `AbstractComputerMenu` erweitern, zum tatsächlich laufenden
    `ServerComputer` gehören und `stillValid` korrekt prüfen. Als Display-Stack
    das eigene Addon-Item verwenden. Native CC-Computer erhalten ihre Reiter bereits
@@ -83,11 +83,11 @@ Quellen- und Kanalprovider laufen auf dem Serverthread und sollten für fremde
 Computer eine leere Liste liefern. Keine Peripherals selbst anhängen. Beispiele
 für Rückgabewerte, nachdem die Zuständigkeit des Addons geprüft wurde:
 
-```java
-new SourceView("my_mod:telemetry", List.of("telemetry"), "local",
-        computer.position().toShortString(), "");
-new ChannelView("my_mod.rpm", "output", "", true,
-        currentRpm, 0, "my_mod", false);
+```kotlin
+SourceView("my_mod:telemetry", listOf("telemetry"), "local",
+        computer.position().toShortString(), "")
+ChannelView("my_mod.rpm", "output", "", true,
+        currentRpm, 0, "my_mod", false)
 ```
 
 Fremde Kanäle bleiben im gemeinsamen Editor schreibgeschützt. Eigene Wertebereiche
@@ -97,20 +97,20 @@ die Setupvorlage registriert für die gesamte Mod-Lebensdauer.
 
 ## Übernahme in CC Aeroworks
 
-Die Vorlage zeigt den Aufbau für eine spätere Migration. CC Aeroworks 1.4.0 behält
-in diesem Release seine vorhandenen Pultreiter; TeutonLib ergänzt dort weiterhin
-Peripheral-Quellen. Vor einer Ersetzung muss CC Aeroworks seine GPS-/Display-Link-
-und Skriptquellen als Provider anbinden, den aktiven Pultcomputer als Host auflösen,
-den Kanalbestand bei Pultteilung/-vereinigung erhalten und seine Controls-Navigation
-ergänzen. Die bestehende Lua-API `channels`, Kanalgruppen und DbW-Override-Semantik
-dürfen dabei nicht durch die einfache TeutonLib-Kanalverwaltung ersetzt werden.
+CC Aeroworks bindet seine bestehende Kanal- und Quellenverwaltung über `ComputerWorkspace` und `ComputerExtensions.registerWorkspace` an. `ComputerPanels.workspace(...)` erzeugt den gemeinsamen Controller; der Bildschirm implementiert `WorkspacePanels.Owner`, schaltet Terminal/Panel passend sichtbar und ruft `tick()` sowie `takeRequestedFocus()` auf. `show(0/1/2)` bedeutet Terminal/Quellen/Kanäle.
+
+`ComputerWorkspace.Snapshot` enthält hierarchische `Entry`-Einträge mit stabiler ID, Beschriftung, Details, optionalem Gruppen-/Zielkontext und `Action`-Beschreibungen. Der Server verarbeitet `Command` ausschließlich nach erneuter Prüfung des Menüs und des aktuellen Datenbestands. Backend-Aktionen bleiben beim Addon, etwa Gruppen, Bindungen und DbW-Ziele. Clientaktionen können einen vorhandenen Detailbildschirm öffnen.
+
+`registerChannelAuthority` markiert Pultkanäle als vom Addon verwaltet; TeutonLib legt dort keinen eigenen beschreibbaren Bestand an. Lesen erfolgt weiterhin über registrierte Kanalprovider. Native CC-Computer verwenden unverändert TeutonLibs Standardbank. `ComputerContext.host()` gibt den bereits geladenen, identitätsgeprüften Host zurück.
+
+Die Quellenprojektion erfolgt explizit; die alte `ConsoleSourcesMixin`-Ergänzung wird bei registriertem Aeroworks-Workspace übersprungen. Die bestehende Lua-API, Pultgruppen, DbW-Overrides und Speicherung bleiben bei Aeroworks. Keine Datenmigration ist nötig.
 
 ## Prüfen
 
 Im TeutonLib-Quellprojekt:
 
 ```bash
-./gradlew build compilePeripheralTestJava --offline
+./gradlew build compilePeripheralTestKotlin --offline
 ./gradlew runClient -PperipheralTests -PcomputerUiTests -PperipheralRuntime=cc -PcsoRuntime=none --offline
 python3 tools/verify_peripheral_links.py cc
 python3 tools/verify_peripheral_links.py console --dbw --channels-only
@@ -124,5 +124,11 @@ Er arbeitet mit synthetischen Menüs ohne Welt; er ersetzt keinen In-World-Test
 des eigenen Addon-Hosts. Serverprüfungen decken echte Kanäle, Chunk-Lebenszyklus,
 Neustart und Berechtigungsgrenzen getrennter Menüs ab.
 
-Die TeutonLib-Lizenz bleibt All Rights Reserved. `TEMPLATE_LICENSE.txt` betrifft
+TeutonLib und der Beispielcode stehen unter der MIT-Lizenz (siehe `LICENSE`). `TEMPLATE_LICENSE.txt` betrifft
 ausschließlich die ursprünglich von NeoForged gelieferten MDK-Dateien.
+
+Die Bildschirmvorlage beachtet `ClientConfig.COMPUTER_UI_ENABLED` aus
+`config/teutonlib-client.toml` (`[computerUi] enabled = true`, Standard an).
+Beim Neuladen kann sie ihre zusätzlichen Reiter auch im offenen Bildschirm entfernen
+und wiederherstellen. Eigene Workspace-Bildschirme müssen ihre UI-Einstellung selbst
+berücksichtigen.

@@ -106,7 +106,7 @@ Compile-Abhängigkeiten zusätzlich unter `dependencies/compile/` bereitstellen:
 - CC:Tweaked 1.120.2 (API-Kompatibilitätsbereich 1.119.0 bis vor 1.121.0).
 - CC Aeroworks 1.4.0 und Aeroworks 1.5.0 für die optionale Pultanbindung.
 
-Diese unveränderten JARs werden nicht in TeutonLib eingebettet. Der Java-Code für die Pultanbindung ist vom Kotlin-Compile-Klassenpfad getrennt, da dessen Abhängigkeit Kotlin-2.4-Metadaten enthält.
+Diese unveränderten JARs werden nicht in TeutonLib eingebettet. Die Pultanbindung ist ebenfalls in Kotlin implementiert. Für die lokal geprüften Aeroworks-Binaries mit Kotlin-2.4-Metadaten ist der Compiler entsprechend konfiguriert; die JVM-Schnittstellen werden zusätzlich durch Kompatibilitätstests geprüft.
 
 ```bash
 ./gradlew build --offline

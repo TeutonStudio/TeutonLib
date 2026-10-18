@@ -5,12 +5,15 @@ KotlinForForge **5.11.0** ist erforderlich. TeutonLib muss auf Server und Client
 
 ## PC-UI als Vorlage
 
-Das Release **1.0.0** enthält eine kompilierte, kopierbare
+Das Release **1.1.0** enthält eine kompilierte, kopierbare
 [PC-UI-Integrationsvorlage](examples/computer-ui/README.md) für CC Aeroworks und
 andere Addons: Terminal, gemeinsame Quellen-/Kanalreiter, Fokus und Resize.
 `./gradlew releaseBundle --offline` erzeugt das ZIP mit Mod-JAR, Quellen und
 Dokumentation unter `build/distributions/`.
-[Releaseumfang und Voraussetzungen](docs/release-1.0.0.md).
+[Releaseumfang und Voraussetzungen](docs/release-1.1.0.md).
+
+Die automatische UI-Erweiterung lässt sich clientseitig in `config/teutonlib-client.toml`
+unter `[computerUi]` mit `enabled = false` abschalten (Standard: `true`).
 
 ## Optionales Create/Sable-Modul
 
@@ -120,6 +123,10 @@ Für eine neue Welt wird eine vorhandene globale `config/teutonlib-server.toml` 
 
 ## Entwicklung
 
+Die Mod, Mixins, Tests und Integrationsbeispiele sind vollständig in Kotlin geschrieben.
+Java 21 ist die Ziel-JVM. Lua wird für die CC:Tweaked-Integration verwendet.
+
+
 Die originalen lokalen Pack-Binaries aus CreateSableOptimization unter `dependencies/compile/`
 und `dependencies/runtime/` bereitstellen. Diese JARs sind absichtlich nicht versioniert.
 
@@ -186,8 +193,20 @@ dieser Prüfung.
 
 ## Lizenz
 
-All Rights Reserved. Copyright (c) 2026 TeutonStudio.
+MIT. Copyright (c) 2026 TeutonStudio. Siehe [LICENSE](LICENSE).
 
 ## CC:Tweaked: Quellen und Kanäle
 
 Gemeinsame Computerreiter, persistente DbW-Signale und modemgestützte Kanalabfragen: [Deutsch](docs/computer-channels.md) · [English](docs/computer-channels.en.md).
+
+## Gemeinsame Addon-Workspaces (1.1.0)
+
+`ComputerWorkspace` und `ComputerPanels.workspace(...)` erlauben vollständige Quellen-/Kanalpanels mit einem autoritativen Addon-Backend. CC-Aeroworks verwendet diese Schnittstelle für seine vorhandenen Kanalgruppen, Bindungen, DbW-Ziele und Skriptdiagnosen. Die Ladereihenfolge lautet TeutonLib vor CC-Aeroworks; die Daten bleiben im bisherigen Aeroworks-Speicher. Siehe [Integrationsvorlage](examples/computer-ui/README.md).
+
+Geprüfte Basis: Minecraft 1.21.1, NeoForge 21.1.234, Create 6.0.10, Aeronautics 1.3.2 und CC:Tweaked 1.120.2. Die Reiter nativer CC-Computer nutzen weiterhin das Standardbackend.
+
+## Projekt und API
+
+[Quellcode](https://github.com/TeutonStudio/TeutonLib) · [Fehler melden](https://github.com/TeutonStudio/TeutonLib/issues) · [Downloads](https://github.com/TeutonStudio/TeutonLib/releases)
+
+Die dokumentierten Provider-, Kontext-, Workspace- und Client-Schnittstellen sind die öffentlichen Erweiterungspunkte. Minor-Versionen ergänzen die API kompatibel; inkompatible öffentliche API-Änderungen benötigen eine neue Major-Version. Integrations- und Mixin-Implementierungsdetails sind davon ausgenommen.

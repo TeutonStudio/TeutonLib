@@ -2,13 +2,29 @@
 
 TeutonLib ergänzt normale und erweiterte Blockcomputer um die Reiter **Quellen** und **Kanäle** mit Bildsymbolen in der nativen CC-Seitenleiste. CC:Tweaked genügt; Create wird nur für den Peripheral Link benötigt. Pocket Computer und Turtles erhalten diese Reiter nicht.
 
+## UI ein- und ausschalten
+
+In `config/teutonlib-client.toml` auf jedem Client:
+
+```toml
+[computerUi]
+    enabled = true
+```
+
+Standard ist `true`. Mit `false` entfallen die automatisch ergänzten Quellen-/Kanalreiter
+an CC-Blockcomputern und in der Beispielvorlage. Nach Config-Neuladen wird auch ein
+offener Bildschirm aktualisiert und zum Terminal zurückgesetzt. Ohne Dateiüberwachung
+gilt die Änderung beim nächsten Clientstart. Kanaldaten, Lua-APIs und Peripheral Links
+bleiben verfügbar. Eigene Addon-Workspaces wie die Pultoberfläche von CC Aeroworks
+werden vom jeweiligen Addon gesteuert.
+
 ## Quellen
 
 Die Quellen sind nach lokalem Anschluss, Kabelverbindung und Peripheral Link gruppiert. Ein Klick auf einen Gruppenbalken klappt ihn ein oder aus; ein Klick auf ein Gerät öffnet dessen Details. Linkgeräte erhalten eine kurze Typ-/Linkbezeichnung, während die vollständige Lua-Adresse in den Details und im Tooltip erhalten bleibt.
 
 Die Liste zeigt dieselben Peripheral-Adressen wie die Computer-API: lokale Seiten, Kabelgeräte und Peripheral Links. Geräte werden nicht erneut angehängt. Typen, Verbindungsart und bekannte Block-/Linkpositionen stehen in der Detailzeile und im Tooltip. Verschiedene Adressen bleiben getrennt. Änderungen werden bei geöffnetem Reiter einmal pro Sekunde abgefragt.
 
-Die vorhandene Quellenansicht von CC Aeroworks 1.4.0 wird ebenfalls um Peripherals ergänzt; Display Links, GPS und Display-Skripte bleiben erhalten. Die Migration seiner Reiter ist ein separater Schritt.
+Die vorhandene Quellenansicht von CC Aeroworks 1.4.0 wird ebenfalls um Peripherals ergänzt; Display Links, GPS und Display-Skripte bleiben erhalten. Mit TeutonLib 1.1.0 kann Aeroworks seine gemeinsamen Reiter über den autoritativen Workspace-Adapter verwenden; Details stehen in der Integrationsvorlage.
 
 ## Kanäle
 
@@ -83,6 +99,11 @@ Die bestehende Aeroworks-Lua-API `channels` wird nicht überschrieben. Pultspezi
 
 ## Prüfung
 
-`./gradlew test build compilePeripheralTestJava --offline` prüft Datenspeicher und Kompilierung. `python3 tools/verify_peripheral_links.py cc` ergänzt reale CraftOS-Tests ohne DbW. Das Profil `console` prüft zusätzlich Pulte und Sable. Mit `--dbw` wird die lokale, unveränderte `dependencies/compile/drivebywire-0.3.0.jar` als Testlaufzeit eingebunden; dieses JAR wird nicht mit TeutonLib ausgeliefert.
+`./gradlew test build compilePeripheralTestKotlin --offline` prüft Datenspeicher und Kompilierung. `python3 tools/verify_peripheral_links.py cc` ergänzt reale CraftOS-Tests ohne DbW. Das Profil `console` prüft zusätzlich Pulte und Sable. Mit `--dbw` wird die lokale, unveränderte `dependencies/compile/drivebywire-0.3.0.jar` als Testlaufzeit eingebunden; dieses JAR wird nicht mit TeutonLib ausgeliefert.
 
 Für die gezielte Prüfung von Chunk-Entladung, Wiederladen, Neustart und getrennten Spieler-Menüs: `python3 tools/verify_peripheral_links.py console --dbw --channels-only`. Der Render-/Fokustest startet mit `./gradlew runClient -PperipheralTests -PcomputerUiTests -PperipheralRuntime=cc -PcsoRuntime=none --offline`; die vollständige optionale Clientkombination verwendet stattdessen `-PperipheralRuntime=console -PdbwTests -PcsoRuntime=all`. Testcode und Testmixins sind nicht im veröffentlichten JAR enthalten.
+
+Der gezielte Config-Test läuft mit
+`./gradlew runClient -PperipheralTests -PcomputerUiConfigTests -PperipheralRuntime=cc -PcsoRuntime=none --offline`.
+Er prüft Standard an, ausgeschalteten Start, Aus-/Einschalten bei offenem Reiter,
+Resize und Terminal-Wiederherstellung für native Computer und die Beispielvorlage.
