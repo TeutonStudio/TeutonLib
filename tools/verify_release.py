@@ -26,7 +26,7 @@ with zipfile.ZipFile(jar) as archive:
     assert metadata['license'] == 'MIT'
     assert metadata['mods'][0]['version'] == version
     assert not any(n.endswith('.jar') for n in names), 'Foreign JAR embedded'
-    assert not any('/peripheraltest/' in n or '/energytest/' in n or n.startswith('example/') for n in names), 'Verification code shipped'
+    assert not any('/peripheraltest/' in n or '/energytest/' in n or '/dockingtest/' in n or n.startswith('example/') for n in names), 'Verification code shipped'
     for license_name in ('LICENSE', 'TEMPLATE_LICENSE.txt'):
         assert archive.read('META-INF/' + license_name) == (ROOT / license_name).read_bytes()
 with zipfile.ZipFile(sources) as archive:

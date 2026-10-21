@@ -41,6 +41,15 @@ nicht unterstützten Versionen. Andere Mods können eigene Abhängigkeitsanforde
 **Die separate CSO-JAR muss entfernt werden.** Gleichzeitiges Laden der Mod-ID `cso` wird
 verhindert, weil TeutonLib dieselben Eingriffe bereits enthält. Fremdmods werden nicht eingebettet.
 
+## Analoge Docking Connector
+
+Mit `compat.simulated.enableAnalogDocking = true` (Standard) steuert die tatsächliche
+Redstone-Stärke den bestehenden Anschluss: 0–5 eingefahren, 6–10 ein halber Block,
+11–15 ein Block. Gegenstellen handeln vor dem Andocken die kürzere Länge aus;
+HALF benötigt zwei, FULL drei Blöcke Abstand zwischen den Basismittelpunkten.
+Verriegelung und die bestehenden Transfers verwenden weiterhin Simulated/Sable.
+[Geometrie, Konfiguration und Prüfungen](docs/analog-docking.md).
+
 ## Energieeingang an New-Age-Motorerweiterungen
 
 Grundlegende und fortgeschrittene Motorerweiterungen akzeptieren FE-Energie von Flux Points,

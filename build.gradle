@@ -29,6 +29,10 @@ sourceSets {
         compileClasspath += sourceSets.main.compileClasspath
         runtimeClasspath += sourceSets.main.compileClasspath
     }
+    dockingTest {
+        compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
     energyTest {
         compileClasspath += sourceSets.main.output + sourceSets.main.compileClasspath
         runtimeClasspath += sourceSets.main.runtimeClasspath
@@ -77,6 +81,9 @@ neoForge {
 
     mods {
         "${mod_id}" { sourceSet(sourceSets.main) }
+        if (providers.gradleProperty('analogDockingTests').isPresent()) {
+            teutonlib_docking_test { sourceSet(sourceSets.dockingTest) }
+        }
         if (providers.gradleProperty('motorEnergyTests').isPresent()) {
             teutonlib_energy_test { sourceSet(sourceSets.energyTest) }
         }

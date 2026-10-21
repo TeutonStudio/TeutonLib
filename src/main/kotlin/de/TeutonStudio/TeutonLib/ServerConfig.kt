@@ -17,6 +17,7 @@ object ServerConfig {
     const val FILE_NAME = "teutonlib-server.toml"
     @JvmField val SPEC: ModConfigSpec
     @JvmField val CSO_ENABLED: ModConfigSpec.BooleanValue
+    @JvmField val ENABLE_ANALOG_DOCKING: ModConfigSpec.BooleanValue
     @JvmField val MOTOR_EXTENSION_ENERGY_TRANSFER: ModConfigSpec.BooleanValue
     @JvmField val PERIPHERAL_LINK_RANGE: ModConfigSpec.IntValue
     @JvmField val PERIPHERAL_LINK_LIMIT: ModConfigSpec.IntValue
@@ -26,6 +27,13 @@ object ServerConfig {
         CSO_ENABLED = builder.comment("Enable cogwheel bridges across locked Sable/Simulated docks.",
             "Takes effect during play. The server controls all clients.",
             "Requires Create 6.0.10, Sable 2.0.5 and Simulated 1.3.2.").define("enabled", true)
+        builder.pop(2)
+        builder.push("compat").push("simulated")
+        ENABLE_ANALOG_DOCKING = builder.comment(
+            "Analog docking: signals 0-5 retract, 6-10 extend half a block, 11-15 extend one block.",
+            "Both connectors use the shorter requested length. Independent of cogwheel bridge enablement.",
+            "Disable to restore Simulated 1.3.2 docking behavior. Takes effect during play."
+        ).define("enableAnalogDocking", true)
         builder.pop(2)
         builder.push("compat").push("createNewAge")
         MOTOR_EXTENSION_ENERGY_TRANSFER = builder.comment(

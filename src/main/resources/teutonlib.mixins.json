@@ -7,6 +7,8 @@
     "ServerConfigLocationMixin",
     "flux.FluxPointConnectionMixin",
     "cso.DockingConnectorMixin",
+    "cso.AnalogDockingConnectorMixin",
+    "cso.AnalogDockingPairMixin",
     "cso.KineticBlockEntityMixin",
     "cso.RotationPropagatorMixin",
     "peripheral.LinkIdentityMixin",

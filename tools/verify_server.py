@@ -30,6 +30,8 @@ logpath=report/f'server-{profile}.log'
 log=logpath.open('w')
 motor_tests = os.environ.get('TEUTONLIB_MOTOR_TESTS') == '1'
 extra_args = ['-PmotorEnergyTests'] if motor_tests else []
+docking_tests = os.environ.get('TEUTONLIB_DOCKING_TESTS') == '1'
+if docking_tests: extra_args.append('-PanalogDockingTests')
 proc=subprocess.Popen(['./gradlew','runSmokeServer',f'-PcsoRuntime={profile}',*extra_args,'--offline','--no-daemon','--console=plain'],cwd=root,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
 connection=None
 checks=[]
@@ -74,6 +76,9 @@ try:
  active=profile=='all'
  # The fixture world was created with the default enabled setting.
  expect_status(True,active)
+ if docking_tests:
+  assert profile == 'all', 'Docking verification requires Simulated and Sable'
+  assert 'Analog docking PASS:' in command('teutonlib_docking_test')
  if motor_tests:
   assert profile == 'all', 'Motor verification requires the all profile and local New Age/Flux JARs'
   assert 'verification PASS' in command('teutonlib_energy_test')
@@ -133,12 +138,22 @@ try:
  if profile in ('all','create'):
   command('fill 0 100 0 3 101 0 minecraft:air')
   command('forceload remove 0 0')
+ if docking_tests:
+  command('forceload add 16000 16000 16016 16032')
+  command('teutonlib_docking_test prepareReload')
+  deadline=time.monotonic()+15
+  while time.monotonic()<deadline:
+   response=request(2,'teutonlib_docking_test probeReload')
+   if 'PASS=true' in response: break
+   time.sleep(.25)
+  else: raise AssertionError('Docking reload fixture did not lock: '+response)
+  checks.append({'dockingBeforeReload':response})
  command('stop')
- proc.wait(timeout=35)
+ proc.wait(timeout=60)
  assert proc.returncode==0,f'Gradle exit {proc.returncode}'
- if motor_tests:
+ if motor_tests or docking_tests:
   connection.close();connection=None
-  # Reload the same disposable world and verify the motor's existing energy and connection.
+  # Reload the same disposable world and verify saved buffers and connections.
   log.flush()
   offset=logpath.stat().st_size
   proc=subprocess.Popen(['./gradlew','runSmokeServer',f'-PcsoRuntime={profile}',*extra_args,'--offline','--no-daemon','--console=plain'],cwd=root,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
@@ -155,9 +170,34 @@ try:
     if time.monotonic()>=deadline: raise
     time.sleep(.1)
   request(3,values['rcon.password'])
-  assert 'PASS=true' in command('teutonlib_energy_test lifecycle restart')
+  if motor_tests: assert 'PASS=true' in command('teutonlib_energy_test lifecycle restart')
+  if docking_tests:
+   deadline=time.monotonic()+15
+   while time.monotonic()<deadline:
+    response=request(2,'teutonlib_docking_test probeReload')
+    if 'PASS=true' in response: break
+    time.sleep(.25)
+   else: raise AssertionError('Docking restart failed: '+response)
+   checks.append({'dockingAfterRestart':response})
+   command('forceload remove 16000 16000 16016 16032')
+   deadline=time.monotonic()+40
+   while time.monotonic()<deadline:
+    response=request(2,'execute if loaded 16008 240 16008 run say docking_chunk_still_loaded')
+    if 'docking_chunk_still_loaded' not in response: break
+    time.sleep(.5)
+   else: raise AssertionError('Docking chunk did not unload')
+   command('forceload add 16000 16000 16016 16032')
+   deadline=time.monotonic()+15
+   while time.monotonic()<deadline:
+    response=request(2,'teutonlib_docking_test probeReload')
+    if 'PASS=true' in response: break
+    time.sleep(.25)
+   else: raise AssertionError('Docking chunk reload failed: '+response)
+   checks.append({'dockingAfterChunkReload':response})
+   command('teutonlib_docking_test clearReload')
+   command('forceload remove 16000 16000 16016 16032')
   command('stop')
-  proc.wait(timeout=35)
+  proc.wait(timeout=60)
   assert proc.returncode==0,f'Gradle restart exit {proc.returncode}'
  (report/f'server-{profile}.json').write_text(json.dumps({'profile':profile,'passed':True,'checks':checks},indent=2,ensure_ascii=False)+'\n')
  print('Server smoke checks passed.',flush=True)
