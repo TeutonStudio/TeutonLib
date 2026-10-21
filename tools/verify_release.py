@@ -25,6 +25,13 @@ with zipfile.ZipFile(jar) as archive:
     metadata = tomllib.loads(archive.read('META-INF/neoforge.mods.toml').decode())
     assert metadata['license'] == 'MIT'
     assert metadata['mods'][0]['version'] == version
+    assert metadata['modLoader'] == 'kotlinforforge', 'KotlinForForge language loader required'
+    kff_range = f"[{props['kotlin_for_forge_version']},6)"
+    assert metadata['loaderVersion'] == kff_range
+    kff = next(d for d in metadata['dependencies'][name] if d['modId'] == 'kotlinforforge')
+    assert kff['type'] == 'required' and kff['side'] == 'BOTH', 'KotlinForForge must be mandatory on both sides'
+    assert kff['versionRange'] == kff_range
+    assert 'de/TeutonStudio/TeutonLib/client/TeutonLibClient.class' in names, 'Config editor registration missing'
     assert not any(n.endswith('.jar') for n in names), 'Foreign JAR embedded'
     assert not any('/peripheraltest/' in n or '/energytest/' in n or '/dockingtest/' in n or n.startswith('example/') for n in names), 'Verification code shipped'
     for license_name in ('LICENSE', 'TEMPLATE_LICENSE.txt'):

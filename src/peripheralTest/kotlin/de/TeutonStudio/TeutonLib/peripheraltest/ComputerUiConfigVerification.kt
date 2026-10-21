@@ -42,6 +42,7 @@ object ComputerUiConfigVerification {
         val report = Path.of("../../build/reports/smoke/computer-ui-config.txt")
         try {
             Files.deleteIfExists(report)
+            verifyConfigEditor(mc)
             if (!ClientConfig.COMPUTER_UI_ENABLED.default) throw AssertionError("UI must default to enabled")
             for (template in booleanArrayOf(false, true)) for (family in arrayOf<ComputerFamily>(
                 ComputerFamily.NORMAL,
@@ -93,7 +94,7 @@ object ComputerUiConfigVerification {
             Files.createDirectories(report.parent)
             Files.writeString(
                 report,
-                "PASS: default on; native/template normal/advanced; disabled startup; enable, disable on channels, resize, re-enable; terminal restored\n"
+                "PASS: registered NeoForge config editor; client navigation and toggle; unloaded server config locked; default on; native/template normal/advanced; disabled startup; enable, disable on channels, resize, re-enable; terminal restored\n"
             )
         } catch (error: Throwable) {
             TeutonLib.Companion.LOGGER.error("Computer UI config verification failed", error)
@@ -101,6 +102,54 @@ object ComputerUiConfigVerification {
             ClientConfig.COMPUTER_UI_ENABLED.set(previous)
             mc.setScreen(null)
             mc.stop()
+        }
+    }
+
+    /** Exercise the actual registered editor, including nested sections and a real toggle. */
+    private fun verifyConfigEditor(mc: Minecraft) {
+        val container = net.neoforged.fml.ModList.get().getModContainerById(TeutonLib.MOD_ID).orElseThrow()
+        val factory = container.getCustomExtension(
+            net.neoforged.neoforge.client.gui.IConfigScreenFactory::class.java
+        ).orElseThrow { AssertionError("No config screen registered") }
+        val parent = mc.screen!!
+        val editor = factory.createScreen(container, parent)
+        mc.setScreen(editor)
+        val clientLabel = Component.translatable("teutonlib.configuration.section.teutonlib.client.toml").string
+        val serverLabel = Component.translatable("teutonlib.configuration.section.teutonlib.server.toml").string
+        val buttons = descendants(editor).filterIsInstance<net.minecraft.client.gui.components.Button>().toList()
+        val client = buttons.single { it.message.string.contains(clientLabel) }
+        val server = buttons.single { it.message.string.contains(serverLabel) }
+        check(client.active) { "Client config is locked" }
+        check(!server.active) { "Unloaded world config must be locked" }
+        client.onPress()
+        val clientSection = mc.screen!!
+        check(clientSection is net.neoforged.neoforge.client.gui.ConfigurationScreen.ConfigurationSectionScreen)
+        // The only subsection button uses the translated section label.
+        descendants(clientSection).filterIsInstance<net.minecraft.client.gui.components.Button>()
+            .first { it.active && it.message.string == Component.translatable(
+                "neoforge.configuration.uitext.section",
+                Component.translatable("teutonlib.configuration.computerUi.button")
+            ).string }.onPress()
+        val preferenceSection = mc.screen!!
+        check(preferenceSection !== clientSection) { "Computer UI subsection did not open" }
+        val toggle = descendants(preferenceSection)
+            .filterIsInstance<net.minecraft.client.gui.components.CycleButton<*>>().single()
+        val previous = ClientConfig.COMPUTER_UI_ENABLED.get()
+        toggle.onPress()
+        check(ClientConfig.COMPUTER_UI_ENABLED.get() != previous) { "Editor did not change UI preference" }
+        toggle.onPress()
+        check(ClientConfig.COMPUTER_UI_ENABLED.get() == previous) { "Editor did not restore UI preference" }
+        preferenceSection.onClose()
+        clientSection.onClose()
+        editor.onClose()
+        check(mc.screen === parent) { "Editor did not return to parent" }
+    }
+
+    private fun descendants(node: net.minecraft.client.gui.components.events.GuiEventListener):
+        Sequence<net.minecraft.client.gui.components.events.GuiEventListener> = sequence {
+        yield(node)
+        if (node is net.minecraft.client.gui.components.events.ContainerEventHandler) {
+            node.children().forEach { yieldAll(descendants(it)) }
         }
     }
 

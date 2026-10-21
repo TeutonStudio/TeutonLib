@@ -5,12 +5,12 @@ KotlinForForge **5.11.0** ist erforderlich. TeutonLib muss auf Server und Client
 
 ## PC-UI als Vorlage
 
-Das Release **1.2.1** enthält eine kompilierte, kopierbare
+Das Release **1.2.2** enthält eine kompilierte, kopierbare
 [PC-UI-Integrationsvorlage](examples/computer-ui/README.md) für CC Aeroworks und
 andere Addons: Terminal, gemeinsame Quellen-/Kanalreiter, Fokus und Resize.
 `./gradlew releaseBundle --offline` erzeugt das ZIP mit Mod-JAR, Quellen und
 Dokumentation unter `build/distributions/`.
-[Releaseumfang und Voraussetzungen](docs/release-1.2.1.md).
+[Releaseumfang und Voraussetzungen](docs/release-1.2.2.md).
 
 Die automatische UI-Erweiterung lässt sich clientseitig in `config/teutonlib-client.toml`
 unter `[computerUi]` mit `enabled = false` abschalten (Standard: `true`).
@@ -97,6 +97,18 @@ Bedienung, API, Kompatibilitätsgrenze für eigene Betriebssysteme und Testbefeh
 
 ## Config und Befehle
 
+Unter **Mods → TeutonLib → Config** öffnet sich der eingebaute NeoForge-Editor.
+**Configured wird dafür nicht benötigt.** Der Editor zeigt die Client-Einstellungen und
+bei geladener Einzelspielerwelt auch deren Server-Einstellungen. Die Beschriftungen und
+Hilfetexte sind auf Deutsch und Englisch verfügbar. Änderungen werden beim Verlassen der
+jeweiligen Config-Seite gespeichert; die Dateiüberwachung übernimmt das Neuladen.
+
+Am Hauptmenü sind Server-Einstellungen nicht geladen. Auf einem entfernten Server und
+in einer für LAN geöffneten Welt sperrt der NeoForge-Editor die Server-Einstellungen.
+Auf Dedicated Servern die Datei auf dem Server bearbeiten oder für das CSO-Modul die
+unten aufgeführten OP-Befehle verwenden. Client-Einstellungen bleiben lokal bearbeitbar.
+
+
 Die weltbezogene Datei wird automatisch erzeugt:
 
 - Einzelspieler: `saves/<Welt>/serverconfig/teutonlib-server.toml`
@@ -133,7 +145,9 @@ Für eine neue Welt wird eine vorhandene globale `config/teutonlib-server.toml` 
 ## Entwicklung
 
 Die Mod, Mixins, Tests und Integrationsbeispiele sind vollständig in Kotlin geschrieben.
-Java 21 ist die Ziel-JVM. Lua wird für die CC:Tweaked-Integration verwendet.
+Auch die Gradle-Builddateien verwenden Kotlin DSL (`build.gradle.kts`, `settings.gradle.kts`).
+Java 21 ist die Ziel-JVM. Lua bleibt für die CC:Tweaked-Laufzeit erforderlich;
+die externen Entwicklungs-Prüfskripte unter `tools/` verwenden Python.
 
 
 Die originalen lokalen Pack-Binaries aus CreateSableOptimization unter `dependencies/compile/`
@@ -161,6 +175,11 @@ Energieintegration werden diese beiden Mods nicht benötigt.
 Für Startprüfungen stehen `-PcsoRuntime=none` (nur KotlinForForge),
 `-PcsoRuntime=create` (Create und KotlinForForge) und `-PcsoRuntime=all` (Standard)
 zur Verfügung. Diese Profile beeinflussen nur lokale Entwicklungsstarts.
+Den Config-Editor und das Umschalten der Computerreiter im echten Client prüfen:
+`./gradlew runClient -PperipheralTests -PcomputerUiConfigTests --offline`.
+Der Client beendet sich nach der Prüfung; das Ergebnis steht unter
+`build/reports/smoke/computer-ui-config.txt`.
+
 Die JUnit-Tests prüfen zusätzlich die API-Signaturen der lokalen Compile-JARs.
 
 Die automatischen Serverprüfungen verwenden separate Testwelten unter `run/smoke/`

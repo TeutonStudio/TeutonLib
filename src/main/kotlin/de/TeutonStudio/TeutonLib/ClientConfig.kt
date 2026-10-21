@@ -9,13 +9,13 @@ object ClientConfig {
     @JvmField val COMPUTER_UI_ENABLED: ModConfigSpec.BooleanValue
     init {
         val builder = ModConfigSpec.Builder()
-        builder.push("computerUi")
+        builder.translation("teutonlib.configuration.computerUi").push("computerUi")
         COMPUTER_UI_ENABLED = builder.comment(
             "Show TeutonLib's extra Sources and Channels tabs on CC block computers.",
             "Also used by the example addon screen. Addons control their own custom workspaces.",
             "Does not disable channel storage, Lua APIs or peripheral links.",
             "Changes apply to open computer screens when this config is reloaded."
-        ).define("enabled", true)
+        ).translation("teutonlib.configuration.computerUi.enabled").define("enabled", true)
         builder.pop()
         SPEC = builder.build()
     }
