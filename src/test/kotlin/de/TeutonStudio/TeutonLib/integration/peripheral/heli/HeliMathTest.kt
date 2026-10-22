@@ -1,6 +1,7 @@
 package de.TeutonStudio.TeutonLib.integration.peripheral.heli
 
 import org.joml.Vector3d
+import net.minecraft.core.Direction
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertThrows
@@ -33,13 +34,24 @@ class HeliMathTest {
     }
 
     @Test
-    fun yawUsesDocumentedAxesAndWrapsAtOneEighty() {
+    fun yawUsesMinecraftAxesAndWrapsAtThreeSixty() {
         assertEquals(0.0, HeliMath.yawDegrees(Vector3d(0.0, 0.0, 1.0)), 1.0e-12)
-        assertEquals(90.0, HeliMath.yawDegrees(Vector3d(1.0, 0.0, 0.0)), 1.0e-12)
-        assertEquals(-180.0, HeliMath.yawDegrees(Vector3d(0.0, 0.0, -1.0)), 1.0e-12)
-        assertTrue(HeliMath.yawDegrees(Vector3d(1.0e-6, 0.0, -1.0)) > 179.0)
-        assertTrue(HeliMath.yawDegrees(Vector3d(-1.0e-6, 0.0, -1.0)) < -179.0)
+        assertEquals(90.0, HeliMath.yawDegrees(Vector3d(-1.0, 0.0, 0.0)), 1.0e-12)
+        assertEquals(180.0, HeliMath.yawDegrees(Vector3d(0.0, 0.0, -1.0)), 1.0e-12)
+        assertEquals(270.0, HeliMath.yawDegrees(Vector3d(1.0, 0.0, 0.0)), 1.0e-12)
+        assertTrue(HeliMath.yawDegrees(Vector3d(1.0e-6, 0.0, 1.0)) > 359.0)
+        assertTrue(HeliMath.yawDegrees(Vector3d(-1.0e-6, 0.0, 1.0)) < 1.0)
         assertThrows(IllegalArgumentException::class.java) { HeliMath.yawDegrees(Vector3d(0.0, 1.0, 0.0)) }
+        assertThrows(IllegalArgumentException::class.java) {
+            HeliMath.yawDegrees(Vector3d(Double.NaN, 0.0, 1.0))
+        }
+    }
+
+    @Test
+    fun staticGimbalAxesUseSimulatedVisualPositiveDirection() {
+        assertEquals(270.0, HeliMath.yawDegrees(GimbalHeading.staticForward(Direction.Axis.X)), 1.0e-12)
+        assertEquals(0.0, HeliMath.yawDegrees(GimbalHeading.staticForward(Direction.Axis.Z)), 1.0e-12)
+        assertThrows(IllegalArgumentException::class.java) { GimbalHeading.staticForward(Direction.Axis.Y) }
     }
 
     @Test

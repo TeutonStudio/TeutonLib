@@ -16,6 +16,7 @@
     "peripheral.BlockEntityRemovalMixin",
     "peripheral.aeronautics.GyroscopicBearingMixin",
     "peripheral.simulated.SimPeripheralAccessor",
+    "peripheral.simulated.GimbalSensorPeripheralMixin",
     "peripheral.console.ConsoleGraphMixin",
     "peripheral.console.ConsoleRuntimeMixin",
     "peripheral.console.ConsoleTreeMixin",
@@ -30,7 +31,8 @@
   "client": [
     "cso.client.KineticBlockEntityVisualMixin",
     "computer.client.ComputerScreenMixin",
-    "computer.client.DbwClientMixin"
+    "computer.client.DbwClientMixin",
+    "simulated.GimbalSensorTooltipMixin"
   ],
   "injectors": {
     "defaultRequire": 1

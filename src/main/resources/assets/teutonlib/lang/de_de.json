@@ -1,5 +1,6 @@
 {
   "block.teutonlib.peripheral_link": "Peripheral Link",
+  "teutonlib.gimbal_sensor.y_angle": "Y-Winkel: %s",
   "teutonlib.peripheral_link.cleared": "Zielauswahl des Peripheral Links gelöscht.",
   "teutonlib.peripheral_link.selected": "Ziel ausgewählt: %s",
   "teutonlib.peripheral_link.invalid_target": "Zuerst einen geladenen Computer oder ein Pult innerhalb der Reichweite auswählen.",

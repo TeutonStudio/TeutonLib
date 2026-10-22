@@ -50,16 +50,31 @@ end
 ## Gimbalsensor
 
 ```lua
+local pitch = sensor.getPitch()
 local yaw = sensor.getYaw()
+local roll = sensor.getRoll()
+local degrees = sensor.getAngles()       -- { pitch, roll }
+local radians = sensor.getAnglesRad()    -- { pitch, roll }
+local rotation = sensor.getRotation()    -- { pitch, yaw, roll }
 ```
 
-`getYaw()` liest die tatsächliche Sable-Sublevelrotation und ist von der Montageausrichtung
-des Sensorblocks unabhängig. Das Ergebnis ist in Grad im halboffenen Bereich
-`[-180, 180)`: lokale +Z nach Welt-+Z ist 0°, lokale +Z nach Welt-+X ist +90°.
+`getPitch()` und `getRoll()` entsprechen den beiden etablierten Simulated-Werten aus
+`getAngles()`. `getYaw()` liest die tatsächliche Sable-Sublevelrotation und ist von der
+Montageausrichtung des Sensorblocks unabhängig.
+Der Y-Winkel verwendet Minecraft-Yaw im halboffenen Bereich `[0, 360)`: Süd ist 0°,
+West 90°, Nord 180° und Ost 270°. Alle Einzelmethoden und `getRotation()` liefern Grad;
+`getAnglesRad()` behält Simulateds zweielementiges Radiantformat bei.
 
-Außerhalb eines Sable-Sublevels oder bei senkrechter beziehungsweise nicht endlicher
-Vorwärtsrichtung liefert die Methode einen verständlichen Lua-Fehler. Die vorhandenen
-`getAngles()`- und `getAnglesRad()`-Methoden werden unverändert weitergereicht.
+Bei einem statischen Sensor wird Simulateds visuelle positive Blockachse verwendet:
+Z-Achse entspricht Süd/0°, X-Achse Ost/270°. Bei senkrechter oder nicht endlicher
+Vorwärtsrichtung liefern `getYaw()` und `getRotation()` einen verständlichen Lua-Fehler.
+
+TeutonLib bewahrt `getAngles()` und `getAnglesRad()` als `{ pitch, roll }`, damit
+bestehende Simulated- und Create-Avionics-Programme kompatibel bleiben. `getPitch()`,
+`getYaw()`, `getRoll()` und `getRotation()` sind sowohl direkt am CC:Tweaked-Peripheral
+als auch über einen Peripheral Link und auf CC-Aeroworks-Pultcomputern verfügbar.
+`getRotaion()` bleibt als veralteter Alias für die ursprünglich angefragte Schreibweise
+erhalten; neue Programme sollten `getRotation()` verwenden.
 
 ## Beispiel mit Methodenprüfung
 

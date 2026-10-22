@@ -140,6 +140,13 @@ class DependencyCompatibilityTest {
         )
         assertTrue(gimbal.containsKey("getAngles()Ljava/util/List;"))
         assertTrue(gimbal.containsKey("getAnglesRad()Ljava/util/List;"))
+        assertEquals(0, gimbal.getValue("getAngles()Ljava/util/List;") and Opcodes.ACC_FINAL)
+        assertEquals(0, gimbal.getValue("getAnglesRad()Ljava/util/List;") and Opcodes.ACC_FINAL)
+        val sensor = DependencyCompatibilityTest.methods(
+            "dev/simulated_team/simulated/content/blocks/gimbal_sensor/GimbalSensorBlockEntity"
+        )
+        assertTrue(sensor.containsKey("getXAngle()D"))
+        assertTrue(sensor.containsKey("getZAngle()D"))
         assertTrue(DependencyCompatibilityTest.methods("dev/ryanhcode/sable/sublevel/SubLevel")
             .containsKey("logicalPose()Ldev/ryanhcode/sable/companion/math/Pose3d;"))
     }

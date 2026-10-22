@@ -44,14 +44,15 @@ object HeliMath {
         return Vector3d(unitAxis).mul(cos(limit)).add(tangent.mul(sin(limit))).normalize()
     }
 
+    /** Minecraft yaw: south is 0, west is 90, north is 180 and east is 270 degrees. */
     fun yawDegrees(worldForward: Vector3dc): Double {
         require(worldForward.x().isFinite() && worldForward.z().isFinite()) { "Sublevel orientation is not finite" }
         require(worldForward.x() * worldForward.x() + worldForward.z() * worldForward.z() > EPSILON) {
             "Sublevel has no determinable horizontal yaw"
         }
-        var yaw = Math.toDegrees(atan2(worldForward.x(), worldForward.z()))
-        if (yaw >= 180.0) yaw -= 360.0
-        if (yaw < -180.0) yaw += 360.0
+        var yaw = Math.toDegrees(atan2(-worldForward.x(), worldForward.z()))
+        if (yaw < 0.0) yaw += 360.0
+        if (yaw >= 360.0) yaw -= 360.0
         return yaw
     }
 }

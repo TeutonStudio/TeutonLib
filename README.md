@@ -96,8 +96,11 @@ Bedienung, API, Kompatibilitätsgrenze für eigene Betriebssysteme und Testbefeh
 [Peripheral-Link-Dokumentation](docs/peripheral-link.md).
 
 Für Heli-Steuerungen ergänzt TeutonLib am Directional Gyroscopic Propeller Bearing
-`adjustTilt` und `setTargetDirection` sowie am Gimbalsensor `getYaw`. Signaturen,
-Koordinatensystem, 20-Tick-Timeout und Lua-Beispiele stehen in der
+`adjustTilt` und `setTargetDirection`. Der Gimbalsensor zeigt zusätzlich den Y-Winkel in
+der Ingenieursbrille und bietet Pitch, Yaw und Roll einzeln sowie über `getRotation()` an.
+Die bestehenden zweiachsigen `getAngles()`- und `getAnglesRad()`-Ergebnisse bleiben
+kompatibel. Signaturen, Koordinatensystem, 20-Tick-Timeout und
+Lua-Beispiele stehen in der
 [Heli-Peripheral-Dokumentation](docs/heli-peripherals.md).
 
 Für portable Computergrafik liefern `teutonlib.svg` und `teutonlib.font` SVG-Rasterung

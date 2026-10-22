@@ -24,6 +24,11 @@ class CsoMixinPlugin : IMixinConfigPlugin {
             ) != null)
                     && (!mixinClassName.endsWith("DbwClientMixin") || mods.getModFileById("drivebywire") != null)
         }
+        if (mixinClassName.contains(".mixin.simulated.")) {
+            val mods = LoadingModList.get()
+            return mods != null && mods.getModFileById("create") != null && mods.getModFileById("sable") != null &&
+                    mods.getModFileById("simulated") != null
+        }
         if (mixinClassName.contains(".mixin.peripheral.")) {
             val mods = LoadingModList.get()
             return mods != null && mods.getModFileById("computercraft") != null && mods.getModFileById("create") != null &&
