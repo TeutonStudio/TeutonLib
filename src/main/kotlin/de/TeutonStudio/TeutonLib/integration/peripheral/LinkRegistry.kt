@@ -277,6 +277,7 @@ object LinkRegistry {
         val chunk = event.chunk as? LevelChunk ?: return
         run {
             for (block in chunk.blockEntities.values) {
+                (block as? LuaTiltTarget)?.`teutonlib$clearLuaTiltTarget`()
                 removeAnchor(block)
                 if (block is PeripheralLinkBlockEntity) remove(block)
             }

@@ -109,8 +109,10 @@ class LinkLuaApi(private val system: IComputerSystem) : ILuaAPI {
         val next: MutableMap<String, LinkDevice> = LinkedHashMap<String, LinkDevice>()
         for (connection in LinkRegistry.connections(owner)) {
             val previous = devices.get(connection.name())
-            if (previous is LinkBinding && previous.matches(connection)) next.put(connection.name(), previous)
-            else next.put(connection.name(), LinkBinding(this, system, connection))
+            if (previous is LinkBinding && previous.matches(connection) ||
+                previous is ExtendedLinkDevice && previous.matches(connection)
+            ) next.put(connection.name(), previous)
+            else next.put(connection.name(), PeripheralExtensions.augment(LinkBinding(this, system, connection)))
         }
         for (entry in devices.entries) if (next.get(entry.key) !== entry.value) {
             close(entry.value)
@@ -120,7 +122,11 @@ class LinkLuaApi(private val system: IComputerSystem) : ILuaAPI {
         publish(next)
         for (entry in next.entries) if (old.get(entry.key) !== entry.value) {
             try {
-                (entry.value as LinkBinding).attach()
+                when (val device = entry.value) {
+                    is LinkBinding -> device.attach()
+                    is ExtendedLinkDevice -> device.attachDelegate()
+                    else -> error("Unexpected link device ${device.javaClass.name}")
+                }
                 system.queueEvent("peripheral", entry.key)
             } catch (failure: RuntimeException) {
                 TeutonLib.Companion.LOGGER.warn("Could not attach Peripheral Link {}", entry.key, failure)

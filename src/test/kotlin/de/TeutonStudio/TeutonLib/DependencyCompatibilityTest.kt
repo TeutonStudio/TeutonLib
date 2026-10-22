@@ -128,6 +128,22 @@ class DependencyCompatibilityTest {
         )
     }
 
+    @Test
+    @Throws(IOException::class)
+    fun helicopterPeripheralTargetsMatchInstalledAeronauticsBundle() {
+        val gyro = DependencyCompatibilityTest.methods(
+            "dev/eriksonn/aeronautics/content/blocks/propeller/bearing/gyroscopic_propeller_bearing/GyroscopicPropellerBearingBlockEntity"
+        )
+        assertTrue(gyro.containsKey("setTilt(Lorg/joml/Vector3d;Lorg/joml/Vector3d;D)V"))
+        val gimbal = DependencyCompatibilityTest.methods(
+            "dev/simulated_team/simulated/compat/computercraft/peripherals/GimbalSensorPeripheral"
+        )
+        assertTrue(gimbal.containsKey("getAngles()Ljava/util/List;"))
+        assertTrue(gimbal.containsKey("getAnglesRad()Ljava/util/List;"))
+        assertTrue(DependencyCompatibilityTest.methods("dev/ryanhcode/sable/sublevel/SubLevel")
+            .containsKey("logicalPose()Ldev/ryanhcode/sable/companion/math/Pose3d;"))
+    }
+
     companion object {
         private const val DOCK =
             "dev/simulated_team/simulated/content/blocks/docking_connector/DockingConnectorBlockEntity"

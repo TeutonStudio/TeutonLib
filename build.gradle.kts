@@ -133,6 +133,7 @@ val generateModMetadata by tasks.registering(ProcessResources::class) {
     val props = listOf(
         "minecraft_version", "minecraft_version_range", "neo_version", "kotlin_for_forge_version",
         "loader_version_range", "create_mod_version", "sable_mod_version", "simulated_mod_version_range",
+        "aeronautics_mod_version_range",
         "mod_id", "mod_name", "mod_version", "mod_group_id", "mod_authors", "mod_license", "mod_description"
     ).associateWith { providers.gradleProperty(it).get() }
     inputs.properties(props)

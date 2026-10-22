@@ -6,6 +6,7 @@ import de.TeutonStudio.TeutonLib.integration.CsoRuntime
 import de.TeutonStudio.TeutonLib.integration.computer.ComputerIntegration
 import de.TeutonStudio.TeutonLib.integration.energy.NewAgeMotorEnergy
 import de.TeutonStudio.TeutonLib.integration.peripheral.PeripheralLinks
+import de.TeutonStudio.TeutonLib.integration.peripheral.heli.HeliPeripheralIntegration
 import de.TeutonStudio.TeutonLib.network.CsoStatePayload
 import java.util.function.Consumer
 import net.neoforged.bus.api.IEventBus
@@ -33,7 +34,12 @@ class TeutonLib(modBus: IEventBus, container: ModContainer) {
                 event!!
             )
         })
-        modBus.addListener<RegisterCapabilitiesEvent>(Consumer { obj: RegisterCapabilitiesEvent? -> NewAgeMotorEnergy.registerCapabilities(obj!!) })
+        modBus.addListener<RegisterCapabilitiesEvent>(Consumer { event: RegisterCapabilitiesEvent? ->
+            NewAgeMotorEnergy.registerCapabilities(event!!)
+            if (ModList.get().isLoaded("computercraft") && ModList.get().isLoaded("aeronautics") &&
+                ModList.get().isLoaded("simulated") && ModList.get().isLoaded("sable")
+            ) HeliPeripheralIntegration.registerCapabilities(event)
+        })
         if (ModList.get().isLoaded("computercraft") && ModList.get()
                 .isLoaded("create")
         ) PeripheralLinks.register(modBus)

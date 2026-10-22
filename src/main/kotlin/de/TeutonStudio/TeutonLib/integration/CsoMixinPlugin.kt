@@ -26,7 +26,10 @@ class CsoMixinPlugin : IMixinConfigPlugin {
         }
         if (mixinClassName.contains(".mixin.peripheral.")) {
             val mods = LoadingModList.get()
-            return mods != null && mods.getModFileById("computercraft") != null && mods.getModFileById("create") != null && (!mixinClassName.contains(
+            return mods != null && mods.getModFileById("computercraft") != null && mods.getModFileById("create") != null &&
+                    (!mixinClassName.contains(".peripheral.aeronautics.") ||
+                            mods.getModFileById("aeronautics") != null && mods.getModFileById("simulated") != null && mods.getModFileById("sable") != null) &&
+                    (!mixinClassName.contains(".peripheral.simulated.") || mods.getModFileById("simulated") != null) && (!mixinClassName.contains(
                 ".peripheral.console."
             ) || mods.getModFileById("cc_aeroworks") != null)
         }

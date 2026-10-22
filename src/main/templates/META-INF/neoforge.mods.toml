@@ -64,6 +64,13 @@ ordering="AFTER"
 side="BOTH"
 
 [[dependencies.${mod_id}]]
+modId="aeronautics"
+type="optional"
+versionRange="${aeronautics_mod_version_range}"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
 modId="cso"
 type="incompatible"
 versionRange="*"

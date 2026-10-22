@@ -5,12 +5,12 @@ KotlinForForge **5.11.0** ist erforderlich. TeutonLib muss auf Server und Client
 
 ## PC-UI als Vorlage
 
-Das Release **1.2.2** enthält eine kompilierte, kopierbare
+Das Release **1.3.0** enthält eine kompilierte, kopierbare
 [PC-UI-Integrationsvorlage](examples/computer-ui/README.md) für CC Aeroworks und
 andere Addons: Terminal, gemeinsame Quellen-/Kanalreiter, Fokus und Resize.
 `./gradlew releaseBundle --offline` erzeugt das ZIP mit Mod-JAR, Quellen und
 Dokumentation unter `build/distributions/`.
-[Releaseumfang und Voraussetzungen](docs/release-1.2.2.md).
+[Releaseumfang und Voraussetzungen](docs/release-1.3.0.md).
 
 Die automatische UI-Erweiterung lässt sich clientseitig in `config/teutonlib-client.toml`
 unter `[computerUi]` mit `enabled = false` abschalten (Standard: `true`).
@@ -94,6 +94,16 @@ Sable-Verbindungen verwenden Weltpositionen einschließlich Bewegung und Drehung
 
 Bedienung, API, Kompatibilitätsgrenze für eigene Betriebssysteme und Testbefehle:
 [Peripheral-Link-Dokumentation](docs/peripheral-link.md).
+
+Für Heli-Steuerungen ergänzt TeutonLib am Directional Gyroscopic Propeller Bearing
+`adjustTilt` und `setTargetDirection` sowie am Gimbalsensor `getYaw`. Signaturen,
+Koordinatensystem, 20-Tick-Timeout und Lua-Beispiele stehen in der
+[Heli-Peripheral-Dokumentation](docs/heli-peripherals.md).
+
+Für portable Computergrafik liefern `teutonlib.svg` und `teutonlib.font` SVG-Rasterung
+und eine Bitmap-Schrift für Terminals, Monitore und optionale Pixel-Displays. Beide
+Module funktionieren ohne CCVisual und ohne CC-Aeroworks. API und Beispiele stehen in
+der [Computergrafik-Dokumentation](docs/computer-graphics.md).
 
 ## Config und Befehle
 

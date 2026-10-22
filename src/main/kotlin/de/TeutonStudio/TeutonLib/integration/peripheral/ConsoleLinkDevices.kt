@@ -19,7 +19,7 @@ internal object ConsoleLinkDevices {
         val result = LinkedHashMap<String, LinkDevice>()
         bindings.forEach { (name: String, binding: PeripheralBinding) ->
             if (!name!!.startsWith("cc_aeroworks:link_")) return@forEach
-            result.put(name, object : LinkDevice {
+            val device = object : LinkDevice {
                 override fun peripheral(): IPeripheral {
                     return binding!!.node.target
                 }
@@ -40,7 +40,8 @@ internal object ConsoleLinkDevices {
                 override fun info(): Map<String, Any?> {
                     return binding!!.info()
                 }
-            })
+            }
+            result.put(name, PeripheralExtensions.augment(device))
         }
         return result
     }
