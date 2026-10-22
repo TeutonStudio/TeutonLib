@@ -173,9 +173,15 @@ tasks.withType<AbstractArchiveTask>().configureEach {
 }
 val verifyKotlinSources by tasks.registering {
     doLast {
-        val javaSources = fileTree("src") { include("**/*.java") } +
+        val allowedJavaSources = setOf(
+            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/computer/client/DbwClientMixin.java")
+        )
+        val javaSources = (fileTree("src") { include("**/*.java") } +
             fileTree("examples") { include("**/*.java") }
-        check(javaSources.isEmpty) { "Java sources remain: ${javaSources.files}" }
+        ).files
+        check(javaSources == allowedJavaSources) {
+            "Unexpected Java sources: ${javaSources - allowedJavaSources}; missing required Java mixins: ${allowedJavaSources - javaSources}"
+        }
     }
 }
 tasks.check { dependsOn("compileComputerUiExampleKotlin", verifyKotlinSources) }
