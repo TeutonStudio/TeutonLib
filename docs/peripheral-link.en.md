@@ -36,6 +36,20 @@ Custom operating systems which skip CraftOS autorun can install the extension ex
 require("teutonlib.peripheral_links").install()
 ```
 
+A linked Simulated Optical Sensor additionally provides `getLocalDirection()`. It returns
+the laser facing as a local unit vector `{ x = ..., y = ..., z = ... }`. On a Sable
+sublevel, this vector uses plot coordinates rather than world coordinates, allowing a
+program to derive the world direction from a gimbal sensor's rotation:
+
+```lua
+local sensor = assert(peripheral.find("optical_sensor"))
+local direction = sensor.getLocalDirection()
+print(direction.x, direction.y, direction.z) -- 0  0  1
+```
+
+This method is intentionally available through a Peripheral Link only. A stationary
+sensor's local coordinate system is identical to the world coordinate system.
+
 The native API is registered through `ComputerCraftAPI.registerAPIFactory`; its global name is `teutonlib_links` and its module name is `teutonlib.links`.
 
 Embedded desk computers additionally expose the same bindings through their existing API:

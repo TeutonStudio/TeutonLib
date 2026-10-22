@@ -151,6 +151,20 @@ class DependencyCompatibilityTest {
             .containsKey("logicalPose()Ldev/ryanhcode/sable/companion/math/Pose3d;"))
     }
 
+    @Test
+    @Throws(IOException::class)
+    fun opticalSensorExposesItsLocalLaserDirection() {
+        val peripheral = DependencyCompatibilityTest.methods(
+            "dev/simulated_team/simulated/compat/computercraft/peripherals/OpticalSensorPeripheral"
+        )
+        assertTrue(peripheral.containsKey("getType()Ljava/lang/String;"))
+        val sensor = DependencyCompatibilityTest.methods(
+            "dev/simulated_team/simulated/content/blocks/lasers/optical_sensor/OpticalSensorBlockEntity"
+        )
+        assertTrue(sensor.containsKey("getDirection()Lnet/minecraft/core/Direction;"))
+        assertTrue(sensor.getValue("getDirection()Lnet/minecraft/core/Direction;") and Opcodes.ACC_PUBLIC != 0)
+    }
+
     companion object {
         private const val DOCK =
             "dev/simulated_team/simulated/content/blocks/docking_connector/DockingConnectorBlockEntity"

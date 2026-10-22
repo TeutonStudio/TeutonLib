@@ -8,6 +8,7 @@ import net.neoforged.fml.ModList
 internal object HeliPeripheralExtensions {
     fun methods(device: LinkDevice): Map<String, LinkExtensionMethod> {
         val additions = LinkedHashMap<String, LinkExtensionMethod>()
+        if (ModList.get().isLoaded("simulated")) additions.putAll(OpticalSensorPeripheralExtensions.methods(device))
         if (ModList.get().isLoaded("aeronautics")) additions.putAll(BearingPeripheralExtensions.methods(device))
         return additions
     }

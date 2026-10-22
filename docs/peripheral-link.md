@@ -50,6 +50,21 @@ Eigene Betriebssysteme, die kein CraftOS-Autorun ausführen, laden das Modul aus
 require("teutonlib.peripheral_links").install()
 ```
 
+Ein Simulated Optical Sensor hinter einem Peripheral Link erhält zusätzlich
+`getLocalDirection()`. Die Methode liefert die Laser-Ausrichtung als lokalen Einheitsvektor
+`{ x = ..., y = ..., z = ... }`. Auf einem Sable-Sublevel sind dies dessen Plotkoordinaten,
+nicht Weltkoordinaten. Damit kann ein Programm die Weltrichtung anhand der Rotation eines
+Gimbalsensors selbst berechnen. Beispiel für einen nach vorne (+Z) gerichteten Sensor:
+
+```lua
+local sensor = assert(peripheral.find("optical_sensor"))
+local direction = sensor.getLocalDirection()
+print(direction.x, direction.y, direction.z) -- 0  0  1
+```
+
+Die Methode steht bewusst nur über einen Peripheral Link bereit. Ein statischer Sensor
+verwendet dasselbe lokale Koordinatensystem wie die Welt.
+
 Die serverseitige API wird mit `ComputerCraftAPI.registerAPIFactory` bereitgestellt. Ihr globaler Name ist `teutonlib_links`, ihr Modulname `teutonlib.links`. Die Implementierung des ROM-Moduls ist die Referenz für eigene Betriebssysteme. Während der API-Erzeugung erfolgt kein Weltzugriff; der aktuelle Computerblock wird erst nach Aktivierung auf dem Serverthread aufgelöst.
 
 ## Eingebaute Pultcomputer
