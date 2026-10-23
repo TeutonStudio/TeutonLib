@@ -97,9 +97,11 @@ Sable-Verbindungen verwenden Weltpositionen einschließlich Bewegung und Drehung
 Bedienung, API, Kompatibilitätsgrenze für eigene Betriebssysteme und Testbefehle:
 [Peripheral-Link-Dokumentation](docs/peripheral-link.md).
 
-Für Heli-Steuerungen ergänzt TeutonLib am Directional Gyroscopic Propeller Bearing
-`adjustTilt` und `setTargetDirection`. Der Gimbalsensor zeigt zusätzlich den Y-Winkel in
-der Ingenieursbrille und bietet Pitch, Yaw und Roll einzeln sowie über `getRotation()` an.
+Für Heli-Steuerungen ergänzt TeutonLib direkt, im Modemnetz und über Peripheral Links am
+Directional Gyroscopic Propeller Bearing `adjustTilt` und `setTargetDirection`; das gilt
+auch für den von Simulated Addition abgeleiteten Block. Der Gimbalsensor zeigt zusätzlich
+den Y-Winkel in der Ingenieursbrille und bietet Pitch, Yaw und Roll einzeln sowie über
+`getRotation()` an.
 Die bestehenden zweiachsigen `getAngles()`- und `getAnglesRad()`-Ergebnisse bleiben
 kompatibel. Signaturen, Koordinatensystem, 20-Tick-Timeout und
 Lua-Beispiele stehen in der

@@ -1,15 +1,21 @@
 # Heli-Peripherals
 
-TeutonLib 1.3.0 erweitert Geräte hinter einem Peripheral Link. Die Methoden stehen über
-`peripheral.call`, `peripheral.wrap`, `peripheral.getMethods` und `peripheral.find` sowohl
-auf normalen CC:Tweaked-Computern als auch auf eingebetteten CC-Aeroworks-Computern zur
-Verfügung. Vorhandene Peripheral-Typen und Methoden bleiben bestehen.
+TeutonLib erweitert die Geräte direkt am Computer, im Kabel-/Modemnetz und hinter einem
+Peripheral Link. Die Methoden stehen über `peripheral.call`, `peripheral.wrap`,
+`peripheral.getMethods` und `peripheral.find` sowohl auf normalen CC:Tweaked-Computern als
+auch auf eingebetteten CC-Aeroworks-Computern zur Verfügung. Vorhandene Peripheral-Typen
+und Methoden bleiben bestehen.
 
 Geprüfte Integrationsbasis: Minecraft 1.21.1, Sable 2.0.5 und das
 Create-Aeronautics-Bundle 1.3.2 mit Aeronautics und Simulated 1.3.2. Alle Integrationen
 bleiben optional.
 
 ## Directional Gyroscopic Propeller Bearing
+
+`adjustTilt` und `setTargetDirection` werden generisch an Aeronautics-Gyroskope und deren
+Unterklassen angehängt. Dazu gehört auch
+`simulated_addition:directional_gyroscopic_propeller_bearing`; sein eigener Peripheral-Typ
+und seine vorhandenen Methoden bleiben unverändert.
 
 ```lua
 bearing.adjustTilt({ deltaRoll = 1.5, deltaPitch = -0.5 })

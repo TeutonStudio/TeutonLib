@@ -17,6 +17,7 @@ import net.neoforged.fml.config.ModConfig
 import net.neoforged.fml.event.config.ModConfigEvent
 import net.neoforged.fml.event.config.ModConfigEvent.Loading
 import net.neoforged.fml.event.config.ModConfigEvent.Reloading
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent
 import net.neoforged.neoforge.common.NeoForge
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent
@@ -25,6 +26,8 @@ import org.slf4j.Logger
 @Mod(TeutonLib.Companion.MOD_ID)
 class TeutonLib(modBus: IEventBus, container: ModContainer) {
     init {
+        val heliIntegration = ModList.get().isLoaded("computercraft") && ModList.get().isLoaded("aeronautics") &&
+            ModList.get().isLoaded("simulated") && ModList.get().isLoaded("sable")
         container.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC, ServerConfig.FILE_NAME)
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, ClientConfig.FILE_NAME)
         modBus.addListener<Loading>(Consumer { event: Loading? -> this.configLoaded(event!!) })
@@ -36,10 +39,11 @@ class TeutonLib(modBus: IEventBus, container: ModContainer) {
         })
         modBus.addListener<RegisterCapabilitiesEvent>(Consumer { event: RegisterCapabilitiesEvent? ->
             NewAgeMotorEnergy.registerCapabilities(event!!)
-            if (ModList.get().isLoaded("computercraft") && ModList.get().isLoaded("aeronautics") &&
-                ModList.get().isLoaded("simulated") && ModList.get().isLoaded("sable")
-            ) HeliPeripheralIntegration.registerCapabilities(event)
+            if (heliIntegration) HeliPeripheralIntegration.registerCapabilities(event)
         })
+        if (heliIntegration) modBus.addListener<FMLCommonSetupEvent> { event ->
+            event.enqueueWork(HeliPeripheralIntegration::registerGenericMethods)
+        }
         if (ModList.get().isLoaded("computercraft") && ModList.get()
                 .isLoaded("create")
         ) PeripheralLinks.register(modBus)

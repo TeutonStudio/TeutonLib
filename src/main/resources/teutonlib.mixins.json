@@ -15,6 +15,7 @@
     "peripheral.LinkAvailableMixin",
     "peripheral.BlockEntityRemovalMixin",
     "peripheral.aeronautics.GyroscopicBearingMixin",
+    "peripheral.aeronautics.DirectionalGyroscopicBearingMixin",
     "peripheral.simulated.SimPeripheralAccessor",
     "peripheral.simulated.GimbalSensorPeripheralMixin",
     "peripheral.console.ConsoleGraphMixin",

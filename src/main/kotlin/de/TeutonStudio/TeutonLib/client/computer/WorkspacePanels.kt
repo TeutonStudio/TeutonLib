@@ -377,7 +377,7 @@ class WorkspacePanels(
                         if (selected == entry.id) accent() else -0x1f1f20,
                         false
                     )
-                    val detail = text(entry.detail).string
+                    val detail = text(WorkspaceSourceRows.detail(entry)).string
                     g.drawString(
                         font,
                         font.plainSubstrByWidth(if (hasApi && entry.metadata.getCompound("api").contains("modem"))
