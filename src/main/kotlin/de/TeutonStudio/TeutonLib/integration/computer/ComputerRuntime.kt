@@ -106,6 +106,17 @@ class ComputerRuntime(private val system: IComputerSystem) : ILuaAPI, ComputerCo
         return (host() as ChannelHost).`teutonlib$channels`()
     }
 
+    fun sourceNickname(name: String): String? =
+        (host() as SourceNicknameHost).`teutonlib$sourceNicknames`().get(name)
+
+    fun setSourceNickname(name: String, nickname: String) {
+        require(sourceViews().any { it.name == name }) { "Peripheral is no longer available" }
+        (host() as SourceNicknameHost).`teutonlib$sourceNicknames`().set(name, nickname)
+        val host = host()
+        host.setChanged()
+        host.level!!.sendBlockUpdated(host.blockPos, host.blockState, host.blockState, 3)
+    }
+
     private fun changed() {
         val host = host()
         host.setChanged()

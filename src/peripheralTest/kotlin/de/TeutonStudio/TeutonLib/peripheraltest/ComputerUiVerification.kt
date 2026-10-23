@@ -74,7 +74,13 @@ object ComputerUiVerification {
         val tab = tabs[page]
         screen.mouseClicked((tab.x + 8).toDouble(), (tab.y + 10).toDouble(), 0)
         if (panels.page() != page) throw AssertionError("Aeroworks tab order/state")
-        val rename = ComputerWorkspace.Action("rename", "Rename", true, false, false)
+        val rename = ComputerWorkspace.Action(
+            if (page == 1) "source_nickname" else "rename",
+            if (page == 1) "teutonlib.computer.set_nickname" else "Rename",
+            true,
+            false,
+            false
+        )
         val child = ComputerWorkspace.Entry(
             "wire:stable", "Engine", "12/15 · 2 connections", "", "wire:stable", true, false,
             mutableListOf<ComputerWorkspace.Entry>(), java.util.List.of<ComputerWorkspace.Action>(rename), CompoundTag().also {
@@ -83,6 +89,7 @@ object ComputerUiVerification {
                     (0..40).map { SourceMethod("method$it", "method$it(value: number)", "Long method documentation to exercise wrapping in the source API window.") },
                     ModemDetails("ender", "minecraft:overworld", 256.0, true)
                 ).encode())
+                if (page == 1) it.putString("nickname", "Engine")
             }
         )
         val entry = ComputerWorkspace.Entry(
@@ -105,7 +112,10 @@ object ComputerUiVerification {
             .map<TerminalWidget> { c: GuiEventListener? -> c as TerminalWidget }.findFirst().orElseThrow()!!
         if (terminal.active || terminal.visible) throw AssertionError("Terminal still accepts input under addon page")
         if (page == 1) {
-            val infoX = (rows.x + rows.width - 18).toDouble()
+            val field = screen.children().filterIsInstance<EditBox>().first()
+            if (screen.focused !== field || !field.isFocused() || field.value != "Engine")
+                throw AssertionError("Source nickname editor focus/value missing")
+            val infoX = (field.x - 18).toDouble()
             val infoY = (rows.y + 52).toDouble()
             screen.mouseClicked(infoX, infoY, 0)
             if (!panels.sourceApiOpen()) throw AssertionError("Source info did not open API")

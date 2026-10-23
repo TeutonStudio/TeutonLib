@@ -65,6 +65,7 @@ class WorkspacePanels(
     private var apiEntryId = ""
     private var apiOffset = 0
     private var pendingSelection = ""
+    private var pendingSourceNickname = false
     private var selected = ""
     private var group = ""
     private var target = ""
@@ -115,6 +116,7 @@ class WorkspacePanels(
         if (next != page) {
             api = null
             pendingSelection = ""
+            pendingSourceNickname = false
             page = next
             session = UUID.randomUUID()
             error = ""
@@ -144,7 +146,7 @@ class WorkspacePanels(
     }
 
     fun takeRequestedFocus(): AbstractWidget? {
-        if (!requestFocus || page != 2 || !name.visible) return null
+        if (!requestFocus || page == 0 || !name.visible) return null
         requestFocus = false
         return name
     }
@@ -186,11 +188,14 @@ class WorkspacePanels(
         rows.active = page != 0
         rows.visible = rows.active
         val available = available()
-        name.active = api == null && page == 2 && available.stream().anyMatch(ComputerWorkspace.Action::needsText)
+        name.active = api == null && page != 0 && available.stream().anyMatch(ComputerWorkspace.Action::needsText)
         name.visible = name.active
+        val editorLabel = text(if (page == 1) "teutonlib.computer.nickname" else "teutonlib.computer.name")
+        name.setMessage(editorLabel)
+        name.setHint(editorLabel)
         for (i in actions.indices) {
             val b = actions.get(i)
-            b.visible = api == null && page == 2 && i < available.size
+            b.visible = api == null && page != 0 && i < available.size
             b.active = b.visible
             if (!b.visible) continue
             val action = available.get(i)
@@ -224,8 +229,10 @@ class WorkspacePanels(
 
     private fun send(action: String) {
         if (Minecraft.getInstance().connection == null) return
-        if (backend == StandardComputerWorkspace.ID && action in listOf("create", "rename"))
+        if (backend == StandardComputerWorkspace.ID && page == 2 && action in listOf("create", "rename"))
             pendingSelection = name.value.trim()
+        if (page == 1 && action in listOf("source_nickname", "clear_source_nickname"))
+            pendingSourceNickname = true
         PacketDistributor.sendToServer(
             WorkspacePayloads.Request(
                 menu, session, backend,
@@ -258,6 +265,10 @@ class WorkspacePanels(
             selected = pendingSelection
             pendingSelection = ""
             requestFocus = true
+        }
+        if (pendingSourceNickname) {
+            if (error.isEmpty()) name.value = selection()?.metadata?.getString("nickname").orEmpty()
+            pendingSourceNickname = false
         }
         api?.let { current ->
             fun findApi(entries: List<ComputerWorkspace.Entry>): SourceApi? {
@@ -300,7 +311,7 @@ class WorkspacePanels(
         AbstractWidget(x, y, width, height, Component.translatable("teutonlib.computer.sources")) {
         var offset = 0
         fun listWidth(): Int {
-            return if (page == 2) name.x - getX() - 15 else width - 12
+            return if (page != 0) name.x - getX() - 15 else width - 12
         }
 
         fun capacity(): Int {
@@ -366,11 +377,12 @@ class WorkspacePanels(
                         if (selected == entry.id) accent() else -0x1f1f20,
                         false
                     )
+                    val detail = text(entry.detail).string
                     g.drawString(
                         font,
                         font.plainSubstrByWidth(if (hasApi && entry.metadata.getCompound("api").contains("modem"))
                             text("teutonlib.computer.modem_" + entry.metadata.getCompound("api").getCompound("modem").getString("kind")).string +
-                                " · " + entry.detail else entry.detail, max(1, contentRight - x)),
+                                " · " + detail else detail, max(1, contentRight - x)),
                         x,
                         y + 11,
                         -0x777778,
@@ -381,8 +393,8 @@ class WorkspacePanels(
                         g.fill(right - 20, y + 2, right - 4, y + 18, if (infoHover) -0xcfcfd0 else -0xe3e3e4)
                         g.drawString(font, "i", right - 14, y + 6, accent(), false)
                         if (infoHover) tooltip = text("teutonlib.computer.show_api").string
-                        else if (hover) tooltip = label + "\n" + entry.detail
-                    } else if (hover) tooltip = label + (if (entry.detail.isEmpty()) "" else "\n" + entry.detail)
+                        else if (hover) tooltip = label + "\n" + detail
+                    } else if (hover) tooltip = label + (if (detail.isEmpty()) "" else "\n" + detail)
                 }
             } finally {
                 g.disableScissor()
@@ -482,7 +494,9 @@ class WorkspacePanels(
             if (!entry.children.isEmpty()) collapsed.put(entry.id, !collapsed.getOrDefault(entry.id, entry.collapsed)!!)
             if (entry.selectable) {
                 selected = entry.id
-                if (page == 2) { name.value = text(entry.label).string; requestFocus = true }
+                if (page == 2) name.value = text(entry.label).string
+                if (page == 1) name.value = entry.metadata.getString("nickname")
+                requestFocus = true
                 armed = ""
                 if (!entry.group.isEmpty()) group = entry.group
                 if (!entry.target.isEmpty()) target = entry.target

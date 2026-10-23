@@ -26,6 +26,7 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler
 
 /** One transport for addon workspaces; a response belongs to one menu, controller and page.  */
 object WorkspacePayloads {
+    private val SOURCE_NICKNAME_ACTIONS = setOf("source_nickname", "clear_source_nickname")
     private val BACKENDS: MutableMap<ResourceLocation, ComputerWorkspace> =
         ConcurrentHashMap<ResourceLocation, ComputerWorkspace>()
 
@@ -69,7 +70,24 @@ object WorkspacePayloads {
         var error = ""
         try {
             check(computer.isOn()) { "Computer is off" }
-            if (p.command.action != "snapshot") backend.execute(player, computer, p.command)
+            if (p.command.action != "snapshot") {
+                if (p.command.action in SOURCE_NICKNAME_ACTIONS) {
+                    require(p.command.page == 1) { "Invalid source action" }
+                    val current = backend.snapshot(player, computer, 1)
+                    fun find(entries: List<ComputerWorkspace.Entry>): ComputerWorkspace.Entry? {
+                        for (entry in entries) {
+                            if (entry.id == p.command.selected) return entry
+                            find(entry.children)?.let { return it }
+                        }
+                        return null
+                    }
+                    val selected = find(current.entries) ?: error("Peripheral is no longer available")
+                    require(selected.actions.any { it.id == p.command.action && !it.clientSide }) {
+                        "Action is no longer available"
+                    }
+                    StandardComputerWorkspace.execute(player, computer, p.command)
+                } else backend.execute(player, computer, p.command)
+            }
         } catch (e: IllegalArgumentException) {
             error = Objects.toString(e.message, "Workspace action failed")
         } catch (e: IllegalStateException) {

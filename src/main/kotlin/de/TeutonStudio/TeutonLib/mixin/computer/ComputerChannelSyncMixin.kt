@@ -17,5 +17,7 @@ abstract class ComputerChannelSyncMixin {
     private fun `teutonlib$update`(provider: HolderLookup.Provider, cir: CallbackInfoReturnable<CompoundTag>) {
         cir.returnValue!!
             .put("TeutonLibChannels", ChannelPersistence.save((this as ChannelHost).`teutonlib$channels`()))
+        cir.returnValue!!
+            .put("TeutonLibSourceNicknames", SourceNicknamePersistence.save((this as SourceNicknameHost).`teutonlib$sourceNicknames`()))
     }
 }

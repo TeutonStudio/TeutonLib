@@ -5,8 +5,10 @@ import dan200.computercraft.shared.computer.core.ServerComputer
 import de.TeutonStudio.TeutonLib.api.computer.*
 import de.TeutonStudio.TeutonLib.api.computer.ComputerWorkspace.*
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.block.entity.BlockEntity
 
 /** The ordinary computer uses the same tree, actions and API viewer as addon computers. */
 object StandardComputerWorkspace : ComputerWorkspace {
@@ -21,15 +23,29 @@ object StandardComputerWorkspace : ComputerWorkspace {
     fun sourceEntry(runtime: ComputerRuntime, source: SourceView,
                     peripheral: dan200.computercraft.api.peripheral.IPeripheral? = runtime.peripherals()[source.name]): Entry {
         val api = SourceIntrospection.describe(runtime, source, peripheral)
-        val detail = listOf(source.connection, source.types.joinToString(", ")).joinToString(" · ")
-        val children = listOfNotNull(
-            source.devicePosition?.takeIf { it.isNotEmpty() }?.let { Entry("peripheral:${source.name}/position", it, "", "", "", false, false, emptyList(), emptyList(), CompoundTag()) },
-            source.linkPosition?.takeIf { it.isNotEmpty() }?.let { Entry("peripheral:${source.name}/link", it, "", "", "", false, false, emptyList(), emptyList(), CompoundTag()) }
-        )
-        val label = if (source.name.startsWith("cc_aeroworks:link_"))
+        val nickname = runtime.sourceNickname(source.name).orEmpty()
+        val technicalLabel = if (source.name.startsWith("cc_aeroworks:link_"))
             source.types.firstOrNull().orEmpty() + " · Link " + source.name.removePrefix("cc_aeroworks:link_").take(8) else source.name
-        return Entry("peripheral:${source.name}", label, detail, "", "", false, true, children, emptyList(),
-            CompoundTag().also { it.put("api", api.encode()) })
+        val blockName = (peripheral?.target as? BlockEntity)?.blockState?.block?.let(BuiltInRegistries.BLOCK::getKey)?.toString()
+        val detail = listOfNotNull(source.name, blockName, source.devicePosition, source.connection,
+            source.types.joinToString(", "), source.linkPosition).filter(String::isNotEmpty).joinToString(" · ")
+        val children = listOfNotNull(
+            Entry("peripheral:${source.name}/address", key("address"), source.name, "", "", false, false, emptyList(), emptyList(), CompoundTag()),
+            blockName?.let { Entry("peripheral:${source.name}/block", key("block"), it, "", "", false, false, emptyList(), emptyList(), CompoundTag()) },
+            source.devicePosition?.takeIf { it.isNotEmpty() }?.let { Entry("peripheral:${source.name}/position", key("position"), it, "", "", false, false, emptyList(), emptyList(), CompoundTag()) },
+            Entry("peripheral:${source.name}/connection", key("connection"), key(source.connection), "", "", false, false, emptyList(), emptyList(), CompoundTag()),
+            source.linkPosition?.takeIf { it.isNotEmpty() }?.let { Entry("peripheral:${source.name}/link", key("link_position"), it, "", "", false, false, emptyList(), emptyList(), CompoundTag()) }
+        )
+        val actions = buildList {
+            add(action("source_nickname", "set_nickname", text = true))
+            if (nickname.isNotEmpty()) add(action("clear_source_nickname", "clear_nickname"))
+        }
+        return Entry("peripheral:${source.name}", nickname.ifEmpty { technicalLabel }, detail, "", "", true, true, children, actions,
+            CompoundTag().also {
+                it.put("api", api.encode())
+                it.putString("source", source.name)
+                it.putString("nickname", nickname)
+            })
     }
 
     override fun snapshot(player: ServerPlayer, computer: ServerComputer, page: Int): Snapshot {
@@ -63,8 +79,17 @@ object StandardComputerWorkspace : ComputerWorkspace {
     }
 
     override fun execute(player: ServerPlayer, computer: ServerComputer, command: Command) {
-        require(command.page == 2) { "Sources are read-only" }
         val runtime = runtime(computer)
+        if (command.page == 1) {
+            require(command.action == "source_nickname" || command.action == "clear_source_nickname") { "Unsupported source action" }
+            val source = command.selected.removePrefix("peripheral:")
+            require(command.selected == "peripheral:$source" && runtime.sourceViews().any { it.name == source }) {
+                "Peripheral is no longer available"
+            }
+            runtime.setSourceNickname(source, if (command.action == "clear_source_nickname") "" else command.text)
+            return
+        }
+        require(command.page == 2) { "Invalid workspace page" }
         if (command.action == "create") {
             require(command.target == "output") { "Only output channels can be created in the workspace" }
             runtime.createChannel(command.text, "output", "")

@@ -18,22 +18,31 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 
 @Mixin(BlockEntity::class)
-abstract class ChannelHostMixin : ChannelHost {
+abstract class ChannelHostMixin : ChannelHost, SourceNicknameHost {
     @Unique
     private var `teutonlib$bank` = ChannelBank()
+    @Unique
+    private var `teutonlib$sourceNicknameBank` = SourceNicknameBank()
     override fun `teutonlib$channels`(): ChannelBank {
         return `teutonlib$bank`
     }
+
+    override fun `teutonlib$sourceNicknames`(): SourceNicknameBank = `teutonlib$sourceNicknameBank`
 
     @Inject(method = ["saveWithoutMetadata", "saveCustomOnly"], at = [At("RETURN")])
     private fun `teutonlib$save`(provider: HolderLookup.Provider, cir: CallbackInfoReturnable<CompoundTag>) {
         if (!`teutonlib$bank`.entries().isEmpty()) cir.returnValue!!
             .put("TeutonLibChannels", ChannelPersistence.save(`teutonlib$bank`))
+        if (`teutonlib$sourceNicknameBank`.entries().isNotEmpty()) cir.returnValue!!
+            .put("TeutonLibSourceNicknames", SourceNicknamePersistence.save(`teutonlib$sourceNicknameBank`))
     }
 
     @Inject(method = ["loadWithComponents", "loadCustomOnly"], at = [At("RETURN")])
     private fun `teutonlib$load`(tag: CompoundTag, provider: HolderLookup.Provider, ci: CallbackInfo?) {
         `teutonlib$bank` = ChannelPersistence.load(tag.getList("TeutonLibChannels", Tag.TAG_COMPOUND.toInt()))
+        `teutonlib$sourceNicknameBank` = SourceNicknamePersistence.load(
+            tag.getList("TeutonLibSourceNicknames", Tag.TAG_COMPOUND.toInt())
+        )
         ComputerIntegration.loaded(this as Any as BlockEntity)
     }
 
