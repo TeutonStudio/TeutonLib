@@ -65,4 +65,15 @@ class ChannelBankTest {
         bank.create("extra", "output", "")
         assertEquals(64, bank.entries().size)
     }
+
+    @Test
+    fun namesAllowUppercaseLettersAndGermanUmlauts() {
+        val bank = ChannelBank()
+        val names = listOf("HÖHE", "grüße", "STRAßE", "ÄÖÜäöüß")
+
+        names.forEach { bank.create(it, "output", "") }
+
+        assertEquals(names, bank.entries().map { it.name })
+        assertThrows(java.lang.IllegalArgumentException::class.java, { bank.create("kanal/überall", "output", "") })
+    }
 }

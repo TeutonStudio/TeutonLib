@@ -18,7 +18,14 @@ the config updates open screens and restores the terminal; without file watching
 restart the client. Channel data, Lua APIs and Peripheral Links remain available.
 Custom addon workspaces, including Aeroworks desk screens, are controlled by their addon.
 
-Each computer supports up to 64 named channels. Names use 1–32 ASCII letters, digits, `_`, `.` or `-`; `world` is reserved. New channels are private. Output values are integers from 0 to 15. Inputs read a selected computer side (`front`, `back`, `left`, `right`, `top`, `bottom`) through DbW. Outputs can be selected with the DbW cable tool; scrolling cycles channels. Definitions, visibility and output values survive shutdown, unloading and restart without an automatic reset. Renaming migrates output cables; deletion removes them and requires a second click in the GUI.
+Each computer supports up to 64 named channels. Names use 1–32 uppercase or lowercase
+letters including `ÄÖÜäöüß`, digits, `_`, `.` or `-`; `world` is reserved.
+Addon-provided channel groups support the same characters. New channels are private.
+Output values are integers from 0 to 15. Inputs read a selected computer side (`front`,
+`back`, `left`, `right`, `top`, `bottom`) through DbW. Outputs can be selected with the
+DbW cable tool; scrolling cycles channels. Definitions, visibility and output values
+survive shutdown, unloading and restart without an automatic reset. Renaming migrates
+output cables; deletion removes them and requires a second click in the GUI.
 
 Without DbW, definitions, outputs and remote queries remain usable. Inputs return 0 and the UI marks the backend unavailable. The tested DbW version is 0.3.0.
 

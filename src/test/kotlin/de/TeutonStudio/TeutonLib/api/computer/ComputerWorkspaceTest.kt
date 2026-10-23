@@ -79,4 +79,26 @@ class ComputerWorkspaceTest {
             java.lang.IllegalArgumentException::class.java,
             { de.TeutonStudio.TeutonLib.api.computer.ComputerWorkspace.Snapshot.Companion.decode(encoded) })
     }
+
+    @Test
+    fun addonChannelGroupsRetainUppercaseLettersAndGermanUmlauts() {
+        val entry = ComputerWorkspace.Entry(
+            "group:ÄÖÜäöüß",
+            "GRÜßE",
+            "",
+            "Kanalgruppe-Überwachung",
+            "",
+            false,
+            false,
+            emptyList(),
+            emptyList(),
+            CompoundTag()
+        )
+
+        val decoded = ComputerWorkspace.Snapshot.decode(
+            ComputerWorkspace.Snapshot("Kanäle", "", listOf(entry), emptyList()).encode()
+        )
+
+        assertEquals(entry, decoded.entries.single())
+    }
 }

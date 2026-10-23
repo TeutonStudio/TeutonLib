@@ -32,7 +32,10 @@ Kabel-, Funk- und Endermodems erscheinen einzeln mit Adresse und Modemart. Ihr A
 
 ## Kanäle
 
-Ein Computer besitzt bis zu 64 benannte Kanäle. Namen enthalten 1–32 ASCII-Buchstaben, Ziffern, `_`, `.` oder `-`; `world` ist für DbW reserviert. Ein neuer Kanal ist **privat**.
+Ein Computer besitzt bis zu 64 benannte Kanäle. Namen enthalten 1–32 Groß- oder
+Kleinbuchstaben einschließlich `ÄÖÜäöüß`, Ziffern, `_`, `.` oder `-`; `world` ist
+für DbW reserviert. Von Addons bereitgestellte Kanalgruppen unterstützen dieselben
+Zeichen. Ein neuer Kanal ist **privat**.
 
 - **Ausgang:** Ganzzahliger Wert 0–15, lokal per Lua oder mit den Werttasten veränderbar. DbW-Kabel können ihn als Quelle auswählen; Scrollen mit dem Kabelwerkzeug wechselt zwischen Ausgängen.
 - **Eingang:** Benannter Lesezugriff auf das DbW-Signal einer Computerseite (`front`, `back`, `left`, `right`, `top`, `bottom`). Mehrere Namen auf derselben Seite lesen dasselbe physische Signal. Eingänge lassen sich nicht beschreiben.

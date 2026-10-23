@@ -81,9 +81,13 @@ class ChannelBank {
 
     companion object {
         const val LIMIT: Int = 64
+        private val NAME = "[A-Za-zÄÖÜäöüß0-9_.-]{1,32}".toRegex()
+
         @JvmStatic
         fun name(value: String): String {
-            require(!(value == null || !value.matches("[A-Za-z0-9_.-]{1,32}".toRegex()) || value == "world")) { "Channel name must contain 1-32 letters, digits, _, . or -; 'world' is reserved" }
+            require(value.matches(NAME) && value != "world") {
+                "Channel name must contain 1-32 German letters, digits, _, . or -; 'world' is reserved"
+            }
             return value
         }
     }
