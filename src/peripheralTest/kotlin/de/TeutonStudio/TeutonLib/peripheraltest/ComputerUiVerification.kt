@@ -62,9 +62,16 @@ object ComputerUiVerification {
         val tabs: MutableList<ComputerSidebarTabs.Tab> =
             screen.children().stream().filter { c: GuiEventListener? -> c is ComputerSidebarTabs.Tab }
                 .map<ComputerSidebarTabs.Tab> { c: GuiEventListener? -> c as ComputerSidebarTabs.Tab }.toList()
-        if (tabs.size != 2) throw AssertionError("Duplicate Aeroworks sidebar: " + tabs.size)
+        if (tabs.size != 3) throw AssertionError("Unexpected workspace sidebar: " + tabs.size)
+        val labels = tabs.map { it.message.string }
+        val expectedLabels = listOf(
+            Component.translatable("teutonlib.computer.standard").string,
+            Component.translatable("teutonlib.computer.sources").string,
+            Component.translatable("teutonlib.computer.channels").string
+        )
+        if (labels != expectedLabels) throw AssertionError("Workspace tab order: $labels")
         val page = if (scenario % 2 == 0) 2 else 1
-        val tab = tabs.get(if (page == 1) 0 else 1)
+        val tab = tabs[page]
         screen.mouseClicked((tab.x + 8).toDouble(), (tab.y + 10).toDouble(), 0)
         if (panels.page() != page) throw AssertionError("Aeroworks tab order/state")
         val rename = ComputerWorkspace.Action("rename", "Rename", true, false, false)
@@ -140,6 +147,13 @@ object ComputerUiVerification {
         screen.keyPressed(256, 0, 0)
         if (mc.screen !== screen || panels.page() != 0) throw AssertionError("Workspace Escape closed screen")
         if (screen.focused !is TerminalWidget) throw AssertionError("Workspace terminal focus not restored")
+        val tabs = screen.children().filterIsInstance<ComputerSidebarTabs.Tab>()
+        screen.mouseClicked((tabs[page].x + 8).toDouble(), (tabs[page].y + 8).toDouble(), 0)
+        if (panels.page() != page) throw AssertionError("Workspace page did not reopen")
+        screen.mouseClicked((tabs[0].x + 8).toDouble(), (tabs[0].y + 8).toDouble(), 0)
+        if (panels.page() != 0 || screen.focused !is TerminalWidget) {
+            throw AssertionError("Standard tab did not restore terminal")
+        }
     }
 
     @SubscribeEvent
@@ -208,7 +222,7 @@ object ComputerUiVerification {
                 Files.createDirectories(Path.of("../../build/reports/smoke"))
                 Files.writeString(
                     Path.of("../../build/reports/smoke/computer-ui.txt"),
-                    "PASS: $scenarioCount scenarios; native CC and addon template (Aeroworks workspace when installed), normal/advanced, GUI scales 2/3, exactly two icon tabs, editor focus, selected channel, source API open/scroll/close, naming, Escape, terminal focus and resize session renewal\n"
+                    "PASS: $scenarioCount scenarios; native CC and addon template (Aeroworks workspace when installed), normal/advanced, GUI scales 2/3, Standard/Sources/Channels tabs, editor focus, selected channel, source API open/scroll/close, naming, Escape, terminal focus and resize session renewal\n"
                 )
                 mc.stop()
                 stage++

@@ -55,15 +55,22 @@ class TemplateComputerScreen<T : AbstractComputerMenu>
             Consumer { widget: AbstractWidget? -> addRenderableWidget<AbstractWidget>(widget) },
             Runnable { setFocused(terminal) }, java.util.function.BiConsumer { _, _ -> })
         panels!!.family(family)
-        for (page in 1..2) {
-            val target = page
-            addRenderableWidget<ComputerSidebarTabs.Tab>(
-                ComputerSidebarTabs.tab(
-                    leftPos,
-                    ComputerSidebarTabs.top(topPos, sidebarYOffset, page - 1), family,
-                    if (page == 1) "sources" else "channels", BooleanSupplier { panels!!.page() == target },
-                    Runnable { showPage(if (panels!!.page() == target) 0 else target) })
+        for (target in 0..2) {
+            val tab = if (target == 0) ComputerSidebarTabs.standardTab(
+                leftPos,
+                ComputerSidebarTabs.top(topPos, sidebarYOffset, target),
+                family,
+                BooleanSupplier { panels!!.page() == 0 },
+                Runnable { showPage(0) }
+            ) else ComputerSidebarTabs.tab(
+                leftPos,
+                ComputerSidebarTabs.top(topPos, sidebarYOffset, target),
+                family,
+                if (target == 1) "sources" else "channels",
+                BooleanSupplier { panels!!.page() == target },
+                Runnable { showPage(target) }
             )
+            addRenderableWidget<ComputerSidebarTabs.Tab>(tab)
         }
         showPage(previousPage)
     }

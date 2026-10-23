@@ -18,6 +18,7 @@
   "teutonlib.ponder.peripheral_link.place": "Place the link against the device. Only the device on its attachment side is exposed. Craft it using a Display Link and an ender pearl. Successful placement clears the target selection on the item.",
   "teutonlib.ponder.peripheral_link.lua": "The device appears in peripheral.find() automatically. Embedded desk computers also use peripherals.find(). No receiver or connection program is required.",
   "teutonlib.ponder.peripheral_link.range": "Defaults: 256 blocks and 64 links per target network. Right-click for status. Break and place again to re-pair; sneak with the item to clear the selection.",
+  "teutonlib.computer.standard": "Standard",
   "teutonlib.computer.sources": "Sources",
   "teutonlib.computer.channels": "Channels",
   "teutonlib.computer.name": "Channel name",

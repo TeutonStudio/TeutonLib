@@ -78,7 +78,7 @@ object ComputerUiConfigVerification {
                 val tab: ComputerSidebarTabs.Tab = screen.children().stream()
                     .filter { o: kotlin.Any? -> ComputerSidebarTabs.Tab::class.java.isInstance(o) }
                     .map<ComputerSidebarTabs.Tab> { obj: kotlin.Any? -> ComputerSidebarTabs.Tab::class.java.cast(obj) }
-                    .skip(1)
+                    .filter { it.message.string == Component.translatable("teutonlib.computer.channels").string }
                     .findFirst().orElseThrow()!!
                 screen.mouseClicked((tab.x + 8).toDouble(), (tab.y + 8).toDouble(), 0)
                 if (panels.page() != 2) throw AssertionError("Channels did not open")
@@ -157,7 +157,7 @@ object ComputerUiConfigVerification {
     private fun check(screen: AbstractComputerScreen<*>, enabled: Boolean) {
         val tabs =
             screen.children().stream().filter { o: Any? -> ComputerSidebarTabs.Tab::class.java.isInstance(o) }.count()
-        if (tabs != (if (enabled) 2 else 0).toLong()) throw AssertionError("Unexpected tabs: " + tabs)
+        if (tabs != (if (enabled) 3 else 0).toLong()) throw AssertionError("Unexpected tabs: " + tabs)
         if (((screen as WorkspacePanels.Owner).`teutonlib$workspace`() != null) != enabled) throw AssertionError("Stale controller")
         val terminal: TerminalWidget =
             screen.children().stream().filter { o: kotlin.Any? -> TerminalWidget::class.java.isInstance(o) }

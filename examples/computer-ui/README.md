@@ -6,7 +6,7 @@ KotlinForForge 5.11.0 und CC:Tweaked 1.120.2.
 
 `TemplateComputerScreen` ist ein vollständiger Bildschirm für ein bestehendes
 `AbstractComputerMenu`: CC-Terminal, Gehäuse, Strom-/Neustartleiste sowie gemeinsame
-Quellen- und Kanalreiter. Die Vorlage enthält keinen neuen Computerblock.
+Standard-, Quellen- und Kanalreiter. Die Vorlage enthält keinen neuen Computerblock.
 Blockregistrierung, ServerComputer-Lebenszyklus, Menüöffnung und Rechteprüfung
 bleiben Aufgaben des Addons.
 
@@ -99,7 +99,7 @@ die Setupvorlage registriert für die gesamte Mod-Lebensdauer.
 
 CC Aeroworks bindet seine bestehende Kanal- und Quellenverwaltung über `ComputerWorkspace` und `ComputerExtensions.registerWorkspace` an. `ComputerPanels.workspace(...)` erzeugt den gemeinsamen Controller; der Bildschirm implementiert `WorkspacePanels.Owner`, schaltet Terminal/Panel passend sichtbar und ruft `tick()` sowie `takeRequestedFocus()` auf. `show(0/1/2)` bedeutet Terminal/Quellen/Kanäle.
 
-`ComputerWorkspace.Snapshot` enthält hierarchische `Entry`-Einträge mit stabiler ID, Beschriftung, Details, optionalem Gruppen-/Zielkontext und `Action`-Beschreibungen. Der Server verarbeitet `Command` ausschließlich nach erneuter Prüfung des Menüs und des aktuellen Datenbestands. Backend-Aktionen bleiben beim Addon, etwa Gruppen, Bindungen und DbW-Ziele. Clientaktionen können einen vorhandenen Detailbildschirm öffnen.
+`ComputerWorkspace.Snapshot` enthält hierarchische `Entry`-Einträge mit stabiler ID, Beschriftung, Details, optionalem Gruppen-/Zielkontext und `Action`-Beschreibungen. Der Server verarbeitet `Command` ausschließlich nach erneuter Prüfung des Menüs und des aktuellen Datenbestands. Backend-Aktionen bleiben beim Addon, etwa Gruppen, Bindungen und DbW-Ziele. Clientaktionen können einen vorhandenen Detailbildschirm öffnen. `ComputerSidebarTabs.standardTab(...)` erzeugt den obersten Reiter für die Terminalseite; darunter folgen Quellen und Kanäle.
 
 `registerChannelAuthority` markiert Pultkanäle als vom Addon verwaltet; TeutonLib legt dort keinen eigenen beschreibbaren Bestand an. Lesen erfolgt weiterhin über registrierte Kanalprovider. Native CC-Computer verwenden unverändert TeutonLibs Standardbank. `ComputerContext.host()` gibt den bereits geladenen, identitätsgeprüften Host zurück.
 

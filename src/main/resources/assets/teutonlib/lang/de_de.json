@@ -18,6 +18,7 @@
   "teutonlib.ponder.peripheral_link.place": "Anschließend den Link am Gerät platzieren. Er erschließt nur das Gerät an seiner Befestigungsseite. Ein Display Link und eine Enderperle ergeben einen Peripheral Link. Nach erfolgreicher Platzierung wird die Zielauswahl am Item gelöscht.",
   "teutonlib.ponder.peripheral_link.lua": "Das Gerät erscheint automatisch in peripheral.find(). Pultcomputer finden es zusätzlich mit peripherals.find(). Kein Empfänger und kein Lua-Programm zur Verbindung nötig.",
   "teutonlib.ponder.peripheral_link.range": "Standard: 256 Blöcke, 64 Links je Zielnetz. Rechtsklick zeigt den Status. Zum Umverknüpfen abbauen; Schleichen mit dem Item löscht die Zielauswahl.",
+  "teutonlib.computer.standard": "Standard",
   "teutonlib.computer.sources": "Quellen",
   "teutonlib.computer.channels": "Kanäle",
   "teutonlib.computer.name": "Kanalname",

@@ -94,14 +94,22 @@ abstract class ComputerScreenMixin protected constructor(
             Consumer { w: AbstractWidget? -> addRenderableWidget<AbstractWidget>(w) },
             Runnable { setFocused(terminal) }, java.util.function.BiConsumer { _, _ -> })
         `teutonlib$panels`!!.family(family)
-        for (i in 1..2) {
-            val target = i
-            addRenderableWidget<ComputerSidebarTabs.Tab>(
-                ComputerSidebarTabs.tab(
-                    leftPos, ComputerSidebarTabs.top(topPos, sidebarYOffset, i - 1), family!!,
-                    if (i == 1) "sources" else "channels", BooleanSupplier { `teutonlib$panels`!!.page() == target },
-                    Runnable { `teutonlib$show`(if (`teutonlib$panels`!!.page() == target) 0 else target) })
+        for (target in 0..2) {
+            val tab = if (target == 0) ComputerSidebarTabs.standardTab(
+                leftPos,
+                ComputerSidebarTabs.top(topPos, sidebarYOffset, target),
+                family!!,
+                BooleanSupplier { `teutonlib$panels`!!.page() == 0 },
+                Runnable { `teutonlib$show`(0) }
+            ) else ComputerSidebarTabs.tab(
+                leftPos,
+                ComputerSidebarTabs.top(topPos, sidebarYOffset, target),
+                family!!,
+                if (target == 1) "sources" else "channels",
+                BooleanSupplier { `teutonlib$panels`!!.page() == target },
+                Runnable { `teutonlib$show`(target) }
             )
+            addRenderableWidget<ComputerSidebarTabs.Tab>(tab)
         }
         `teutonlib$show`(page)
     }
