@@ -19,10 +19,9 @@ class CsoMixinPlugin : IMixinConfigPlugin {
         }
         if (mixinClassName.contains(".mixin.computer.") || mixinClassName.endsWith(".LinkSystemAccessMixin")) {
             val mods = LoadingModList.get()
-            return mods != null && mods.getModFileById("computercraft") != null && (!mixinClassName.contains(".computer.console.") || mods.getModFileById(
-                "cc_aeroworks"
-            ) != null)
-                    && (!mixinClassName.endsWith("DbwClientMixin") || mods.getModFileById("drivebywire") != null)
+            return mods != null && mods.getModFileById("computercraft") != null &&
+                    (!mixinClassName.endsWith("WirelessModemRangeMixin") || mods.getModFileById("sable") != null) &&
+                    (!mixinClassName.endsWith("DbwClientMixin") || mods.getModFileById("drivebywire") != null)
         }
         if (mixinClassName.contains(".mixin.simulated.")) {
             val mods = LoadingModList.get()
@@ -34,9 +33,7 @@ class CsoMixinPlugin : IMixinConfigPlugin {
             return mods != null && mods.getModFileById("computercraft") != null && mods.getModFileById("create") != null &&
                     (!mixinClassName.contains(".peripheral.aeronautics.") ||
                             mods.getModFileById("aeronautics") != null && mods.getModFileById("simulated") != null && mods.getModFileById("sable") != null) &&
-                    (!mixinClassName.contains(".peripheral.simulated.") || mods.getModFileById("simulated") != null) && (!mixinClassName.contains(
-                ".peripheral.console."
-            ) || mods.getModFileById("cc_aeroworks") != null)
+                    (!mixinClassName.contains(".peripheral.simulated.") || mods.getModFileById("simulated") != null)
         }
         return !mixinClassName.contains(".mixin.cso.") || CsoAvailability.available()
     }

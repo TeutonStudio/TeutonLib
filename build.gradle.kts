@@ -58,7 +58,7 @@ neoForge {
     }
     runs {
         create("client") {
-            listOf("computerUiTests", "computerUiConfigTests").forEach {
+            listOf("computerUiTests", "computerUiConfigTests", "peripheralLinkUiTests").forEach {
                 if (providers.gradleProperty(it).isPresent) systemProperty("teutonlib.$it", "true")
             }
             client()
@@ -125,8 +125,10 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    dependsOn(tasks.jar)
     inputs.files(localCompileJars)
     systemProperty("teutonlib.compatibilityJars", localCompileJars.asPath)
+    systemProperty("teutonlib.architectureArtifact", tasks.jar.get().archiveFile.get().asFile.absolutePath)
 }
 
 val generateModMetadata by tasks.registering(ProcessResources::class) {

@@ -7,8 +7,10 @@ import de.TeutonStudio.TeutonLib.integration.computer.ComputerIntegration
 import de.TeutonStudio.TeutonLib.integration.energy.NewAgeMotorEnergy
 import de.TeutonStudio.TeutonLib.integration.peripheral.PeripheralLinks
 import de.TeutonStudio.TeutonLib.integration.peripheral.heli.HeliPeripheralIntegration
+import de.TeutonStudio.TeutonLib.integration.peripheral.simulated.DirectionalGearshiftIntegration
 import de.TeutonStudio.TeutonLib.network.CsoStatePayload
 import java.util.function.Consumer
+import net.neoforged.bus.api.EventPriority
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.ModContainer
 import net.neoforged.fml.ModList
@@ -28,6 +30,8 @@ class TeutonLib(modBus: IEventBus, container: ModContainer) {
     init {
         val heliIntegration = ModList.get().isLoaded("computercraft") && ModList.get().isLoaded("aeronautics") &&
             ModList.get().isLoaded("simulated") && ModList.get().isLoaded("sable")
+        val directionalGearshiftIntegration = ModList.get().isLoaded("computercraft") &&
+            ModList.get().isLoaded("create") && ModList.get().isLoaded("simulated")
         container.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC, ServerConfig.FILE_NAME)
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, ClientConfig.FILE_NAME)
         modBus.addListener<Loading>(Consumer { event: Loading? -> this.configLoaded(event!!) })
@@ -37,6 +41,13 @@ class TeutonLib(modBus: IEventBus, container: ModContainer) {
                 event!!
             )
         })
+        // Claim the Simulated gearshift before optional addons can install a partial peripheral for it.
+        if (directionalGearshiftIntegration) {
+            modBus.addListener(
+                EventPriority.HIGH,
+                Consumer<RegisterCapabilitiesEvent>(DirectionalGearshiftIntegration::registerCapabilities)
+            )
+        }
         modBus.addListener<RegisterCapabilitiesEvent>(Consumer { event: RegisterCapabilitiesEvent? ->
             NewAgeMotorEnergy.registerCapabilities(event!!)
             if (heliIntegration) HeliPeripheralIntegration.registerCapabilities(event)

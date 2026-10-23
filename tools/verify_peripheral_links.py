@@ -12,7 +12,8 @@ root=Path(__file__).resolve().parents[1]
 profile=sys.argv[1] if len(sys.argv)>1 else 'cc'
 dbw='--dbw' in sys.argv
 channels_only='--channels-only' in sys.argv
-report_name=f'peripheral-{profile}'+('-channels' if channels_only else '')
+simulated='--simulated' in sys.argv
+report_name=f'peripheral-{profile}'+('-channels' if channels_only else '')+('-simulated' if simulated else '')
 report=root/'build/reports/smoke';report.mkdir(parents=True,exist_ok=True)
 (report/f'{report_name}.json').unlink(missing_ok=True)
 if profile not in ('cc', 'console'):
@@ -37,7 +38,7 @@ properties.write_text('\n'.join(lines)+'\n')
 logpath=report/f'{report_name}.log'
 log=logpath.open('w')
 extra_args = ['-PperipheralTests', '-PperipheralRuntime='+profile] + (['-PdbwTests'] if dbw else [])
-launch_args=['./gradlew','runSmokeServer','-PcsoRuntime='+('all' if profile=='console' or dbw else 'create'), '-PperipheralTestDir='+str(instance),*extra_args,'--offline','--no-daemon','--console=plain']
+launch_args=['./gradlew','runSmokeServer','-PcsoRuntime='+('all' if profile=='console' or dbw or simulated else 'create'), '-PperipheralTestDir='+str(instance),*extra_args,'--offline','--no-daemon','--console=plain']
 proc=subprocess.Popen(launch_args,cwd=root,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
 connection=None
 checks=[]
@@ -124,8 +125,30 @@ try:
     if 'FAIL' in result: raise AssertionError(result)
     time.sleep(.5)
    else: raise AssertionError(action+' timed out: '+result)
+  if simulated:
+   assert 'PASS gearshift' in command('teutonlib_link_test gearshift')
   if profile=='console':
    assert 'PASS sable' in command('teutonlib_link_test sable')
+   assert 'STARTED sable_gps' in command('teutonlib_link_test sable_gps_start')
+   deadline=time.monotonic()+55
+   while time.monotonic()<deadline:
+    result=request(2,'teutonlib_link_test sable_gps_result').strip()
+    if result.startswith('INITIAL_PASS '):
+     checks.append({'sable_gps_initial':result});print(result,flush=True);break
+    if 'FAIL' in result: raise AssertionError(result)
+    time.sleep(.25)
+   else: raise AssertionError('Sable GPS initial locate timed out: '+result)
+   assert 'MOVED sable_gps' in command('teutonlib_link_test sable_gps_move')
+   deadline=time.monotonic()+55
+   while time.monotonic()<deadline:
+    result=request(2,'teutonlib_link_test sable_gps_result').strip()
+    if result.startswith('PASS '):
+     checks.append({'sable_gps_moved':result});print(result,flush=True);break
+    if 'FAIL' in result: raise AssertionError(result)
+    time.sleep(.25)
+   else: raise AssertionError('Sable GPS moved locate timed out: '+result)
+   assert 'PASS sable_gps' in command('teutonlib_link_test sable_gps_cleanup')
+   if not simulated: assert 'PASS gearshift' in command('teutonlib_link_test gearshift')
    for family in ('normal','advanced'):
     assert 'STARTED' in command('teutonlib_link_test console_'+family)
     wait_for('READY',True)
@@ -161,7 +184,7 @@ try:
  if not channels_only: assert 'PASS persistence' in command('teutonlib_link_test persistence')
  command('stop');proc.wait(timeout=35)
  assert proc.returncode==0
- (report/f'{report_name}.json').write_text(json.dumps({'profile':profile,'dbw':dbw,'passed':True,'checks':checks},indent=2)+'\n')
+ (report/f'{report_name}.json').write_text(json.dumps({'profile':profile,'dbw':dbw,'simulated':simulated,'passed':True,'checks':checks},indent=2)+'\n')
  print('Peripheral checks passed.',flush=True)
 
 except Exception:

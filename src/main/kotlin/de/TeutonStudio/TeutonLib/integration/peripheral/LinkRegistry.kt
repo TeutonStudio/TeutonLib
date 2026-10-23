@@ -1,10 +1,12 @@
 package de.TeutonStudio.TeutonLib.integration.peripheral
 
-import dan200.computercraft.api.lua.IComputerSystem
 import dan200.computercraft.api.peripheral.IPeripheral
-import dan200.computercraft.api.peripheral.WorkMonitor
 import dan200.computercraft.shared.computer.blocks.ComputerBlockEntity
 import de.TeutonStudio.TeutonLib.ServerConfig
+import de.TeutonStudio.TeutonLib.api.computer.peripheral.PeripheralAttachmentRuntime
+import de.TeutonStudio.TeutonLib.api.computer.peripheral.PeripheralProviders
+import de.TeutonStudio.TeutonLib.api.sable.SubLevelGeometry
+import de.TeutonStudio.TeutonLib.integration.computer.SourceNicknameHost
 import java.util.Collections
 import java.util.Comparator
 import java.util.HashMap
@@ -19,7 +21,6 @@ import net.minecraft.world.level.block.entity.BlockEntity
 import net.minecraft.world.level.chunk.LevelChunk
 import net.minecraft.world.phys.Vec3
 import net.neoforged.bus.api.SubscribeEvent
-import net.neoforged.fml.ModList
 import net.neoforged.neoforge.common.util.TriState
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock
 import net.neoforged.neoforge.event.level.ChunkEvent
@@ -34,14 +35,9 @@ object LinkRegistry {
         Collections.newSetFromMap<PeripheralLinkBlockEntity>(IdentityHashMap<PeripheralLinkBlockEntity, Boolean>())
     private val APIS: MutableSet<LinkLuaApi> =
         Collections.newSetFromMap<LinkLuaApi>(IdentityHashMap<LinkLuaApi, Boolean>())
-    private val CONSOLES: MutableMap<WorkMonitor, ConsoleRuntimeAccess> =
-        IdentityHashMap<WorkMonitor, ConsoleRuntimeAccess>()
-
     @JvmStatic
     fun isTarget(block: BlockEntity?): Boolean {
-        return block is ComputerBlockEntity || ModList.get().isLoaded("cc_aeroworks") && ConsoleLinkSupport.isTarget(
-            block
-        )
+        return block is ComputerBlockEntity || PeripheralProviders.supports(block)
     }
 
     @Synchronized
@@ -97,24 +93,6 @@ object LinkRegistry {
         APIS.remove(api)
     }
 
-    @Synchronized
-    @JvmStatic
-    fun console(system: IComputerSystem, runtime: ConsoleRuntimeAccess) {
-        CONSOLES.put(system.mainThreadMonitor, runtime)
-    }
-
-    @Synchronized
-    @JvmStatic
-    fun console(system: IComputerSystem): ConsoleRuntimeAccess? {
-        return CONSOLES.get(system.mainThreadMonitor)
-    }
-
-    @Synchronized
-    @JvmStatic
-    fun removeConsole(system: IComputerSystem) {
-        CONSOLES.remove(system.mainThreadMonitor)
-    }
-
     @JvmStatic
     fun loaded(block: BlockEntity?): Boolean {
         return block != null && !block.isRemoved() && block.level is ServerLevel
@@ -135,7 +113,7 @@ object LinkRegistry {
 
     @JvmStatic
     fun worldPosition(level: ServerLevel, pos: BlockPos): Vec3 {
-        return if (ModList.get().isLoaded("sable")) SableLinkPositions.world(level, pos) else pos.center
+        return SubLevelGeometry.projectToWorld(level, pos.center)
     }
 
     @Synchronized
@@ -155,8 +133,7 @@ object LinkRegistry {
     @JvmStatic
     fun owner(anchor: BlockEntity?): BlockEntity? {
         if (anchor is ComputerBlockEntity) return anchor
-        if (ModList.get().isLoaded("cc_aeroworks")) return ConsoleLinkSupport.owner(anchor)
-        return null
+        return PeripheralProviders.owner(anchor)
     }
 
     /** Called on the server thread once per tick, and by guarded main-thread calls.  */
@@ -168,7 +145,20 @@ object LinkRegistry {
                 link!!.identity().toString()
             })).toList()
         val counts: MutableMap<BlockEntity, Int> = IdentityHashMap<BlockEntity, Int>()
-        for (link in ordered) link.connection = resolve(link, counts)
+        var changed = false
+        for (link in ordered) {
+            val previous = link.connection
+            val next = resolve(link, counts)
+            if (!sameConnection(previous, next)) changed = true
+            link.connection = next
+        }
+        if (changed) PeripheralAttachmentRuntime.reconcileAll()
+    }
+
+    private fun sameConnection(first: Connection?, second: Connection?): Boolean = when {
+        first == null || second == null -> first == null && second == null
+        else -> first.link === second.link && first.anchor === second.anchor && first.owner === second.owner &&
+            first.peripheral === second.peripheral
     }
 
     /** Publish a complete snapshot once; computer threads must never observe a
@@ -185,12 +175,13 @@ object LinkRegistry {
             link.status = "target_unavailable"
             return null
         }
+        link.rememberTarget(anchor)
         if (anchor.level !== level) {
             link.status = "dimension"
             return null
         }
         val range = ServerConfig.PERIPHERAL_LINK_RANGE.get().toDouble()
-        val distance = worldPosition(link)!!.distanceToSqr(worldPosition(anchor))
+        val distance = SubLevelGeometry.distanceSquared(level, link.blockPos.center, anchor.blockPos.center)
         if (!java.lang.Double.isFinite(distance) || distance > range * range) {
             link.status = "range"
             return null
@@ -217,7 +208,18 @@ object LinkRegistry {
         }
         counts.put(owner, count + 1)
         link.status = "connected"
-        return Connection(link, anchor, owner, peripheral)
+        return Connection(link, anchor, owner, peripheral).also(::migrateNickname)
+    }
+
+    /** Moves legacy computer-local names to their authoritative link exactly once. */
+    private fun migrateNickname(connection: Connection) {
+        val nicknames = (connection.owner as? SourceNicknameHost)?.`teutonlib$sourceNicknames`()
+        val previous = nicknames?.get(connection.name())
+        if (!connection.link.initializeNickname(previous)) return
+        if (previous != null) {
+            nicknames.set(connection.name(), "")
+            connection.owner.setChanged()
+        }
     }
 
     @Synchronized
@@ -242,12 +244,9 @@ object LinkRegistry {
     fun tick(event: ServerTickEvent.Post?) {
         validate()
         val apis: MutableList<LinkLuaApi>
-        val consoles: MutableList<ConsoleRuntimeAccess>
         synchronized(LinkRegistry::class.java) {
             apis = java.util.List.copyOf<LinkLuaApi>(APIS)
-            consoles = java.util.List.copyOf<ConsoleRuntimeAccess>(CONSOLES.values)
         }
-        consoles.forEach(Consumer { obj: ConsoleRuntimeAccess -> obj!!.`teutonlib$refresh`() })
         apis.forEach(Consumer { obj: LinkLuaApi? -> obj!!.refresh() })
     }
 
@@ -291,7 +290,6 @@ object LinkRegistry {
         LINKS.clear()
         ANCHORS.clear()
         APIS.clear()
-        CONSOLES.clear()
     }
 
     @SubscribeEvent

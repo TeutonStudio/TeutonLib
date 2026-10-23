@@ -48,7 +48,7 @@ object ServerConfig {
         builder.translation("teutonlib.configuration.peripheralLink").push("peripheralLink")
         PERIPHERAL_LINK_RANGE = builder.comment("Wireless range in world blocks, including moving Sable sublevels.")
             .translation("teutonlib.configuration.range").defineInRange("range", 256, 1, 30000000)
-        PERIPHERAL_LINK_LIMIT = builder.comment("Maximum active links per computer or control desk network.")
+        PERIPHERAL_LINK_LIMIT = builder.comment("Maximum active Peripheral Links per computer or control desk network.")
             .translation("teutonlib.configuration.maxLinksPerNetwork").defineInRange("maxLinksPerNetwork", 64, 1, 4096)
         builder.pop(2)
         SPEC = builder.build()

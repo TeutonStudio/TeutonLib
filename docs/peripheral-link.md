@@ -10,9 +10,11 @@ Ein Create-Messingrahmen, eine Enderperle und ein Sender ergeben im formlosen Re
 
 1. Mit dem Item einen normalen oder erweiterten CC-Computer auswählen. Mit CC Aeroworks kann stattdessen ein beliebiges Mitglied einer Aeroworks-Pultreihe ausgewählt werden.
 2. Den Link gegen das gewünschte Gerät platzieren. Ausschließlich das Gerät auf der Befestigungsseite wird angebunden.
-3. Rechtsklick auf den platzierten Link zeigt die Ziel-UUID und den aktuellen Status.
+3. Rechtsklick auf den platzierten Link öffnet Status, Weiterleitungsdetails, Lua-API und den Spitznamen-Editor.
 
-Schleichen und Benutzen löscht die Zielauswahl des gehaltenen Items. Danach kann ein neues Ziel ausgewählt werden; mit bereits ausgewähltem Ziel platziert der nächste Rechtsklick den Link. Zum Umverknüpfen einen platzierten Link abbauen und mit neuer Auswahl platzieren. Abgebaute Links geben ihre UUID und Kopplung nicht an das Drop-Item weiter. Nach erfolgreicher Platzierung wird die Zielauswahl im verbleibenden Itemstapel gelöscht, auch im Kreativmodus. Fehlgeschlagene Platzierungen erhalten die Auswahl. Pocket Computer und Turtles können nicht ausgewählt werden.
+Schleichen und Benutzen löscht die Zielauswahl des gehaltenen Items. Danach kann ein neues Ziel ausgewählt werden; mit bereits ausgewähltem Ziel platziert der nächste Rechtsklick den Link. Zum Umverknüpfen einen platzierten Link abbauen und mit neuer Auswahl platzieren. Abgebaute Links geben UUID, Kopplung und Spitznamen nicht an das Drop-Item weiter. Nach erfolgreicher Platzierung wird die Zielauswahl im verbleibenden Itemstapel gelöscht, auch im Kreativmodus. Fehlgeschlagene Platzierungen erhalten die Auswahl. Pocket Computer und Turtles können nicht ausgewählt werden.
+
+Der Spitzname wird am Link gespeichert und in der Quellenansicht des verbundenen Computers verwendet. Er kann in beiden Fenstern bearbeitet werden, ohne die stabile Lua-Adresse zu verändern. Namen aus bestehenden Welten, die noch am Computer gespeichert sind, werden beim ersten Verbinden einmalig auf den Link übernommen.
 
 Kopplung und Platzierung prüfen auf dem Server Interaktionsreichweite, Bau-/Interaktionsberechtigung und geladene Blöcke; die Platzierung prüft zusätzlich Ziel und Funkreichweite. Die regulären NeoForge-Interaktions- und Platzierungsereignisse bleiben im normalen Spielerpfad erhalten.
 
@@ -27,6 +29,11 @@ In der weltbezogenen `serverconfig/teutonlib-server.toml`:
 ```
 
 Die Reichweitengrenze ist eingeschlossen. Das Limit gilt gemeinsam für aktive Links an allen Ankern derselben Pultreihe beziehungsweise desselben Standardcomputers. Bei mehr geladenen Links werden die ersten erreichbaren Geräte in stabiler Link-UUID-Reihenfolge berücksichtigt. Änderungen gelten nach Laden/Neuladen der Serverkonfiguration.
+
+Dieselbe zentrale Sable-Geometrie gilt für das echte CC:Tweaked-Funknetz: normale Modems
+bewerten Entfernung und höhenabhängige Reichweite in sichtbaren Weltkoordinaten. Dadurch liefert
+`gps.locate()` auf einem bewegten Sable-Sublevel die globale Weltposition. GPS-Hosts, Payloads und
+Trilateration bleiben unverändert bei CC:Tweaked; echte Dimensionsgrenzen bleiben distanzlos.
 
 ## Standardcomputer
 
@@ -64,6 +71,19 @@ print(direction.x, direction.y, direction.z) -- 0  0  1
 
 Die Methode steht bewusst nur über einen Peripheral Link bereit. Ein statischer Sensor
 verwendet dasselbe lokale Koordinatensystem wie die Welt.
+
+Ein **Directional Gearshift aus Create Simulated** wird als vollwertiges Peripheral vom Typ
+`directional_gearshift` bereitgestellt. Das gilt für Peripheral Links ebenso wie für eine
+direkte CC-Verbindung. `setOutput("left", boolean)` und `setOutput("right", boolean)` schalten
+die beiden Eingänge; `getOutput` liest sie. Zusätzlich stehen die analogen 0/15-Aliase
+`setAnalogOutput`/`getAnalogOutput` sowie `setLeft`, `setRight`, `setOutputs`, `clear` und
+`getStatus` zur Verfügung:
+
+```lua
+local gearshift = assert(peripheral.find("directional_gearshift"))
+gearshift.setOutput("left", true)
+gearshift.setOutput("right", false)
+```
 
 Die serverseitige API wird mit `ComputerCraftAPI.registerAPIFactory` bereitgestellt. Ihr globaler Name ist `teutonlib_links`, ihr Modulname `teutonlib.links`. Die Implementierung des ROM-Moduls ist die Referenz für eigene Betriebssysteme. Während der API-Erzeugung erfolgt kein Weltzugriff; der aktuelle Computerblock wird erst nach Aktivierung auf dem Serverthread aufgelöst.
 
@@ -134,6 +154,6 @@ Die Serverprüfungen nacheinander ausführen. Sie verwenden eigene Welten unter 
 
 Der CC-Test läuft ohne CC Aeroworks; das Console-Profil ergänzt Aeroworks und dessen Computer. Das CC-Profil läuft mit Create ohne Sable und ohne CC Aeroworks; das Console-Profil verwendet zusätzlich die lokalen Sable-/Aeroworks-Binaries. Für lokale Starts lässt sich der Zusatz explizit mit `-PperipheralRuntime=cc` oder `-PperipheralRuntime=console` aktivieren. Entwicklungsprüfungen benötigen zusätzlich `-PperipheralTests`.
 
-Die Tests prüfen reale normale und erweiterte CC-Computer mit CraftOS, Kopplung/Platzierung, Löschen der Itemauswahl, generische Inventare, mehrere Links, konfiguriertes Netzlimit, persistente Namen, falsche Dimension, exakte Reichweitengrenze, echte Chunk-Entladung, Wiederverbindung, alte Handles, Kabel- und Flüssigkeitstransfers, Monitorereignisse, Mounts sowie UUID-Konflikte und einen Serverneustart. Die Sable-Prüfung verwendet echte Assemblierung und Blockverschiebung mit separaten Sublevels, veränderten Positionen und Drehung. Das Console-Profil prüft beide Computervarianten, reale Gimbal-Messwerte, genau ein gemeinsames Laufwerks-Attachment für beide APIs, gemeinsame Namen und Bindungen, Pultbaum, computerlose Reihen sowie Entfernen/Einsetzen des Computers, Reboots und Teilen/Zusammenführen der Reihe.
+Die Tests prüfen reale normale und erweiterte CC-Computer mit CraftOS, Kopplung/Platzierung, Löschen der Itemauswahl, generische Inventare, mehrere Links, konfiguriertes Netzlimit, persistente Namen, falsche Dimension, exakte Reichweitengrenze, echte Chunk-Entladung, Wiederverbindung, alte Handles, Kabel- und Flüssigkeitstransfers, Monitorereignisse, Mounts sowie UUID-Konflikte und einen Serverneustart. Die Sable-Prüfung verwendet echte Assemblierung und Blockverschiebung mit separaten Sublevels, veränderten Positionen und Drehung. Vier echte GPS-Hosts und ein echter CraftOS-Client prüfen `gps.locate()` vor und nach der Bewegung sowie Dimensionsisolation. Das Console-Profil prüft beide Computervarianten, reale Gimbal-Messwerte, genau ein gemeinsames Laufwerks-Attachment für beide APIs, gemeinsame Namen und Bindungen, Pultbaum, computerlose Reihen sowie Entfernen/Einsetzen des Computers, Reboots und Teilen/Zusammenführen der Reihe.
 
 Zusätzliche Ingame-Abnahme: Erscheinungsbild und Ponder auf einem Client sowie reale Avionics-Stellbefehle mit dessen vorhandenem Interface. Die Beispieltypen oben setzen deren jeweilige Mods voraus. Der Link nimmt keine Avionics-spezifischen Eingriffe vor.

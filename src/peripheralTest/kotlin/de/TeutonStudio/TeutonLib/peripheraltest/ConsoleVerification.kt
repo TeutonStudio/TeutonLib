@@ -206,7 +206,9 @@ object ConsoleVerification {
             LinkRegistry.validate()
             check(
                 link.connection != null && link.connection!!.owner === owner,
-                "computer at a different row member must own the link"
+                "computer at a different row member must own the link: status=${link.status}, " +
+                    "actual=${link.connection?.owner?.blockPos}, expected=${owner.blockPos}, " +
+                    "network=${ConsoleMultiblockManager.resolve(level, anchor.blockPos)}"
             )
             // Removing and reinstalling the computer retains the selected member's target identity.
             val removed = ConsoleComputers.remove(owner)

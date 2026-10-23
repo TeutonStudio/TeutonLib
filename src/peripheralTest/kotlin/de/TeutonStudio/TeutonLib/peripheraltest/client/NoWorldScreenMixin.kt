@@ -13,7 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 abstract class NoWorldScreenMixin {
     @Inject(method = ["tick"], at = [At("HEAD")], cancellable = true)
     private fun `teutonlib$withoutWorld`(ci: CallbackInfo) {
-        if (java.lang.Boolean.getBoolean("teutonlib.computerUiTests") && Minecraft.getInstance().player == null) ci.cancel()
+        if ((java.lang.Boolean.getBoolean("teutonlib.computerUiTests") ||
+                java.lang.Boolean.getBoolean("teutonlib.peripheralLinkUiTests")) &&
+            Minecraft.getInstance().player == null
+        ) ci.cancel()
     }
 
     /** Synthetic menus have no game mode; physical mouse clicks must not trigger inventory packets. */
@@ -22,7 +25,9 @@ abstract class NoWorldScreenMixin {
         slot: net.minecraft.world.inventory.Slot?, slotId: Int, button: Int,
         click: net.minecraft.world.inventory.ClickType, ci: CallbackInfo
     ) {
-        if ((java.lang.Boolean.getBoolean("teutonlib.computerUiTests") || java.lang.Boolean.getBoolean("teutonlib.computerUiConfigTests"))
+        if ((java.lang.Boolean.getBoolean("teutonlib.computerUiTests") ||
+                java.lang.Boolean.getBoolean("teutonlib.computerUiConfigTests") ||
+                java.lang.Boolean.getBoolean("teutonlib.peripheralLinkUiTests"))
             && Minecraft.getInstance().gameMode == null) ci.cancel()
     }
 }

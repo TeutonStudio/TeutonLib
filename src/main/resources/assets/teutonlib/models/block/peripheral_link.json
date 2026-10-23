@@ -1,5 +1,5 @@
 {
-  "credit": "Made with Blockbench",
+	"credit": "Peripheral Link model made with Blockbench",
   "loader": "neoforge:composite",
   "parent": "block/block",
   "textures": {

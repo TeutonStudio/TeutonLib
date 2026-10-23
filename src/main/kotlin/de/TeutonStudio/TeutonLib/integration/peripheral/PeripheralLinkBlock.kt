@@ -5,7 +5,7 @@ import com.simibubi.create.AllShapes
 import java.util.function.Function
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
-import net.minecraft.network.chat.Component
+import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.InteractionResult
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -96,16 +96,7 @@ class PeripheralLinkBlock(properties: Properties) : BaseEntityBlock(properties) 
         hit: BlockHitResult
     ): InteractionResult {
         val link = level.getBlockEntity(pos) as? PeripheralLinkBlockEntity ?: return InteractionResult.sidedSuccess(level.isClientSide)
-        if (!level.isClientSide) {
-            LinkRegistry.validate()
-            player.displayClientMessage(
-                Component.translatable(
-                    "teutonlib.peripheral_link.status",
-                    if (link.target() == null) "—" else link.target().toString(),
-                    Component.translatable("teutonlib.peripheral_link.status." + link.status)
-                ), false
-            )
-        }
+        if (!level.isClientSide && player is ServerPlayer) player.openMenu(link, pos)
         return InteractionResult.sidedSuccess(level.isClientSide)
     }
 

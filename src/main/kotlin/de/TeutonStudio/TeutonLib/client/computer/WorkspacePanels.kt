@@ -473,11 +473,17 @@ class WorkspacePanels(
         }
 
         override fun mouseClicked(x: Double, y: Double, button: Int): Boolean {
-            if (!visible || !active || button != 0 || x < getX() + 6 || x >= getX() + 6 + listWidth() || y < getY() + 28 || y >= getY() + 28 + capacity() * 20) return false
+            if (!visible || !active || button != 0) return false
             if (api != null) {
-                if (x >= getX() + width - 26 && y < getY() + 47) closeSourceApi()
+                if (x < getX() || x >= getX() + width || y < getY() || y >= getY() + height) return false
+                if (x >= getX() + width - 26 && y in (getY() + 27).toDouble()..(getY() + 45).toDouble()) {
+                    closeSourceApi()
+                }
                 return true
             }
+            if (x < getX() + 6 || x >= getX() + 6 + listWidth() ||
+                y < getY() + 28 || y >= getY() + 28 + capacity() * 20
+            ) return false
             val rows = entries()
             val index = offset + ((y - getY() - 28) / 20).toInt()
             if (index >= rows.size) return true

@@ -5,6 +5,10 @@ import de.TeutonStudio.TeutonLib.TeutonLib
 import de.TeutonStudio.TeutonLib.integration.computer.WorkspacePayloads
 import net.minecraft.resources.ResourceLocation
 import net.minecraft.world.level.block.entity.BlockEntity
+import dan200.computercraft.shared.computer.core.ServerComputer
+import dan200.computercraft.api.peripheral.IPeripheral
+import de.TeutonStudio.TeutonLib.integration.computer.ComputerIntegration
+import de.TeutonStudio.TeutonLib.integration.computer.StandardComputerWorkspace
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.function.Consumer
 import java.util.function.Function
@@ -72,4 +76,17 @@ object ComputerExtensions {
         return AutoCloseable { authorities.remove(owner) }
     }
     @JvmStatic fun externalChannels(computer: ComputerContext): Boolean = authorities.any { it.test(computer) }
+
+    /** Stable projection helpers for addon workspaces; implementation runtime types never escape. */
+    @JvmStatic fun sourceViews(computer: ServerComputer): List<SourceView> =
+        ComputerIntegration.runtime(computer)?.sourceViews().orEmpty()
+
+    @JvmStatic fun sourceEntry(
+        computer: ServerComputer,
+        source: SourceView,
+        peripheral: IPeripheral? = null
+    ): ComputerWorkspace.Entry {
+        val runtime = checkNotNull(ComputerIntegration.runtime(computer)) { "Computer unavailable" }
+        return StandardComputerWorkspace.sourceEntry(runtime, source, peripheral ?: runtime.peripherals()[source.name])
+    }
 }

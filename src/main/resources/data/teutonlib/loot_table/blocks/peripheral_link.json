@@ -16,7 +16,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "teutonlib:peripheral_link"
+              "name": "teutonlib:peripheral_link"
         }
       ],
       "conditions": [

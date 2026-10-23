@@ -3,6 +3,14 @@
 TeutonStudio-Bibliothek für **Minecraft 1.21.1 / NeoForge 21.1.234 / Java 21**.
 KotlinForForge **5.11.0** ist erforderlich. TeutonLib muss auf Server und Clients installiert sein.
 
+## Neu in 1.5.0
+
+Die öffentlichen Computer-APIs umfassen jetzt generische Peripheral-Topologien und
+Attachments, Workspace-Deskriptoren, persistente Gruppen und Signalausgänge sowie einen
+Kernel für eingebettete CC:Tweaked-Computer. Sable-Funk, Modemreichweite und `gps.locate()`
+verwenden sichtbare Weltkoordinaten; Simulated-Docking-Zustände stehen über eine dependency-sichere
+Fassade bereit. [Vollständige Release-Notizen](docs/release-1.5.0.md).
+
 ## PC-UI als Vorlage
 
 Das Release **1.3.0** enthält eine kompilierte, kopierbare
@@ -93,6 +101,8 @@ Entfernte Geräte erscheinen automatisch in `peripheral.find()` und auf Pultcomp
 zusätzlich in `peripherals.find()`. Persistente Linknamen, vollständige CC-Methoden,
 Inventar-/Flüssigkeitstransfers, Ereignisse und Laufwerks-Mounts werden unterstützt.
 Sable-Verbindungen verwenden Weltpositionen einschließlich Bewegung und Drehung.
+Der Directional Gearshift aus Create Simulated ist direkt und über Peripheral Links als
+`directional_gearshift` mit `setOutput("left"|"right", boolean)` steuerbar.
 
 Bedienung, API, Kompatibilitätsgrenze für eigene Betriebssysteme und Testbefehle:
 [Peripheral-Link-Dokumentation](docs/peripheral-link.md).
@@ -196,6 +206,11 @@ Den Config-Editor und das Umschalten der Computerreiter im echten Client prüfen
 `./gradlew runClient -PperipheralTests -PcomputerUiConfigTests --offline`.
 Der Client beendet sich nach der Prüfung; das Ergebnis steht unter
 `build/reports/smoke/computer-ui-config.txt`.
+
+Die eigenständige Peripheral-Link-Oberfläche benötigt im Entwicklungsprofil CC:Tweaked und
+Create. Ihr automatischer Render-, Fokus-, Scroll-, Escape- und Resize-Test läuft mit
+`./gradlew runClient -PperipheralTests -PperipheralLinkUiTests -PperipheralRuntime=cc -PcsoRuntime=create --offline`;
+das Ergebnis steht unter `build/reports/smoke/peripheral-link-ui.txt`.
 
 Die JUnit-Tests prüfen zusätzlich die API-Signaturen der lokalen Compile-JARs.
 

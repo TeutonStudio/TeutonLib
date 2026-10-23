@@ -103,29 +103,28 @@ class DependencyCompatibilityTest {
 
     @Test
     @Throws(IOException::class)
-    fun consoleGraphAndBindingMixinTargetsRemainCompatible() {
-        val prefix = "de/teutonstudio/ccaeroworks/computer/"
-        assertTrue(
-            DependencyCompatibilityTest.Companion.methods(prefix + "PeripheralNetworkBuilder").containsKey(
-                "build(L" + prefix + "ConsoleComputer;)L" + prefix + "PeripheralNetworkGraph;"
-            )
-        )
-        val runtime: kotlin.collections.MutableMap<kotlin.String, kotlin.Int> =
-            DependencyCompatibilityTest.Companion.methods(prefix + "PeripheralNetworkRuntime")
-        assertTrue(runtime.containsKey("graph(Z)L" + prefix + "PeripheralNetworkGraph;"))
-        assertTrue(runtime.containsKey("invalidateGraph(Z)V"))
-        assertTrue(runtime.containsKey("queueDetached(L" + prefix + "PeripheralNetworkNode;)V"))
-        assertTrue(runtime.containsKey("describePeripheral(L" + prefix + "PeripheralNetworkNode;)Ljava/util/Map;"))
-        val binding: kotlin.collections.MutableMap<kotlin.String, kotlin.Int> =
-            DependencyCompatibilityTest.Companion.methods(prefix + "PeripheralBinding")
-        assertTrue(binding.containsKey("checkAttached()V"))
-        assertTrue(binding.containsKey("checkValid()Z"))
-        assertTrue(binding.containsKey("close()V"))
-        assertTrue(
-            DependencyCompatibilityTest.Companion.methods(prefix + "PeripheralTreeKt").containsKey(
-                "describeTree(L" + prefix + "PeripheralNetworkRuntime;)Ljava/util/Map;"
-            )
-        )
+    fun wirelessAndSableGeometryTargetsRemainCompatible() {
+        val wireless = methods("dan200/computercraft/shared/peripheral/modem/wireless/WirelessNetwork")
+        assertTrue(wireless.containsKey(
+            "tryTransmit(Ldan200/computercraft/api/network/PacketReceiver;Ldan200/computercraft/api/network/Packet;DZ)V"
+        ))
+        val sableWireless = methods("dev/ryanhcode/sable/mixin/compatibility/computercraft/WirelessNetworkMixin")
+        assertTrue(sableWireless.containsKey(
+            "getPosition(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/Vec3;Ldan200/computercraft/api/network/PacketReceiver;)D"
+        ))
+        val modem = methods("dan200/computercraft/shared/peripheral/modem/wireless/WirelessModemPeripheral")
+        assertTrue(modem.containsKey("getRange()D"))
+        assertTrue(modem.containsKey("getPosition()Lnet/minecraft/world/phys/Vec3;") ||
+            methods("dan200/computercraft/api/network/PacketSender")
+                .containsKey("getPosition()Lnet/minecraft/world/phys/Vec3;"))
+
+        val sable = methods("dev/ryanhcode/sable/ActiveSableCompanion")
+        assertTrue(sable.containsKey(
+            "projectOutOfSubLevel(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;"
+        ))
+        assertTrue(sable.containsKey(
+            "distanceSquaredWithSubLevels(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/Position;Lnet/minecraft/core/Position;)D"
+        ))
     }
 
     @Test

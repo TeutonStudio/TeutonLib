@@ -15,6 +15,9 @@ import dan200.computercraft.api.pocket.IPocketAccess
 import dan200.computercraft.api.turtle.ITurtleAccess
 import dan200.computercraft.shared.computer.blocks.ComputerBlockEntity
 import de.TeutonStudio.TeutonLib.TeutonLib
+import de.TeutonStudio.TeutonLib.api.computer.peripheral.PeripheralAttachmentRuntime
+import de.TeutonStudio.TeutonLib.api.computer.peripheral.PeripheralDeviceBinding
+import de.TeutonStudio.TeutonLib.api.computer.peripheral.PeripheralEndpointMetadata
 import java.lang.RuntimeException
 import java.util.Collections
 import java.util.IdentityHashMap
@@ -38,6 +41,7 @@ class LinkLuaApi(private val system: IComputerSystem) : ILuaAPI {
 
     @Volatile
     private var running = false
+    private var managedInitialized = false
 
     init {
         portable =
@@ -56,6 +60,7 @@ class LinkLuaApi(private val system: IComputerSystem) : ILuaAPI {
 
     override fun startup() {
         running = true
+        managedInitialized = false
         ACCESS.put(system.mainThreadMonitor, this)
         LinkRegistry.register(this)
     }
@@ -68,6 +73,7 @@ class LinkLuaApi(private val system: IComputerSystem) : ILuaAPI {
         for (device in devices.values) close(device)
         devices = java.util.Map.of<String, LinkDevice>()
         peripherals = java.util.Map.of<String, IPeripheral>()
+        managedInitialized = false
     }
 
     fun available(): MutableMap<String, IPeripheral> {
@@ -96,10 +102,17 @@ class LinkLuaApi(private val system: IComputerSystem) : ILuaAPI {
             publish(java.util.Map.of<String, LinkDevice>())
             return
         }
-        val console = LinkRegistry.console(system)
-        if (console != null) {
-            val next = console.`teutonlib$devices`()
-            publish(next)
+        if (owner !is ComputerBlockEntity && !managedInitialized) {
+            PeripheralAttachmentRuntime.reconcile(system.mainThreadMonitor)
+            managedInitialized = true
+        }
+        val managed = PeripheralAttachmentRuntime.bindings(system.mainThreadMonitor)
+            .filterValues { binding -> binding.endpoint.metadata[PeripheralEndpointMetadata.LINK] == true }
+            .mapValuesTo(LinkedHashMap()) { (_, binding) ->
+                PeripheralExtensions.augment(ManagedLinkDevice(binding))
+            }
+        if (managed.isNotEmpty()) {
+            publish(managed)
             return
         }
         if (owner !is ComputerBlockEntity) {
@@ -224,4 +237,28 @@ class LinkLuaApi(private val system: IComputerSystem) : ILuaAPI {
             return java.util.Map.of<String, Any?>("x", pos.x, "y", pos.y, "z", pos.z, "dimension", dimension)
         }
     }
+}
+
+/** Non-owning view of a binding whose attach/detach lifecycle belongs to a host runtime. */
+private class ManagedLinkDevice(private val binding: PeripheralDeviceBinding) : LinkDevice {
+    override fun peripheral(): IPeripheral = binding.endpoint.peripheral
+    override fun methods(): Set<String> = binding.methodNames
+    override fun call(context: ILuaContext, method: String, arguments: IArguments): MethodResult =
+        binding.call(context, method, arguments)
+
+    override fun handle(): Any {
+        val names = (binding.methodNames + "getPeripheralInfo").sorted().toTypedArray()
+        return object : IDynamicLuaObject {
+            override fun getMethodNames(): Array<String> = names
+            override fun callMethod(context: ILuaContext, index: Int, args: IArguments): MethodResult {
+                if (index !in names.indices) throw LuaException("Unknown method")
+                return if (names[index] == "getPeripheralInfo" && names[index] !in binding.methodNames) {
+                    MethodResult.of(info())
+                } else binding.call(context, names[index], args)
+            }
+        }
+    }
+
+    override fun info(): Map<String, Any?> = binding.info()
+    override fun close() = Unit
 }

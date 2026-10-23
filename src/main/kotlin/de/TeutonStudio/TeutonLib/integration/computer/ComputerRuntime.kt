@@ -106,13 +106,23 @@ class ComputerRuntime(private val system: IComputerSystem) : ILuaAPI, ComputerCo
         return (host() as ChannelHost).`teutonlib$channels`()
     }
 
-    fun sourceNickname(name: String): String? =
-        (host() as SourceNicknameHost).`teutonlib$sourceNicknames`().get(name)
+    fun sourceNickname(name: String): String? {
+        val host = host()
+        val connection = LinkRegistry.connection(name)?.takeIf { it.owner === host }
+        if (connection != null) return connection.link.nickname().takeIf(String::isNotEmpty)
+        return (host as SourceNicknameHost).`teutonlib$sourceNicknames`().get(name)
+    }
 
     fun setSourceNickname(name: String, nickname: String) {
         require(sourceViews().any { it.name == name }) { "Peripheral is no longer available" }
-        (host() as SourceNicknameHost).`teutonlib$sourceNicknames`().set(name, nickname)
         val host = host()
+        val nicknames = (host as SourceNicknameHost).`teutonlib$sourceNicknames`()
+        val connection = LinkRegistry.connection(name)?.takeIf { it.owner === host }
+        if (connection == null) nicknames.set(name, nickname)
+        else {
+            connection.link.nickname(nickname)
+            nicknames.set(name, "")
+        }
         host.setChanged()
         host.level!!.sendBlockUpdated(host.blockPos, host.blockState, host.blockState, 3)
     }

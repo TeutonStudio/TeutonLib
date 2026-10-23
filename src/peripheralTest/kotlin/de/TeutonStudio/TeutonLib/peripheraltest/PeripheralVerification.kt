@@ -4,17 +4,21 @@ import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.StringArgumentType
 import com.mojang.brigadier.context.CommandContext
 import dan200.computercraft.api.filesystem.WritableMount
+import dan200.computercraft.api.peripheral.PeripheralCapability
 import dan200.computercraft.shared.computer.blocks.ComputerBlockEntity
 import dan200.computercraft.shared.computer.core.ServerComputer
 import dan200.computercraft.shared.peripheral.diskdrive.DiskDriveBlockEntity
 import dan200.computercraft.shared.peripheral.modem.wired.WiredModemFullBlockEntity
 import de.TeutonStudio.TeutonLib.ServerConfig
 import de.TeutonStudio.TeutonLib.TeutonLib
+import de.TeutonStudio.TeutonLib.integration.computer.SourceNicknameHost
 import de.TeutonStudio.TeutonLib.integration.peripheral.*
 import de.TeutonStudio.TeutonLib.integration.peripheral.LinkIdentity
 import de.TeutonStudio.TeutonLib.integration.peripheral.LinkRegistry
 import de.TeutonStudio.TeutonLib.integration.peripheral.PeripheralLinkBlockEntity
 import de.TeutonStudio.TeutonLib.integration.peripheral.PeripheralLinks
+import de.TeutonStudio.TeutonLib.integration.peripheral.simulated.DirectionalGearshiftPeripheral
+import dev.simulated_team.simulated.content.blocks.directional_gearshift.DirectionalGearshiftBlock
 import java.lang.AssertionError
 import java.lang.Exception
 import java.lang.IllegalArgumentException
@@ -46,6 +50,7 @@ import net.minecraft.world.level.GameType
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
+import net.minecraft.world.level.block.DirectionalBlock
 import net.minecraft.world.level.block.entity.ChestBlockEntity
 import net.minecraft.world.level.material.Fluids
 import net.minecraft.world.phys.BlockHitResult
@@ -129,7 +134,9 @@ class PeripheralVerification {
         private fun run(level: ServerLevel, action: String): String {
             if (action.startsWith("channels_")) return ChannelsVerification.run(level, action.substring(9))!!
             if (action.startsWith("console_")) return ConsoleVerification.run(level, action.substring(8))!!
+            if (action.startsWith("sable_gps_")) return SableVerification.runGps(level, action.substring(10))
             if (action == "sable") return SableVerification.run(level)
+            if (action == "gearshift") return verifyDirectionalGearshift(level)
             if (action == "chunk_prepare") {
                 level.setChunkForced(CHUNK_TARGET.x shr 4, 0, true)
                 level.setChunkForced(CHUNK_LINK.x shr 4, 0, true)
@@ -170,6 +177,13 @@ class PeripheralVerification {
             }
             if (action == "normal" || action == "advanced") {
                 checks.clear()
+                val linkId = ResourceLocation.parse("teutonlib:peripheral_link")
+                require(BuiltInRegistries.BLOCK.get(linkId) === PeripheralLinks.BLOCK.get(), "canonical Peripheral Link block ID")
+                require(BuiltInRegistries.ITEM.get(linkId) === PeripheralLinks.ITEM.get(), "canonical Peripheral Link item ID")
+                require(
+                    BuiltInRegistries.BLOCK_ENTITY_TYPE.get(linkId) === PeripheralLinks.ENTITY.get(),
+                    "canonical Peripheral Link block entity ID"
+                )
                 level.setChunkForced(0, 0, true)
                 level.removeBlock(COMPUTER, false)
                 for (x in 8..15) for (y in 200..202) for (z in 8..15) level.removeBlock(BlockPos(x, y, z), false)
@@ -294,7 +308,22 @@ class PeripheralVerification {
                             || first.connection!!.peripheral.additionalTypes.contains("inventory"),
                     "generic inventory resolved through CC"
                 )
+                val legacyPos = FIRST.south(4)
+                val legacy = link(level, legacyPos, id)
+                val legacyAddress = "cc_aeroworks:link_${legacy.identity()}"
+                val nicknameBank = (target as SourceNicknameHost).`teutonlib$sourceNicknames`()
+                nicknameBank.set(legacyAddress, "Legacy cargo")
+                LinkRegistry.validate()
+                require(legacy.nickname() == "Legacy cargo", "legacy computer-local nickname migrated to link")
+                require(nicknameBank.get(legacyAddress) == null, "legacy computer-local nickname removed after migration")
+                level.removeBlock(legacyPos, false)
+                level.removeBlock(legacyPos.below(), false)
+                LinkRegistry.validate()
                 firstName = first.connection!!.name()
+                first.nickname("Cargo inventory")
+                val linkSnapshot = PeripheralLinkPayloads.snapshot(first)
+                require(linkSnapshot.getString("primaryType").isNotEmpty(), "link snapshot includes primary type")
+                require(linkSnapshot.contains("api"), "link snapshot includes exposed API")
                 target.persistentData.putString("ExpectedLinkName", firstName)
                 target.setChanged()
                 savedLink = first.saveWithFullMetadata(level.registryAccess())
@@ -309,6 +338,8 @@ class PeripheralVerification {
                     first.identity() == original && first.connection!!.name() == firstName,
                     "save/load preserves peripheral name"
                 )
+                require(first.nickname() == "Cargo inventory", "save/load preserves Peripheral Link nickname")
+                require(first.knownTargetPosition() == COMPUTER, "save/load preserves known link target position")
                 // Boundary fixture: exact 256 world blocks, and one block beyond it.
                 val boundary: BlockPos = COMPUTER.offset(256, 0, 0)
                 level.setChunkForced(boundary.x shr 4, boundary.z shr 4, true)
@@ -533,6 +564,59 @@ class PeripheralVerification {
                 return "PASS persistence"
             }
             throw IllegalArgumentException("Unknown action " + action)
+        }
+
+        @JvmStatic
+        private fun verifyDirectionalGearshift(level: ServerLevel): String {
+            val computerPos = BlockPos(32, 200, 8)
+            val gearshiftPos = computerPos.east(4)
+            val linkPos = gearshiftPos.above()
+            level.setChunkForced(computerPos.x shr 4, computerPos.z shr 4, true)
+            try {
+                level.setBlockAndUpdate(computerPos, block("computercraft:computer_normal").defaultBlockState())
+                val computer = level.getBlockEntity(computerPos) as ComputerBlockEntity
+                val target = UUID.randomUUID()
+                (computer as LinkIdentity).`teutonlib$linkTarget`(target)
+                LinkRegistry.registerAnchor(computer)
+
+                level.setBlockAndUpdate(
+                    gearshiftPos,
+                    block("simulated:directional_gearshift").defaultBlockState()
+                )
+                val peripheral = level.getCapability(
+                    PeripheralCapability.get(), gearshiftPos, Direction.UP
+                )
+                require(peripheral is DirectionalGearshiftPeripheral, "TeutonLib gearshift capability has priority")
+                val gearshift = peripheral as DirectionalGearshiftPeripheral
+                require(gearshift.type == "directional_gearshift", "gearshift peripheral type")
+                val methods = dan200.computercraft.shared.computer.core.ServerContext.get(level.server)
+                    .peripheralMethods().getSelfMethods(gearshift).keys
+                require("setOutput" in methods && "getOutput" in methods, "gearshift standard output methods")
+                require("setOutputs" in methods && "getStatus" in methods, "gearshift compatibility methods")
+
+                gearshift.setOutput("left", true)
+                gearshift.setOutput("right", false)
+                val state = level.getBlockState(gearshiftPos)
+                require(state.getValue(DirectionalGearshiftBlock.LEFT_POWERED), "gearshift left output applied")
+                require(!state.getValue(DirectionalGearshiftBlock.RIGHT_POWERED), "gearshift right output applied")
+
+                level.setBlockAndUpdate(
+                    linkPos,
+                    PeripheralLinks.BLOCK.get().defaultBlockState()
+                        .setValue(DirectionalBlock.FACING, Direction.UP)
+                )
+                val link = level.getBlockEntity(linkPos) as PeripheralLinkBlockEntity
+                link.target(target)
+                LinkRegistry.register(link)
+                LinkRegistry.validate()
+                require(link.connection?.peripheral?.type == "directional_gearshift", "gearshift connected through Peripheral Link")
+                return "PASS gearshift"
+            } finally {
+                level.removeBlock(linkPos, false)
+                level.removeBlock(gearshiftPos, false)
+                level.removeBlock(computerPos, false)
+                level.setChunkForced(computerPos.x shr 4, computerPos.z shr 4, false)
+            }
         }
     }
 }

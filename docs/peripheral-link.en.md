@@ -4,7 +4,9 @@ TeutonLib adds `teutonlib:peripheral_link` when **CC:Tweaked and Create** are in
 
 Craft a brass casing, an ender pearl, and a transmitter together using a shapeless recipe. The existing shapeless recipe using a Display Link and an ender pearl remains available; both variants have the same material cost. Right-click a normal or advanced CC computer with the item, then place the link against the peripheral. With CC Aeroworks, any member of an Aeroworks control desk row can be selected instead. Only the device on the link's attachment side is exposed. No receiver, frequency, or connection program is needed.
 
-Right-click a placed link to inspect its target and status. Sneak-use the item to clear its selection before selecting another target. Break and replace a placed link to change its target. Dropped links do not retain their UUID or pairing. Successful placement clears the selected target from the remaining item stack, including in creative mode. Failed placement preserves the selection. Pocket computers and turtles are not selectable targets.
+Right-click a placed link to open its status, forwarding details, Lua API, and nickname editor. Sneak-use the item to clear its selection before selecting another target. Break and replace a placed link to change its target. Dropped links do not retain their UUID, pairing, or nickname. Successful placement clears the selected target from the remaining item stack, including in creative mode. Failed placement preserves the selection. Pocket computers and turtles are not selectable targets.
+
+The nickname is stored on the link and used by the connected computer's Sources view. It can be edited in either screen without changing the stable Lua address. Names from existing worlds which are still stored on a computer are migrated to the link on its first connection.
 
 ## Configuration
 
@@ -17,6 +19,11 @@ The world-specific `serverconfig/teutonlib-server.toml` contains:
 ```
 
 The range boundary is inclusive. The active link limit is shared by all anchors in the same desk network. Configuration reloads take effect during play. Sable distance checks use current world positions, including vehicle movement and rotation. Plot coordinates are used only for block access.
+
+The same central Sable geometry applies to CC:Tweaked's real wireless network. Normal modems
+measure distance and altitude-dependent range in visible world coordinates, so `gps.locate()` on
+a moving Sable sublevel returns its global world position. GPS hosts, payloads, and trilateration
+remain unchanged in CC:Tweaked, and real dimension boundaries remain distance-less.
 
 ## Lua
 
@@ -49,6 +56,18 @@ print(direction.x, direction.y, direction.z) -- 0  0  1
 
 This method is intentionally available through a Peripheral Link only. A stationary
 sensor's local coordinate system is identical to the world coordinate system.
+
+A **Create Simulated Directional Gearshift** is exposed as a complete
+`directional_gearshift` peripheral through both Peripheral Links and direct CC connections.
+`setOutput("left", boolean)` and `setOutput("right", boolean)` control its two inputs, while
+`getOutput` reads them. The API also includes the 0/15 aliases `setAnalogOutput` and
+`getAnalogOutput`, plus `setLeft`, `setRight`, `setOutputs`, `clear`, and `getStatus`:
+
+```lua
+local gearshift = assert(peripheral.find("directional_gearshift"))
+gearshift.setOutput("left", true)
+gearshift.setOutput("right", false)
+```
 
 The native API is registered through `ComputerCraftAPI.registerAPIFactory`; its global name is `teutonlib_links` and its module name is `teutonlib.links`.
 
@@ -83,6 +102,6 @@ python3 tools/verify_peripheral_links.py cc
 python3 tools/verify_peripheral_links.py console
 ```
 
-Run the server profiles sequentially. The first uses Create and CC without Sable or CC Aeroworks. The second also loads Sable and CC Aeroworks. They use disposable worlds under `run/peripheral`, a localhost-only RCON endpoint, and a development verification mod excluded from the release JAR. Results are saved under `build/reports/smoke`.
+Run the server profiles sequentially. The first uses Create and CC without Sable or CC Aeroworks. The second also loads Sable and CC Aeroworks. It exercises a real CraftOS `gps.locate()` against four global hosts before and after moving the Sable sublevel, plus dimension isolation. They use disposable worlds under `run/peripheral`, a localhost-only RCON endpoint, and a development verification mod excluded from the release JAR. Results are saved under `build/reports/smoke`.
 
 For exact supported dependency versions, implementation details, and additional client/device acceptance checks, see the [German documentation](peripheral-link.md).

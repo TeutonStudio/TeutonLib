@@ -18,16 +18,11 @@
     "peripheral.aeronautics.DirectionalGyroscopicBearingMixin",
     "peripheral.simulated.SimPeripheralAccessor",
     "peripheral.simulated.GimbalSensorPeripheralMixin",
-    "peripheral.console.ConsoleGraphMixin",
-    "peripheral.console.ConsoleRuntimeMixin",
-    "peripheral.console.ConsoleTreeMixin",
-    "peripheral.console.ConsoleBindingMixin",
     "peripheral.LinkSystemAccessMixin",
-    "peripheral.console.ConsoleApiLifecycleMixin",
     "computer.ChannelHostMixin",
     "computer.ServerComputerAccessor",
     "computer.ComputerChannelSyncMixin",
-    "computer.console.ConsoleSourcesMixin"
+    "computer.WirelessModemRangeMixin"
   ],
   "client": [
     "cso.client.KineticBlockEntityVisualMixin",
