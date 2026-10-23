@@ -2,7 +2,7 @@
 
 TeutonLib adds `teutonlib:peripheral_link` when **CC:Tweaked and Create** are installed. **CC Aeroworks is optional**: installing it also enables links to embedded control desk computers. Avionics is not a dependency.
 
-Craft a Display Link and an ender pearl together using a shapeless recipe. Right-click a normal or advanced CC computer with the item, then place the link against the peripheral. With CC Aeroworks, any member of an Aeroworks control desk row can be selected instead. Only the device on the link's attachment side is exposed. No receiver, frequency, or connection program is needed.
+Craft a brass casing, an ender pearl, and a transmitter together using a shapeless recipe. The existing shapeless recipe using a Display Link and an ender pearl remains available; both variants have the same material cost. Right-click a normal or advanced CC computer with the item, then place the link against the peripheral. With CC Aeroworks, any member of an Aeroworks control desk row can be selected instead. Only the device on the link's attachment side is exposed. No receiver, frequency, or connection program is needed.
 
 Right-click a placed link to inspect its target and status. Sneak-use the item to clear its selection before selecting another target. Break and replace a placed link to change its target. Dropped links do not retain their UUID or pairing. Successful placement clears the selected target from the remaining item stack, including in creative mode. Failed placement preserves the selection. Pocket computers and turtles are not selectable targets.
 

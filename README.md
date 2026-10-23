@@ -83,7 +83,9 @@ normalen und erweiterten eingebauten Computer aller Mitglieder einer Pultreihe.
 
 Mit dem Item zuerst den Computer beziehungsweise Pultanker auswählen und den Link
 anschließend am Gerät platzieren. Kein Empfängerblock und kein Verbindungsprogramm
-sind nötig. Rezept: **Display Link + Enderperle**, formlos. Standard: **256 Blöcke**
+sind nötig. Formlose Rezepte: **Anzeige-Link + Enderperle** oder direkt
+**Messingrahmen + Enderperle + Sender**. Beide benötigen dieselben Materialien.
+Standard: **256 Blöcke**
 und **64 aktive Links pro Zielnetz**, konfigurierbar unter `[compat.peripheralLink]`
 mit `range` und `maxLinksPerNetwork`.
 

@@ -6,7 +6,7 @@ Der Peripheral Link wird von **TeutonLib** registriert, sobald **CC:Tweaked und 
 
 ## Bedienung
 
-Ein Create Display Link und eine Enderperle ergeben im formlosen Rezept einen `teutonlib:peripheral_link`. Der türkisfarbene Link verwendet die Display-Link-Geometrie.
+Ein Create-Messingrahmen, eine Enderperle und ein Sender ergeben im formlosen Rezept einen `teutonlib:peripheral_link`. Das bisherige formlose Rezept aus Anzeige-Link und Enderperle bleibt ebenfalls erhalten; beide Varianten benötigen dieselben Materialien. Der türkisfarbene Link verwendet weiterhin die Display-Link-Geometrie.
 
 1. Mit dem Item einen normalen oder erweiterten CC-Computer auswählen. Mit CC Aeroworks kann stattdessen ein beliebiges Mitglied einer Aeroworks-Pultreihe ausgewählt werden.
 2. Den Link gegen das gewünschte Gerät platzieren. Ausschließlich das Gerät auf der Befestigungsseite wird angebunden.

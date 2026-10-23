@@ -1,0 +1,29 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "computercraft"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "create:brass_casing"
+    },
+    {
+      "item": "minecraft:ender_pearl"
+    },
+    {
+      "item": "create:transmitter"
+    }
+  ],
+  "result": {
+    "id": "teutonlib:peripheral_link",
+    "count": 1
+  }
+}
