@@ -5,6 +5,11 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ServerConfigLocationMixin",
+    "resource.ResourcePackLoaderMixin",
+    "mobile.PowerGridNativeMixin",
+    "mobile.ImmersiveMelodiesMidiMixin",
+    "mobile.VisualRecipeEditorBackupMixin",
+    "mobile.EssentialDiscordIpcMixin",
     "flux.FluxPointConnectionMixin",
     "cso.DockingConnectorMixin",
     "cso.AnalogDockingConnectorMixin",
@@ -25,6 +30,8 @@
     "computer.WirelessModemRangeMixin"
   ],
   "client": [
+    "mobile.PonderRenderTargetMixin",
+    "mobile.CatnipStencilElementMixin",
     "cso.client.KineticBlockEntityVisualMixin",
     "computer.client.ComputerScreenMixin",
     "computer.client.DbwClientMixin",
@@ -33,5 +40,5 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "plugin": "de.TeutonStudio.TeutonLib.integration.CsoMixinPlugin"
+  "plugin": "de.TeutonStudio.TeutonLib.integration.TeutonLibMixinPlugin"
 }

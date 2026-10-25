@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.zip.ZipFile
 
 plugins {
     `java-library`
@@ -100,8 +101,28 @@ neoForge {
 // Simulated is compiled from the extracted JAR but loaded via Aeronautics' bundle.
 val localCompileJars = fileTree("dependencies/compile") { include("*.jar") }
 val localRuntimeJars = fileTree("dependencies/runtime") { include("*.jar") }
+val essentialOuterJars = fileTree("dependencies/compile") { include("Essential_*.jar") }
+val essentialApiJar = layout.buildDirectory.file("generated/compatibility/essential-kdiscordipc.jar")
+val extractEssentialApi by tasks.registering {
+    inputs.files(essentialOuterJars)
+    outputs.file(essentialApiJar)
+    doLast {
+        val outer = essentialOuterJars.files.singleOrNull()
+            ?: error("Expected exactly one Essential release JAR in dependencies/compile")
+        ZipFile(outer).use { zip ->
+            val nested = zip.entries().asSequence()
+                .filter { it.name.matches(Regex("essential-[0-9a-f]+\\.jar")) }
+                .singleOrNull()
+                ?: error("Expected exactly one embedded Essential implementation JAR in ${outer.name}")
+            val output = essentialApiJar.get().asFile
+            output.parentFile.mkdirs()
+            zip.getInputStream(nested).use { input -> output.outputStream().use(input::copyTo) }
+        }
+    }
+}
 dependencies {
     compileOnly(localCompileJars)
+    compileOnly(files(essentialApiJar).builtBy(extractEssentialApi))
     runtimeOnly(localRuntimeJars.matching { include("kotlinforforge-*.jar") })
     if (csoRuntime == "all" || providers.gradleProperty("peripheralRuntime").isPresent) {
         runtimeOnly(localCompileJars.matching { include("cc-tweaked-*.jar") })
@@ -176,7 +197,14 @@ tasks.withType<AbstractArchiveTask>().configureEach {
 val verifyKotlinSources by tasks.registering {
     doLast {
         val allowedJavaSources = setOf(
-            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/computer/client/DbwClientMixin.java")
+            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/computer/client/DbwClientMixin.java"),
+            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/PowerGridNativeMixin.java"),
+            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/ImmersiveMelodiesMidiMixin.java"),
+            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/VisualRecipeEditorBackupMixin.java"),
+            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/EssentialDiscordIpcMixin.java"),
+            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/PonderRenderTargetMixin.java"),
+            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/CatnipStencilElementMixin.java"),
+            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/resource/ResourcePackLoaderMixin.java")
         )
         val javaSources = (fileTree("src") { include("**/*.java") } +
             fileTree("examples") { include("**/*.java") }

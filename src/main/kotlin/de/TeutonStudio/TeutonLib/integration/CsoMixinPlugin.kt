@@ -1,18 +1,33 @@
 package de.TeutonStudio.TeutonLib.integration
 
 import de.TeutonStudio.TeutonLib.mixin.computer.client.DbwClientMixin
+import de.TeutonStudio.TeutonLib.compat.MobileEnvironment
 import net.neoforged.fml.loading.LoadingModList
 import org.objectweb.asm.tree.ClassNode
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo
 
-class CsoMixinPlugin : IMixinConfigPlugin {
+class TeutonLibMixinPlugin : IMixinConfigPlugin {
     override fun onLoad(mixinPackage: String?) {}
     override fun getRefMapperConfig(): String? {
         return null
     }
 
     override fun shouldApplyMixin(targetClassName: String, mixinClassName: String): Boolean {
+        if (mixinClassName.contains(".mixin.mobile.")) {
+            if (!MobileEnvironment.isMobileEnabled()) return false
+            return when {
+                mixinClassName.endsWith("PonderRenderTargetMixin") ||
+                    mixinClassName.endsWith("CatnipStencilElementMixin") -> hasVersion("ponder", "1.0.82+mc1.21.1")
+                mixinClassName.endsWith("PowerGridNativeMixin") -> hasVersion("powergrid", "0.5.5.1")
+                mixinClassName.endsWith("ImmersiveMelodiesMidiMixin") -> hasVersion("immersive_melodies", "0.6.4+1.21.1")
+                mixinClassName.endsWith("VisualRecipeEditorBackupMixin") -> hasVersion("visual_recipe_editor", "1.2.1")
+                // Essential uses its own staged loader. @Pseudo and require=0 keep this optional.
+                mixinClassName.endsWith("EssentialDiscordIpcMixin") -> hasVersion("essential", "1.3.10.9") ||
+                    LoadingModList.get()?.getModFileById("essential") == null
+                else -> false
+            }
+        }
         if (mixinClassName.contains(".mixin.flux.")) {
             val mods = LoadingModList.get()
             return mods != null && mods.getModFileById("fluxnetworks") != null
@@ -36,6 +51,11 @@ class CsoMixinPlugin : IMixinConfigPlugin {
                     (!mixinClassName.contains(".peripheral.simulated.") || mods.getModFileById("simulated") != null)
         }
         return !mixinClassName.contains(".mixin.cso.") || CsoAvailability.available()
+    }
+
+    private fun hasVersion(modId: String, expected: String): Boolean {
+        val file = LoadingModList.get()?.getModFileById(modId) ?: return false
+        return file.mods.any { it.modId == modId && it.version.toString() == expected }
     }
 
     override fun acceptTargets(myTargets: MutableSet<String>, otherTargets: MutableSet<String>) {}

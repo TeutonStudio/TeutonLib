@@ -3,6 +3,13 @@
 TeutonStudio-Bibliothek für **Minecraft 1.21.1 / NeoForge 21.1.234 / Java 21**.
 KotlinForForge **5.11.0** ist erforderlich. TeutonLib muss auf Server und Clients installiert sein.
 
+## Neu in 1.5.3
+
+Version 1.5.3 ergänzt eng begrenzte Android-/Zalith-Kompatibilität für Ponder/Catnip,
+PowerGrid, Essential und Immersive Melodies. Hinzu kommen verifizierte Reparaturen für
+bekannte fehlerhafte Ressourcen sowie Diagnoseausgaben für Paketmetadaten und optionale
+Native-Pfade. [Vollständige Release-Notizen](docs/release-1.5.3.md).
+
 ## Neu in 1.5.0
 
 Die öffentlichen Computer-APIs umfassen jetzt generische Peripheral-Topologien und
@@ -22,6 +29,34 @@ Dokumentation unter `build/distributions/`.
 
 Die automatische UI-Erweiterung lässt sich clientseitig in `config/teutonlib-client.toml`
 unter `[computerUi]` mit `enabled = false` abschalten (Standard: `true`).
+
+## Android-/Zalith-Kompatibilität
+
+TeutonLib erkennt Android über eindeutige JVM-Merkmale und aktiviert dort eng versionierte
+Kompatibilitätspfade. `Linux` und `aarch64` allein lösen sie nicht aus. Für Diagnose und
+Launcher-Sonderfälle gilt bereits während der Mixin-Auswahl:
+
+```text
+-Dteutonlib.mobile.mode=auto   # Standard
+-Dteutonlib.mobile.mode=on     # Erkennung erzwingen
+-Dteutonlib.mobile.mode=off    # alle mobilen Eingriffe abschalten
+```
+
+Ponder/Catnip prüft nacheinander den NeoForge-Puffer, D24S8-Texturen mit getrennter und
+gemeinsamer Anbindung sowie einen D24S8-Renderbuffer. Jeder Kandidat muss zusätzlich zu
+`GL_FRAMEBUFFER_COMPLETE` einen echten Stencil-/Pixeltest bestehen. Falls alle Varianten
+scheitern, kann der experimentelle Zwei-Textur-Compositor mit
+`-Dteutonlib.mobile.render.colorMask=true` zugeschaltet werden.
+
+Für die exakt geprüften Releases nutzt PowerGrid 0.5.5.1 seinen Java-Solver, Essential
+1.3.10.9 einen sauber getrennten Discord-IPC-Adapter und Immersive Melodies 0.6.4 keine
+Hardware-MIDI-Erkennung. MIDI-Dateien, Instrumente und Minecraft-Sounds bleiben erhalten.
+C2ME Native Math wird nicht erzwungen. Visual Recipe Editor 1.2.1 führt seinen eingebauten
+Entwickler-Workspace-Backup nicht aus.
+
+Verifizierte Ressourcenregeln gelten unabhängig von Android und nur bei passender Version
+und SHA-256: Create Radar 0.4.9.2, EnderIO 8.2.10-beta ohne Athena, NTGL 3.1.5 und
+Design 'n' Decor 2.2b. Abweichende Dateien und spätere Versionen werden nicht verändert.
 
 ## Optionales Create/Sable-Modul
 
@@ -171,7 +206,8 @@ Für eine neue Welt wird eine vorhandene globale `config/teutonlib-server.toml` 
 
 ## Entwicklung
 
-Die Mod, Mixins, Tests und Integrationsbeispiele sind vollständig in Kotlin geschrieben.
+Die Mod, Tests und Integrationsbeispiele sind überwiegend in Kotlin geschrieben. Statische
+oder dependency-isolierte Mixins bleiben bewusst kleine Java-Klassen.
 Auch die Gradle-Builddateien verwenden Kotlin DSL (`build.gradle.kts`, `settings.gradle.kts`).
 Java 21 ist die Ziel-JVM. Lua bleibt für die CC:Tweaked-Laufzeit erforderlich;
 die externen Entwicklungs-Prüfskripte unter `tools/` verwenden Python.
@@ -182,7 +218,10 @@ und `dependencies/runtime/` bereitstellen. Diese JARs sind absichtlich nicht ver
 
 `compile/` benötigt Create, Sable, die aus dem Aeronautics-Bundle extrahierte Simulated-JAR,
 KotlinForForge sowie die API-Abhängigkeiten des vorhandenen CSO-Compile-Satzes (unter anderem
-Flywheel, Ponder, Registrate und Sables eingebettete Abhängigkeiten).
+Flywheel, Ponder, Registrate und Sables eingebettete Abhängigkeiten). Für die mobilen
+Kompatibilitätstests kommen die oben genannten unveränderten Release-JARs einschließlich
+des äußeren Essential-JARs und C2ME hinzu. Gradle extrahiert Essentials eingebettete
+Socket-API ausschließlich in `build/generated/compatibility/`; sie wird nicht ausgeliefert.
 `runtime/` enthält die unveränderten Create-, Sable-, Aeronautics-Bundle-, KotlinForForge- und JEI-JARs.
 Die normale Testumgebung (`./gradlew runClient` bzw. `runServer`, Profil `all`) lädt außerdem
 CC:Tweaked 1.120.2 und Drive by Wire 0.3.0 aus `dependencies/compile/` sowie JEI 19.39.0.372,
