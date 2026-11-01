@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "create:item_drain",
+      "required": false
+    }
+  ]
+}

@@ -11,6 +11,11 @@ class CsoCompatibilityTest {
     }
 
     @Test
+    fun sableBelowTheRequiredMinimumIsRejected() {
+        assertEquals(1, CsoCompatibility.problems(supported() + ("sable" to "2.0.5")).size)
+    }
+
+    @Test
     fun noOptionalModsReportsAllMissingDependencies() {
         assertEquals(3, CsoCompatibility.problems(java.util.Map.of<kotlin.String, kotlin.String>()).size)
     }
@@ -46,7 +51,7 @@ class CsoCompatibilityTest {
                     "create",
                     "6.0.10",
                     "sable",
-                    "2.0.5",
+                    "2.0.6",
                     "simulated",
                     "1.3.2"
                 )

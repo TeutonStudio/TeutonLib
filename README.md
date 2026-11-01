@@ -3,6 +3,139 @@
 TeutonStudio-Bibliothek für **Minecraft 1.21.1 / NeoForge 21.1.234 / Java 21**.
 KotlinForForge **5.11.0** ist erforderlich. TeutonLib muss auf Server und Clients installiert sein.
 
+## Neu in 1.5.15: Schlauchkupplung am Item Drain
+
+Creates **Item Drain** nimmt den getragenen Schlauchrollenkopf per
+Schraubenschlüssel-Rechtsklick auf. Die verriegelte Darstellung folgt der
+Modellvorlage; Drain-Tank und normale Item-Verarbeitung bleiben erhalten.
+Der getragene Kopf blockiert das Anklicken des Drains nicht mehr. Beim Abwählen
+des Schraubenschlüssels endet das Tragen, auch beim Wechsel auf einen anderen
+Hotbar-Slot. Der zusätzliche Kupplungsblock samt Item und Rezept entfällt.
+Die RunClient-Umgebung lädt Train Functionality und Sable für Hybridzug- und
+Umbaumodus-Tests. [Release-Notizen](docs/release-1.5.15.md).
+
+## Neu in 1.5.14: Hybridzüge
+
+Züge verwenden standardmäßig eine spezielle Create-Wagen-Contraption mit festem
+Aufbau und laufender Sable-Simulation. Blockzustände, Maschinen, Inventare und
+Unter-Contraptions bleiben aktiv. `/teutonlib train edit` schaltet einen
+angehaltenen Zug zum Umbauen auf bearbeitbare Sable-Blöcke; `/teutonlib train run`
+sperrt den Aufbau wieder und gibt die Fahrt frei. Beide Befehle gelten für den
+gesamten Zug. Die Portalbrücke übernimmt den Modus und startet laufende Lager
+nach der Zielinitialisierung wieder. Create-Radare erhalten einen eigenen
+gespeicherten Contraption-Typ.
+
+Der Fahrmodus behält einen Sable-Simulationsplot einschließlich Darstellung und
+Physikanbindung im Hintergrund. Er ersetzt Sable während der Fahrt noch nicht
+vollständig. [Bedienung, Konfiguration und technische Grenzen](docs/hybrid-trains.md).
+
+## Neu in 1.5.13: New-Age-Motordrehzahl auf Sable
+
+New-Age-Motoren bauen ihr Create-Rotationsnetz nach dem Zusammenbau auf Sable
+wieder auf. Drehzahl- und Drehrichtungswechsel verwenden die tatsächliche
+kinetische Drehzahl, damit die angeschlossenen Wellen weiter angetrieben werden.
+Die Korrektur gilt für grundlegende, fortgeschrittene und verstärkte Motoren mit
+**Create New Age 1.1.7c**, **Create 6.0.10** und **Sable 2.0.6**.
+Die Mods bleiben optional. [Details und Prüfung](docs/release-1.5.13.md).
+
+## Neu in 1.5.12
+
+Der Entity-Schlauchkopf ist in der Server-Config unter
+`[compat.hosePulley]` mit `entityHeadMode = "ALWAYS"`, `"SABLE_ONLY"` oder `"NEVER"`
+einstellbar. Standard ist `ALWAYS`. Änderungen wirken während des Spiels für alle
+Clients. Ohne Entity-Kopf übernimmt wieder der normale Create-Schlauch einschließlich
+seiner Flüssigkeitsaufnahme. [Config und Verhalten](docs/sable-hose-pulley.md).
+
+Sable-Züge an Immersive-Portals-Übergängen erhalten außerdem die Beleuchtung der
+jeweils sichtbaren Welt. Wagenverbindungen werden auf beiden Portalseiten passend
+projiziert und an der Portalfläche geschnitten. Die Clientprüfung berücksichtigt
+auch Sodium. [Portal-Darstellung und Prüfungen](docs/train-portal-compatibility.md).
+
+## Neu in 1.5.11
+
+Physische Schlauchrollenköpfe sind jetzt als feuerfeste Entities registriert.
+Sie entzünden sich in Lava und Feuer nicht mehr. Die Flüssigkeitsaufnahme und
+-ausgabe verwenden die tatsächliche Kopfposition, auch auf Sable-Zügen und bei
+seitlich ausgelenktem Schlauch. Kollision und Schlauchbindung bleiben erhalten.
+
+## Physische Sable-Schlauchspitze
+
+Creates **Item Drain** (`create:item_drain`) nimmt einen getragenen
+Entity-Kopf per Schraubenschlüssel-Rechtsklick auf und verbindet ihn mit fünf
+Rohranschlüssen. Eine Pumpe versorgt beide Seiten in beliebiger Flussrichtung;
+der Durchfluss wird halbiert, der Pumpendruck bleibt erhalten. Ein gespannter
+Schlauch zieht Sable-Konstruktionen zusammen und löst die Kupplung bei Überlast.
+Der Kopf sitzt nach der Modellvorlage im Drain; dessen eigener Tank und normale
+Item-Verarbeitung bleiben erhalten. Der zusätzliche Kupplungsblock entfällt.
+[Bedienung und Zugkonfiguration](docs/sable-hose-pulley.md#schlauchkupplung).
+
+Mit **Create 6.0.10 und Sable 2.0.6** übernimmt TeutonLib die Funktionen von
+SableSchlauch: eine persistente Schlauchspitze mit Gravitation und Kollision,
+Tragen und Werfen per Schraubenschlüssel, Mitfahren bei eingezogenem Schlauch
+sowie eine Begrenzung an Hindernissen und am Weltboden. Sable-Konstruktionen
+verwenden einen projizierten Weltanker. Die separate SableSchlauch-JAR muss
+entfernt werden. [Bedienung, Funktionsgrenzen und Tests](docs/sable-hose-pulley.md).
+
+## Neu in 1.5.10: Mekanism-Anschlussmodelle auf Sable-Zügen
+
+Mit **Mekanism 10.7.19**, **Create Aeronautics: Mekanism Compatibility 0.1.21**,
+**Sable 2.0.6** und **IP Aeronautics 2.6.4** korrigiert TeutonLib die
+Empfängerprüfung für Rohraktualisierungen. Änderungen per Konfigurator verwenden
+auf Sable-Konstruktionen die feste Plot-Blockadresse, damit Ziehen-/Drücken-Modelle
+auch während der Fahrt am richtigen Rohr aktualisiert werden.
+
+`python3 tools/verify_mekanism_models.py` prüft mit separatem Server und grafischem
+Sodium-Client Weltrohre, Zusammenbau, Konfiguratoränderung im Stand und während der
+Fahrt. Die Prüfung vergleicht Server-/Clientmodi, Modelldaten, tatsächlich kompilierte
+Geometrie und die direkt adressierten Moduspakete. Ergebnisse und Screenshots liegen
+unter `build/reports/mekanism-models/` beziehungsweise der dort referenzierten
+Testinstanz in `run/smoke/mekanism-models/`. Persönliche Spielstände werden nicht geöffnet.
+Die opt-in-Testmod und die originalen optionalen Mod-JARs werden nicht mit ausgeliefert.
+
+## Neu in 1.5.9
+
+Version 1.5.9 erhält beim Portal-Seitenwechsel die Bindung stehender Mitfahrer an
+den übertragenen Sable-Wagen. Die beidseitige Darstellung aus 1.5.8 ist enthalten;
+Server und Clients benötigen die aktuelle JAR. Siehe
+[Release-Notizen](docs/release-1.5.9.md) und
+[Portal-Integration und Prüfungen](docs/train-portal-compatibility.md).
+
+## Neu in 1.5.8
+
+Version 1.5.8 zeichnet baubare Züge während der Portalberührung auf beiden Seiten
+der Portalfläche. Dafür verwendet die Brücke die vorhandenen IP-Straddling-Meshes
+und hält deren Darstellung auch bei Stillstand, Umkehr und beim Seitenwechsel
+aufrecht. Es entsteht kein zweiter CTF-Aufbau. Die Erkennung arbeitet mit einer
+geometrischen Hüllprüfung und zwischengespeicherten lokalen Portalsuchen.
+Sable bleibt optional; falls installiert, ist jetzt **mindestens 2.0.6** erforderlich.
+Die private Zug-Integration ist für **Sable 2.0.6** verifiziert.
+[Release-Notizen](docs/release-1.5.8.md) und
+[Funktionsweise, Kosten und Testgrenzen](docs/train-portal-compatibility.md).
+
+## Neu in 1.5.7
+
+Version 1.5.7 behebt den Null-Kontext beim Entkoppeln mit Steam ’n’ Rails und
+ersetzt die Durchfahrtssperre aus 1.5.6 durch gemeinsame Portalübertragungen von
+Create-Wagen und CTF-/Sable-Aufbau. Geprüfte Kombination: CTF 0.1.47,
+IP Aeronautics 2.6.4, Create 6.0.10 und Sable 2.0.5/2.0.6.
+[Umfang, Grenzen und Tests](docs/train-portal-compatibility.md).
+
+## Neu in 1.5.5
+
+Version 1.5.5 ergänzt einen Adapter für **FluidLogistics 1.3.1 / TFMG 1.2.0** mit
+**Create 6.0.10**. Er behebt die kollidierenden Rohrnetz-Mixins, erhält die erweiterte
+Pumpenreichweite und berücksichtigt FluidLogistics-Pumpen in TFMGs Suchlauf.
+Der Adapter funktioniert auch ohne Factory Logistics.
+[Details und Tests](docs/fluid-propagation-compatibility.md).
+
+## Neu in 1.5.4
+
+Version 1.5.4 enthält einen versionsgebundenen Adapter für **FluidLogistics 1.3.1** und
+**Factory Logistics / Factory Abstractions 1.4.9** mit **Create 6.0.10**. Er ersetzt die
+konfliktbehafteten Queue-/Bestands-Mixins und verwendet für Ressourcenvergleiche und
+Mengenänderungen den gemeinsamen Factory-Logistics-Speicher.
+[Geltungsbereich, Prüfsummen und Tests](docs/logistics-compatibility.md).
+
 ## Neu in 1.5.3
 
 Version 1.5.3 ergänzt eng begrenzte Android-/Zalith-Kompatibilität für Ponder/Catnip,
@@ -74,12 +207,14 @@ Die Integration ist zunächst für folgende Mod-Versionen freigeschaltet:
 | Mod | Version |
 | --- | --- |
 | Create | 6.0.10 |
-| Sable | 2.0.5 |
+| Sable | 2.0.6 |
 | Create Simulated | 1.3.2, enthalten im Aeronautics-Bundle 1.3.2 |
 
-Ohne diese Mods, mit einem unvollständigen Satz oder mit anderen Versionen startet TeutonLib
-weiterhin, lässt das Modul aber inaktiv. Log und Statusbefehl nennen die fehlenden oder
-nicht unterstützten Versionen. Andere Mods können eigene Abhängigkeitsanforderungen haben.
+Ohne diese Mods oder mit einem unvollständigen Satz bleibt das Modul inaktiv.
+Sable ist optional; eine installierte Version unter 2.0.6 wird durch die
+Abhängigkeitsprüfung abgelehnt. Andere ungeprüfte Versionen lassen das Modul
+inaktiv. Log und Statusbefehl nennen die fehlenden oder nicht unterstützten Versionen.
+Andere Mods können eigene Abhängigkeitsanforderungen haben.
 
 **Die separate CSO-JAR muss entfernt werden.** Gleichzeitiges Laden der Mod-ID `cso` wird
 verhindert, weil TeutonLib dieselben Eingriffe bereits enthält. Fremdmods werden nicht eingebettet.
@@ -204,6 +339,19 @@ wieder aufgebaut. Ein Welt- oder Spielneustart ist nicht erforderlich.
 Für eine neue Welt wird eine vorhandene globale `config/teutonlib-server.toml` als Vorlage
 übernommen. Danach sind die Einstellungen der Welten voneinander unabhängig.
 
+## Zugaufbauten an Portalen
+
+Baubare Züge von Create: Train Functionality 0.1.47 können durch passende
+Portalgleise von Immersive Portals: Aeronautics 2.6.4 fahren (Create 6.0.10,
+Sable 2.0.6). Wagen, vorhandener Aufbau, Inventare und gespeicherte Zuordnung
+werden gemeinsam übernommen. Ab 1.5.8 wird der vorhandene Aufbau während seiner
+Berührung mit der Portalfläche auf beiden Seiten geschnitten dargestellt. Die
+zusätzliche sichtbare Zeichnung kostet Renderarbeit; die Brücke verwendet bereits
+vorhandene Meshes und vermeidet Blockscans oder einen zweiten CTF-Aufbau.
+Unabhängige Schiffstransfers von Zugaufbauten bleiben gesperrt; gewöhnliche Schiffe
+bleiben übertragbar. Die Brücke ist auf Server und Clients erforderlich.
+[Diagnose, Grenzen und Regressionstests](docs/train-portal-compatibility.md).
+
 ## Entwicklung
 
 Die Mod, Tests und Integrationsbeispiele sind überwiegend in Kotlin geschrieben. Statische
@@ -216,17 +364,24 @@ die externen Entwicklungs-Prüfskripte unter `tools/` verwenden Python.
 Die originalen lokalen Pack-Binaries aus CreateSableOptimization unter `dependencies/compile/`
 und `dependencies/runtime/` bereitstellen. Diese JARs sind absichtlich nicht versioniert.
 
-`compile/` benötigt Create, Sable, die aus dem Aeronautics-Bundle extrahierte Simulated-JAR,
+`compile/` benötigt Create, die aus dem Aeronautics-Bundle extrahierte Simulated-JAR,
 KotlinForForge sowie die API-Abhängigkeiten des vorhandenen CSO-Compile-Satzes (unter anderem
 Flywheel, Ponder, Registrate und Sables eingebettete Abhängigkeiten). Für die mobilen
 Kompatibilitätstests kommen die oben genannten unveränderten Release-JARs einschließlich
 des äußeren Essential-JARs und C2ME hinzu. Gradle extrahiert Essentials eingebettete
 Socket-API ausschließlich in `build/generated/compatibility/`; sie wird nicht ausgeliefert.
-`runtime/` enthält die unveränderten Create-, Sable-, Aeronautics-Bundle-, KotlinForForge- und JEI-JARs.
+`runtime/` enthält die unveränderten Create-, Aeronautics-Bundle-, KotlinForForge- und JEI-JARs.
+Die äußere Sable-JAR wird für Kompilierung und Profil `all` aus
+`dependencies/verification/sable-neoforge-1.21.1-2.0.6.jar` geladen. Ältere äußere
+Sable-JARs in `compile/` oder `runtime/` werden ausgeschlossen.
 Die normale Testumgebung (`./gradlew runClient` bzw. `runServer`, Profil `all`) lädt außerdem
-CC:Tweaked 1.120.2 und Drive by Wire 0.3.0 aus `dependencies/compile/` sowie JEI 19.39.0.372,
+CC:Tweaked 1.120.2, Drive by Wire 0.3.0 und Create: Train Functionality 0.1.47 aus
+`dependencies/compile/` sowie JEI 19.39.0.372,
 Create New Age 1.1.7c und Flux Networks 8.0.0 aus `dependencies/runtime/`.
-Ein zusätzlicher `-PperipheralRuntime=cc`-Parameter ist dafür nicht nötig.
+Zusätzliche Testparameter sind dafür nicht nötig. Mit Sable 2.0.6 und Train Functionality
+können Hybridzüge direkt getestet werden: `/teutonlib train edit` aktiviert den
+Sable-Umbaumodus am angehaltenen Zug, `/teutonlib train run` den Fahrmodus und
+`/teutonlib train status` zeigt den aktuellen Modus ([Details](docs/hybrid-trains.md)).
 Simulated zur Laufzeit ausschließlich über das Bundle laden, um doppelte Mod-IDs zu vermeiden.
 Die originalen JARs von Create New Age und Flux Networks müssen dafür in `dependencies/runtime/`
 liegen; sie werden im Standardprofil automatisch geladen. Für die Kompilierung der

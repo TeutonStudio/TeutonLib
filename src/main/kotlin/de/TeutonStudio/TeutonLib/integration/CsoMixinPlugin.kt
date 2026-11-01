@@ -2,18 +2,34 @@ package de.TeutonStudio.TeutonLib.integration
 
 import de.TeutonStudio.TeutonLib.mixin.computer.client.DbwClientMixin
 import de.TeutonStudio.TeutonLib.compat.MobileEnvironment
+import com.bawnorton.mixinsquared.MixinSquaredBootstrap
+import com.bawnorton.mixinsquared.canceller.MixinCancellerRegistrar
 import net.neoforged.fml.loading.LoadingModList
 import org.objectweb.asm.tree.ClassNode
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo
 
 class TeutonLibMixinPlugin : IMixinConfigPlugin {
-    override fun onLoad(mixinPackage: String?) {}
+    override fun onLoad(mixinPackage: String?) {
+        MixinSquaredBootstrap.init()
+        MixinCancellerRegistrar.register(LogisticsMixinCanceller())
+        MixinCancellerRegistrar.register(FluidPropagationMixinCanceller())
+        MixinCancellerRegistrar.register(TrainPortalMixinCanceller())
+    }
     override fun getRefMapperConfig(): String? {
         return null
     }
 
     override fun shouldApplyMixin(targetClassName: String, mixinClassName: String): Boolean {
+        if (mixinClassName.contains(".mixin.hybrid.radar.")) return HybridTrainCompatibility.radarActive()
+        if (mixinClassName.contains(".mixin.hybrid.swivel.")) return HybridTrainCompatibility.swivelActive()
+        if (mixinClassName.contains(".mixin.hybrid.")) return HybridTrainCompatibility.active()
+        if (mixinClassName.contains(".mixin.newage.")) return NewAgeMotorCompatibility.active()
+        if (mixinClassName.contains(".mixin.mekanism.")) return MekanismModelCompatibility.active()
+        if (mixinClassName.contains(".mixin.hose.")) return HosePulleyCompatibility.active()
+        if (mixinClassName.contains(".mixin.train.")) return TrainPortalCompatibility.active()
+        if (mixinClassName.contains(".mixin.fluids.")) return FluidPropagationCompatibility.active()
+        if (mixinClassName.contains(".mixin.logistics.")) return LogisticsCompatibility.active()
         if (mixinClassName.contains(".mixin.mobile.")) {
             if (!MobileEnvironment.isMobileEnabled()) return false
             return when {
@@ -60,6 +76,7 @@ class TeutonLibMixinPlugin : IMixinConfigPlugin {
 
     override fun acceptTargets(myTargets: MutableSet<String>, otherTargets: MutableSet<String>) {}
     override fun getMixins(): MutableList<String>? {
+        MixinSquaredBootstrap.reOrderExtensions()
         return null
     }
 

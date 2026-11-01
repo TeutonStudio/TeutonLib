@@ -1,0 +1,7 @@
+{
+  "required": true,
+  "package": "de.TeutonStudio.TeutonLib.mekatest.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": ["MekanismSectionCompilerProbeMixin", "MekanismTransmitterQuadProbeMixin", "MekanismPacketProbeMixin", "MekanismTileUpdateProbeMixin"],
+  "injectors": { "defaultRequire": 1 }
+}

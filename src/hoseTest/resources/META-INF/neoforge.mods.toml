@@ -1,0 +1,11 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="MIT"
+
+[[mixins]]
+config="teutonlib-hose-test.mixins.json"
+
+[[mods]]
+modId="teutonlib_hose_test"
+version="1.0.0"
+displayName="TeutonLib Hose Pulley Verification (development only)"

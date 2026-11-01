@@ -52,7 +52,7 @@ side="BOTH"
 [[dependencies.${mod_id}]]
 modId="sable"
 type="optional"
-versionRange="*"
+versionRange="[${sable_mod_version},)"
 ordering="AFTER"
 side="BOTH"
 
@@ -75,6 +75,14 @@ modId="cso"
 type="incompatible"
 versionRange="*"
 reason="TeutonLib includes CSO. Remove the standalone Create Sable Optimization mod."
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="hosepulley_sable_bridge"
+type="incompatible"
+versionRange="*"
+reason="TeutonLib includes SableSchlauch. Remove the standalone Hose Pulley Sable Bridge mod."
 ordering="NONE"
 side="BOTH"
 

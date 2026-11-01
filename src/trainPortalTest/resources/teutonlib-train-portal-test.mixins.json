@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "package": "de.TeutonStudio.TeutonLib.traintest.client.mixin",
+  "plugin": "de.TeutonStudio.TeutonLib.traintest.TrainPortalTestMixinPlugin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": ["TrainPortalRiderCaptureDiagnosticMixin", "TrainPortalRiderRestoreDiagnosticMixin"],
+  "client": ["TrainPortalDrawProbeMixin", "TrainPortalCouplingProbeMixin", "TrainPortalLightingProbeMixin", "TrainPortalFlywheelProbeMixin"],
+  "injectors": { "defaultRequire": 1 }
+}

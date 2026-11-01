@@ -33,6 +33,9 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent
 @Mod("teutonlib_energy_test")
 class MotorEnergyVerification {
     init {
+        NeoForge.EVENT_BUS.addListener<net.neoforged.neoforge.event.tick.ServerTickEvent.Post>(Consumer {
+            MotorSpeedVerification.tickFixture()
+        })
         NeoForge.EVENT_BUS.addListener<RegisterCommandsEvent>(Consumer { event: RegisterCommandsEvent? ->
             this.commands(
                 event!!
@@ -98,6 +101,29 @@ class MotorEnergyVerification {
                     )
                     if (passed) 1 else 0
                 }))
+                .then(Commands.literal("speed").executes { ctx ->
+                    try {
+                        val result = MotorSpeedVerification.run(ctx.source.level)
+                        ctx.source.sendSuccess(Supplier { Component.literal(result) }, false)
+                        1
+                    } catch (error: Throwable) {
+                        TeutonLib.LOGGER.error("Motor speed verification failed", error)
+                        ctx.source.sendFailure(Component.literal("Motor speed verification FAIL: $error"))
+                        0
+                    }
+                })
+                .then(Commands.literal("speedFixture")
+                    .then(Commands.argument("action", StringArgumentType.word()).executes { ctx ->
+                        try {
+                            val result = MotorSpeedVerification.fixture(ctx.source.level, StringArgumentType.getString(ctx, "action"))
+                            ctx.source.sendSuccess(Supplier { Component.literal(result) }, false)
+                            1
+                        } catch (error: Throwable) {
+                            TeutonLib.LOGGER.error("Motor speed fixture failed", error)
+                            ctx.source.sendFailure(Component.literal("Motor speed fixture FAIL: $error"))
+                            0
+                        }
+                    }))
         )
     }
 

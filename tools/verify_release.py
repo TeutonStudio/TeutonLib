@@ -2,6 +2,7 @@
 """Validate the locally built release archives and write SHA256SUMS."""
 from pathlib import Path
 import hashlib
+import json
 import tomllib
 import zipfile
 
@@ -13,7 +14,10 @@ name = props['mod_id']
 jar = ROOT / f'build/libs/{name}-{version}.jar'
 sources = ROOT / f'build/libs/{name}-{version}-sources.jar'
 bundle = ROOT / f'build/distributions/{name}-{version}-computer-ui-template.zip'
-allowed_java = {'src/main/java/de/TeutonStudio/TeutonLib/mixin/computer/client/DbwClientMixin.java'}
+allowed_java = {'src/main/java/de/TeutonStudio/TeutonLib/mixin/' + name + '.java' for name in (
+    'computer/client/DbwClientMixin', 'mobile/PowerGridNativeMixin', 'mobile/ImmersiveMelodiesMidiMixin',
+    'mobile/VisualRecipeEditorBackupMixin', 'mobile/EssentialDiscordIpcMixin', 'mobile/PonderRenderTargetMixin',
+    'mobile/CatnipStencilElementMixin', 'resource/ResourcePackLoaderMixin')}
 java = {str(p.relative_to(ROOT)) for parent in ('src', 'examples') for p in (ROOT / parent).rglob('*.java')}
 assert java == allowed_java, f'Unexpected Java sources: {java - allowed_java}; missing required Java mixins: {allowed_java - java}'
 with zipfile.ZipFile(jar) as archive:
@@ -35,13 +39,22 @@ with zipfile.ZipFile(jar) as archive:
     assert kff['type'] == 'required' and kff['side'] == 'BOTH', 'KotlinForForge must be mandatory on both sides'
     assert kff['versionRange'] == kff_range
     assert 'de/TeutonStudio/TeutonLib/client/TeutonLibClient.class' in names, 'Config editor registration missing'
-    assert not any(n.endswith('.jar') for n in names), 'Foreign JAR embedded'
-    assert not any('/peripheraltest/' in n or '/energytest/' in n or '/dockingtest/' in n or n.startswith('example/') for n in names), 'Verification code shipped'
+    # MixinSquared is the existing explicitly declared integration support library;
+    # the original optional gameplay mods and all verification fixtures stay external.
+    support_jar = 'META-INF/jarjar/mixinsquared-neoforge-0.3.7.jar'
+    assert {n for n in names if n.endswith('.jar')} == {support_jar}, 'Unexpected embedded dependency'
+    nested = json.loads(archive.read('META-INF/jarjar/metadata.json'))['jars']
+    assert len(nested) == 1 and nested[0]['path'] == support_jar
+    assert nested[0]['identifier'] == {'group': 'com.github.bawnorton.mixinsquared', 'artifact': 'mixinsquared-neoforge'}
+    assert nested[0]['version']['artifactVersion'] == '0.3.7'
+    fixture_packages = ('peripheraltest', 'energytest', 'dockingtest', 'traintest', 'hosetest',
+                        'logisticstest', 'fluidtest', 'mekatest')
+    assert not any(any('/' + package + '/' in n for package in fixture_packages) or n.startswith('example/') for n in names), 'Verification code shipped'
     for license_name in ('LICENSE', 'TEMPLATE_LICENSE.txt'):
         assert archive.read('META-INF/' + license_name) == (ROOT / license_name).read_bytes()
 with zipfile.ZipFile(sources) as archive:
     java_sources = {n for n in archive.namelist() if n.endswith('.java')}
-    assert java_sources == {'de/TeutonStudio/TeutonLib/mixin/computer/client/DbwClientMixin.java'}, 'Unexpected Java sources shipped'
+    assert java_sources == {path.removeprefix('src/main/java/') for path in allowed_java}, 'Unexpected Java sources shipped'
     assert any(n.endswith('.kt') for n in archive.namelist()), 'Kotlin sources missing'
     for license_name in ('LICENSE', 'TEMPLATE_LICENSE.txt'):
         assert archive.read('META-INF/' + license_name) == (ROOT / license_name).read_bytes()
@@ -55,5 +68,5 @@ with zipfile.ZipFile(bundle) as archive:
         assert archive.read(license_name) == (ROOT / license_name).read_bytes()
 checksums = ''.join(f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}\n' for p in (jar, sources, bundle))
 (ROOT / 'build/distributions/SHA256SUMS').write_text(checksums)
-print(f'PASS: Kotlin release {version} with isolated Java DbW mixin; metadata, licenses, archive contents and bundled artifacts verified')
+print(f'PASS: Kotlin release {version} with allowlisted Java adapters and MixinSquared; metadata, licenses, archive contents and bundled artifacts verified')
 print(checksums, end='')

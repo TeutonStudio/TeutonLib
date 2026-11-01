@@ -19,6 +19,12 @@ object ServerConfig {
     @JvmField val MOTOR_EXTENSION_ENERGY_TRANSFER: ModConfigSpec.BooleanValue
     @JvmField val PERIPHERAL_LINK_RANGE: ModConfigSpec.IntValue
     @JvmField val PERIPHERAL_LINK_LIMIT: ModConfigSpec.IntValue
+    @JvmField val HOSE_HEAD_MODE: ModConfigSpec.EnumValue<HoseHeadMode>
+    @JvmField val HYBRID_TRAINS: ModConfigSpec.BooleanValue
+    @JvmField val HOSE_SPRING_STIFFNESS: ModConfigSpec.DoubleValue
+    @JvmField val HOSE_DAMPING: ModConfigSpec.DoubleValue
+    @JvmField val HOSE_BREAK_FORCE: ModConfigSpec.DoubleValue
+    @JvmField val HOSE_BREAK_DELAY: ModConfigSpec.DoubleValue
     init {
         val builder = ModConfigSpec.Builder()
         builder.translation("teutonlib.configuration.modules").push("modules")
@@ -51,8 +57,41 @@ object ServerConfig {
         PERIPHERAL_LINK_LIMIT = builder.comment("Maximum active Peripheral Links per computer or control desk network.")
             .translation("teutonlib.configuration.maxLinksPerNetwork").defineInRange("maxLinksPerNetwork", 64, 1, 4096)
         builder.pop(2)
+        builder.translation("teutonlib.configuration.compat").push("compat")
+        builder.translation("teutonlib.configuration.hosePulley").push("hosePulley")
+        HOSE_HEAD_MODE = builder.comment(
+            "Physical hose head: ALWAYS, SABLE_ONLY or NEVER.",
+            "ALWAYS enables entity heads everywhere; SABLE_ONLY only on Sable sublevels; NEVER uses Create's native hose.",
+            "The server controls all clients. Changes apply during play."
+        ).translation("teutonlib.configuration.hoseHeadMode").defineEnum("entityHeadMode", HoseHeadMode.ALWAYS)
+        HOSE_SPRING_STIFFNESS = builder.comment("Docked hose tensile stiffness in Sable force units per block.")
+            .defineInRange("springStiffness", 10000.0, 0.0, 1000000000.0)
+        HOSE_DAMPING = builder.comment("Docked hose axial damping in Sable force units per block/second.")
+            .defineInRange("damping", 2000.0, 0.0, 1000000000.0)
+        HOSE_BREAK_FORCE = builder.comment("Maximum connector holding force in Sable force units.")
+            .defineInRange("breakForce", 50000.0, 1.0, 1000000000.0)
+        HOSE_BREAK_DELAY = builder.comment("Continuous overload duration in physics seconds before release.")
+            .defineInRange("breakDelaySeconds", 0.25, 0.01, 60.0)
+        builder.pop(2)
+        builder.push("trains")
+        HYBRID_TRAINS = builder.comment(
+            "Use hybrid carriages by default: fixed structure, live Sable simulation and explicit editing mode.",
+            "Overrides CTF trainHandling for automatic conversion. Existing inventories and child contraptions stay in one plot.",
+            "Use /teutonlib train edit or /teutonlib train run beside a stopped train."
+        ).define("hybridByDefault", true)
+        builder.pop()
         SPEC = builder.build()
     }
+
+    @JvmStatic
+    fun hoseHeadMode(): HoseHeadMode = if (SPEC.isLoaded) HOSE_HEAD_MODE.get() else HoseHeadMode.ALWAYS
+
+    @JvmStatic fun hybridTrains(): Boolean = if (SPEC.isLoaded) HYBRID_TRAINS.get() else true
+
+    @JvmStatic fun hoseSpringStiffness() = if (SPEC.isLoaded) HOSE_SPRING_STIFFNESS.get() else 10000.0
+    @JvmStatic fun hoseDamping() = if (SPEC.isLoaded) HOSE_DAMPING.get() else 2000.0
+    @JvmStatic fun hoseBreakForce() = if (SPEC.isLoaded) HOSE_BREAK_FORCE.get() else 50000.0
+    @JvmStatic fun hoseBreakDelay() = if (SPEC.isLoaded) HOSE_BREAK_DELAY.get() else 0.25
 
     /** NeoForge 21.1.234 only loads a world override if the file already exists.  */
     @JvmStatic

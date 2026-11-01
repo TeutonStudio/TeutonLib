@@ -116,6 +116,11 @@
   "teutonlib.configuration.createSableOptimization.enabled": "Zahnradbrücken aktivieren",
   "teutonlib.configuration.createSableOptimization.enabled.tooltip": "Überträgt Leistung zwischen Zahnrädern an verriegelten Docks. Benötigt Create 6.0.10, Sable 2.0.5 und Simulated 1.3.2. Änderungen gelten während des Spiels für alle Clients.",
   "teutonlib.configuration.compat": "Integrationen",
+  "teutonlib.configuration.hosePulley": "Create – Schlauchrolle",
+  "teutonlib.configuration.hosePulley.button": "Öffnen",
+  "teutonlib.configuration.hosePulley.tooltip": "Physische Schlauchköpfe in der Welt und auf Sable-Konstruktionen.",
+  "teutonlib.configuration.hoseHeadMode": "Entity-Schlauchkopf",
+  "teutonlib.configuration.hoseHeadMode.tooltip": "ALWAYS: immer. SABLE_ONLY: nur auf Sable-Subleveln. NEVER: nie, normaler Create-Schlauch. Änderungen gelten während des Spiels für alle Clients.",
   "teutonlib.configuration.simulated": "Simulated – Docking",
   "teutonlib.configuration.enableAnalogDocking": "Analoges Docking aktivieren",
   "teutonlib.configuration.enableAnalogDocking.tooltip": "Redstone 0–5: eingefahren; 6–10: halber Block; 11–15: ein Block. Beide Anschlüsse verwenden die kürzere Länge. Änderungen gelten während des Spiels, unabhängig von Zahnradbrücken.",
@@ -140,5 +145,12 @@
   "teutonlib.configuration.createNewAge.button": "Öffnen",
   "teutonlib.configuration.createNewAge.tooltip": "FE-Energieeingang an Motorerweiterungen.",
   "teutonlib.configuration.peripheralLink.button": "Öffnen",
-  "teutonlib.configuration.peripheralLink.tooltip": "Drahtlose Reichweite und Anzahl aktiver Links."
+  "teutonlib.configuration.peripheralLink.tooltip": "Drahtlose Reichweite und Anzahl aktiver Links.",
+  "entity.teutonlib.hose_head": "Schlauchspitze",
+  "teutonlib.hose_connector.empty": "Keine Schlauchspitze eingesetzt",
+  "teutonlib.hose_connector.connected": "Schlauchspitze verriegelt",
+  "teutonlib.hose_connector.flow": "Durchfluss: 50 % · Pumpendruck bleibt erhalten",
+  "teutonlib.hose_connector.tension": "Zugauslastung: %s %%",
+  "teutonlib.hose_connector.force": "Schlauchzug",
+  "teutonlib.train.mode_changed": "Zugmodus: %s (%s Wagen)."
 }

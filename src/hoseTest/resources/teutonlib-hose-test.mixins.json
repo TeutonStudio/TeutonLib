@@ -1,0 +1,7 @@
+{
+  "required": true,
+  "package": "de.TeutonStudio.TeutonLib.hosetest.client.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": ["HoseHeadRenderProbeMixin", "HoseNativeRenderProbeMixin"],
+  "injectors": { "defaultRequire": 1 }
+}

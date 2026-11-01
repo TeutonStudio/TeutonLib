@@ -5,6 +5,8 @@ import de.TeutonStudio.TeutonLib.compat.CompatibilityDiagnostics
 import de.TeutonStudio.TeutonLib.compat.MobileEnvironment
 import de.TeutonStudio.TeutonLib.integration.CsoAvailability
 import de.TeutonStudio.TeutonLib.integration.CsoRuntime
+import de.TeutonStudio.TeutonLib.integration.HosePulleyCompatibility
+import de.TeutonStudio.TeutonLib.integration.hose.HoseEntities
 import de.TeutonStudio.TeutonLib.integration.computer.ComputerIntegration
 import de.TeutonStudio.TeutonLib.integration.energy.NewAgeMotorEnergy
 import de.TeutonStudio.TeutonLib.integration.peripheral.PeripheralLinks
@@ -51,6 +53,19 @@ class TeutonLib(modBus: IEventBus, container: ModContainer) {
             ModList.get().isLoaded("create") && ModList.get().isLoaded("simulated")
         container.registerConfig(ModConfig.Type.SERVER, ServerConfig.SPEC, ServerConfig.FILE_NAME)
         container.registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC, ClientConfig.FILE_NAME)
+        if (ModList.get().isLoaded("create")) {
+            de.TeutonStudio.TeutonLib.integration.hybrid.HybridTrainTypes.register(modBus)
+        }
+        if (de.TeutonStudio.TeutonLib.integration.HybridTrainCompatibility.active()) {
+            NeoForge.EVENT_BUS.register(de.TeutonStudio.TeutonLib.integration.hybrid.HybridTrainCommands)
+        }
+        if (de.TeutonStudio.TeutonLib.integration.HybridTrainCompatibility.radarActive()) {
+            de.TeutonStudio.TeutonLib.integration.hybrid.HybridRadarTypes.register(modBus)
+        }
+        if (HosePulleyCompatibility.active()) {
+            HoseEntities.register(modBus)
+            de.TeutonStudio.TeutonLib.integration.hose.HoseConnectors.register(modBus)
+        }
         modBus.addListener<Loading>(Consumer { event: Loading? -> this.configLoaded(event!!) })
         modBus.addListener<Reloading>(Consumer { event: Reloading? -> this.configReloaded(event!!) })
         modBus.addListener<RegisterPayloadHandlersEvent>(Consumer { event: RegisterPayloadHandlersEvent? ->

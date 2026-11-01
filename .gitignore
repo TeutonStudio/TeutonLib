@@ -19,6 +19,7 @@ crash-reports/
 # Local TerrArchitecture binaries created by the sync script
 dependencies/compile/*.jar
 dependencies/runtime/*.jar
+dependencies/verification/*.jar
 
 # Operating-system clutter
 .DS_Store

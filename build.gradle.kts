@@ -27,7 +27,12 @@ val computerUiExample by sourceSets.creating
 val dockingTest by sourceSets.creating
 val energyTest by sourceSets.creating
 val peripheralTest by sourceSets.creating
-listOf(computerUiExample, dockingTest, energyTest, peripheralTest).forEach {
+val logisticsTest by sourceSets.creating
+val fluidPropagationTest by sourceSets.creating
+val trainPortalTest by sourceSets.creating
+val mekanismModelTest by sourceSets.creating
+val hoseTest by sourceSets.creating
+listOf(computerUiExample, dockingTest, energyTest, peripheralTest, logisticsTest, fluidPropagationTest, trainPortalTest, mekanismModelTest, hoseTest).forEach {
     it.compileClasspath += mainSource.output + mainSource.compileClasspath
     it.runtimeClasspath += mainSource.runtimeClasspath
 }
@@ -44,9 +49,18 @@ kotlin.sourceSets.named("computerUiExample") {
 repositories {
     mavenCentral()
     maven("https://maven.neoforged.net/releases") { name = "NeoForge" }
+    maven("https://maven.bawnorton.com/releases") { name = "MixinSquared" }
 }
 
 val csoRuntime = providers.gradleProperty("csoRuntime").getOrElse("all")
+val logisticsRuntime = providers.gradleProperty("logisticsRuntime")
+    .getOrElse(if (providers.gradleProperty("logisticsTests").isPresent) "both"
+        else if (providers.gradleProperty("fluidPropagationTests").isPresent) "fluid" else "none")
+val tfmgRuntime = providers.gradleProperty("tfmgRuntime")
+    .getOrElse(providers.gradleProperty("fluidPropagationTests").isPresent.toString()).toBooleanStrict()
+require(logisticsRuntime in listOf("both", "fluid", "factory", "none")) {
+    "logisticsRuntime must be both, fluid, factory or none"
+}
 require(csoRuntime in listOf("all", "none", "create")) {
     "csoRuntime must be all, none or create"
 }
@@ -78,6 +92,12 @@ neoForge {
         configureEach {
             systemProperty("forge.logging.markers", "REGISTRIES")
             logLevel = org.slf4j.event.Level.INFO
+            if (providers.gradleProperty("trainPortalAether").isPresent) {
+                systemProperty("teutonlib.trainPortalDestination", "aether:the_aether")
+            }
+            if (providers.gradleProperty("trainPortalRiderDiagnostics").isPresent) {
+                systemProperty("teutonlib.trainPortalRiderDiagnostics", "true")
+            }
         }
     }
     mods {
@@ -94,13 +114,36 @@ neoForge {
                 sourceSet(computerUiExample)
             }
         }
+        if (providers.gradleProperty("logisticsTests").isPresent) {
+            create("teutonlib_logistics_test") { sourceSet(logisticsTest) }
+        }
+        if (providers.gradleProperty("fluidPropagationTests").isPresent) {
+            create("teutonlib_fluid_test") { sourceSet(fluidPropagationTest) }
+        }
+        if (providers.gradleProperty("trainPortalTests").isPresent) {
+            create("teutonlib_train_portal_test") { sourceSet(trainPortalTest) }
+        }
+        if (providers.gradleProperty("mekanismModelTests").isPresent) {
+            create("teutonlib_mekanism_model_test") { sourceSet(mekanismModelTest) }
+        }
+        if (providers.gradleProperty("hoseTests").isPresent) {
+            create("teutonlib_hose_test") { sourceSet(hoseTest) }
+        }
     }
 }
 
 // Unmodified TerrArchitecture binaries; never embed foreign mods in the release.
 // Simulated is compiled from the extracted JAR but loaded via Aeronautics' bundle.
-val localCompileJars = fileTree("dependencies/compile") { include("*.jar") }
+val localCompileJars = fileTree("dependencies/compile") {
+    include("*.jar")
+    exclude("sable-neoforge-*.jar")
+}
 val localRuntimeJars = fileTree("dependencies/runtime") { include("*.jar") }
+val sableVersion = providers.gradleProperty("sable_version").get()
+val sableJar = files("dependencies/verification/sable-neoforge-1.21.1-$sableVersion.jar")
+require(providers.gradleProperty("trainPortalSableVersion").getOrElse(sableVersion) == sableVersion) {
+    "Train portal verification requires the supported Sable $sableVersion release"
+}
 val essentialOuterJars = fileTree("dependencies/compile") { include("Essential_*.jar") }
 val essentialApiJar = layout.buildDirectory.file("generated/compatibility/essential-kdiscordipc.jar")
 val extractEssentialApi by tasks.registering {
@@ -121,9 +164,69 @@ val extractEssentialApi by tasks.registering {
     }
 }
 dependencies {
+    compileOnly("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7")
+    implementation("com.github.bawnorton.mixinsquared:mixinsquared-neoforge:0.3.7")
+    jarJar("com.github.bawnorton.mixinsquared:mixinsquared-neoforge:0.3.7")
     compileOnly(localCompileJars)
+    compileOnly(sableJar)
+    compileOnly(files("dependencies/verification/createbigcannons-5.11.7+mc.1.21.1.jar",
+        "dependencies/verification/ritchiesprojectilelib-2.1.2+mc.1.21.1-neoforge.jar"))
     compileOnly(files(essentialApiJar).builtBy(extractEssentialApi))
     runtimeOnly(localRuntimeJars.matching { include("kotlinforforge-*.jar") })
+    // The default development environment includes the hybrid train/editing integration.
+    if (csoRuntime == "all" || providers.gradleProperty("trainPortalTests").isPresent || providers.gradleProperty("mekanismModelTests").isPresent) {
+        runtimeOnly(localCompileJars.matching { include("create_train_functionality-*.jar") })
+    }
+    if (providers.gradleProperty("trainPortalTests").isPresent || providers.gradleProperty("mekanismModelTests").isPresent) {
+        runtimeOnly(localCompileJars.matching {
+            include("ip_aeronautics-*.jar", "cloth-config-*.jar", "railways-*.jar")
+        })
+    }
+    if (providers.gradleProperty("hybridTrainTests").isPresent) {
+        require(providers.gradleProperty("trainPortalTests").isPresent) { "hybridTrainTests requires trainPortalTests" }
+        runtimeOnly(localCompileJars.matching { include("create_radar-*.jar") })
+        runtimeOnly(files("dependencies/verification/createbigcannons-5.11.7+mc.1.21.1.jar",
+            "dependencies/verification/ritchiesprojectilelib-2.1.2+mc.1.21.1-neoforge.jar"))
+    }
+    if (providers.gradleProperty("trainPortalAether").isPresent) {
+        require(providers.gradleProperty("trainPortalTests").isPresent) {
+            "trainPortalAether is an opt-in train portal verification profile"
+        }
+        val aetherRelease = file("dependencies/verification/aether-1.21.1-1.5.10-neoforge.jar")
+        require(aetherRelease.isFile) { "Missing original Aether 1.5.10 verification JAR: $aetherRelease" }
+        val owoRelease = file("dependencies/verification/owo-lib-neoforge-0.12.15.5-beta.1+1.21.jar")
+        require(owoRelease.isFile) { "Missing original owo verification JAR: $owoRelease" }
+        runtimeOnly(files(aetherRelease, owoRelease))
+    }
+    if (providers.gradleProperty("mekanismModelTests").isPresent) {
+        runtimeOnly(localCompileJars.matching {
+            include("Mekanism-*.jar", "create_mekanism_compat-*.jar")
+        })
+    }
+    if (providers.gradleProperty("mekanismModelTests").isPresent ||
+        providers.gradleProperty("trainPortalSodium").isPresent) {
+        // Sodium's outer JAR is an early-loading service library. A Gradle mod dependency
+        // hides its nested implementation, while the implementation alone lacks its workarounds.
+        // Let the normal mods-directory discovery load the unmodified distribution instead.
+        val sodiumOuterJars = localCompileJars.matching { include("sodium-neoforge-*.jar") }
+        val sodiumClientDirectory = neoForge.runs.getByName("client").gameDirectory
+        tasks.named("runClient") {
+            doFirst {
+                val outer = sodiumOuterJars.files.singleOrNull()
+                    ?: error("Expected exactly one Sodium release JAR in dependencies/compile")
+                val output = sodiumClientDirectory.get().asFile.resolve("mods/${outer.name}")
+                output.parentFile.mkdirs()
+                outer.copyTo(output, overwrite = true)
+            }
+        }
+    }
+    if (tfmgRuntime) runtimeOnly(localCompileJars.matching { include("tfmg-*.jar") })
+    if (logisticsRuntime == "both" || logisticsRuntime == "fluid") {
+        runtimeOnly(localCompileJars.matching { include("fluidlogistics-*.jar") })
+    }
+    if (logisticsRuntime == "both" || logisticsRuntime == "factory") {
+        runtimeOnly(localCompileJars.matching { include("create_factory_logistics-*.jar") })
+    }
     if (csoRuntime == "all" || providers.gradleProperty("peripheralRuntime").isPresent) {
         runtimeOnly(localCompileJars.matching { include("cc-tweaked-*.jar") })
         if (providers.gradleProperty("peripheralRuntime").getOrElse("cc") == "console") {
@@ -134,7 +237,12 @@ dependencies {
         runtimeOnly(localCompileJars.matching { include("drivebywire-*.jar") })
     }
     when (csoRuntime) {
-        "all" -> runtimeOnly(localRuntimeJars.matching { exclude("kotlinforforge-*.jar") })
+        "all" -> {
+            runtimeOnly(localRuntimeJars.matching {
+                exclude("kotlinforforge-*.jar", "sable-neoforge-*.jar")
+            })
+            runtimeOnly(sableJar)
+        }
         "create" -> runtimeOnly(localRuntimeJars.matching { include("create-1.21.1-*.jar") })
     }
     testImplementation(platform("org.junit:junit-bom:5.11.4"))
@@ -147,8 +255,13 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
     dependsOn(tasks.jar)
-    inputs.files(localCompileJars)
-    systemProperty("teutonlib.compatibilityJars", localCompileJars.asPath)
+    val newAgeJar = localRuntimeJars.matching { include("create-new-age-*.jar") }.singleFile
+    inputs.files(localCompileJars, sableJar)
+    inputs.file(newAgeJar)
+    inputs.file("docs/logistics-compatibility.sha256")
+    inputs.file("docs/fluid-propagation-compatibility.sha256")
+    systemProperty("teutonlib.compatibilityJars", (localCompileJars + sableJar).asPath)
+    systemProperty("teutonlib.newAgeJar", newAgeJar.absolutePath)
     systemProperty("teutonlib.architectureArtifact", tasks.jar.get().archiveFile.get().asFile.absolutePath)
 }
 

@@ -116,6 +116,11 @@
   "teutonlib.configuration.createSableOptimization.enabled": "Enable cogwheel bridges",
   "teutonlib.configuration.createSableOptimization.enabled.tooltip": "Transfer power between cogwheels across locked docks. Requires Create 6.0.10, Sable 2.0.5 and Simulated 1.3.2. Changes apply during play for all clients.",
   "teutonlib.configuration.compat": "Integrations",
+  "teutonlib.configuration.hosePulley": "Create – Hose Pulley",
+  "teutonlib.configuration.hosePulley.button": "Open",
+  "teutonlib.configuration.hosePulley.tooltip": "Physical hose heads in the world and on Sable structures.",
+  "teutonlib.configuration.hoseHeadMode": "Entity hose head",
+  "teutonlib.configuration.hoseHeadMode.tooltip": "ALWAYS: everywhere. SABLE_ONLY: only on Sable sublevels. NEVER: use Create's native hose. Changes apply during play to all clients.",
   "teutonlib.configuration.simulated": "Simulated – Docking",
   "teutonlib.configuration.enableAnalogDocking": "Enable analog docking",
   "teutonlib.configuration.enableAnalogDocking.tooltip": "Redstone 0–5: retracted; 6–10: half a block; 11–15: one block. Both connectors use the shorter length. Changes apply during play, independently of cogwheel bridges.",
@@ -140,5 +145,12 @@
   "teutonlib.configuration.createNewAge.button": "Open",
   "teutonlib.configuration.createNewAge.tooltip": "Motor extension FE energy input.",
   "teutonlib.configuration.peripheralLink.button": "Open",
-  "teutonlib.configuration.peripheralLink.tooltip": "Wireless range and active link limits."
+  "teutonlib.configuration.peripheralLink.tooltip": "Wireless range and active link limits.",
+  "entity.teutonlib.hose_head": "Hose Head",
+  "teutonlib.hose_connector.empty": "No hose head inserted",
+  "teutonlib.hose_connector.connected": "Hose head locked",
+  "teutonlib.hose_connector.flow": "Flow: 50% · Pump pressure preserved",
+  "teutonlib.hose_connector.tension": "Tensile load: %s %%",
+  "teutonlib.hose_connector.force": "Hose tension",
+  "teutonlib.train.mode_changed": "Train mode: %s (%s carriages)."
 }
