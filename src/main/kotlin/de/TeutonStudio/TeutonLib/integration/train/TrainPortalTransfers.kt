@@ -36,12 +36,18 @@ object TrainPortalTransfers {
         val sourceEntity: UUID, var handedOff: Boolean = false)
     private val passages = WeakHashMap<Carriage, Passage>()
     private val transferring = ThreadLocal<UUID?>()
+    private val coordinated = ThreadLocal<Set<UUID>>()
     private data class Transfer(val old: SubLevelLinks.Link, val target: CarriageContraptionEntity,
         var bound: Boolean = false, var seats: TrainPortalSeats? = null, var riders: TrainPortalRiders? = null,
         var hoses: TrainPortalHoses? = null)
     private val transaction = ThreadLocal<Transfer?>()
 
-    @JvmStatic fun transferring(id: UUID): Boolean = transferring.get() == id
+    @JvmStatic fun transferring(id: UUID): Boolean = transferring.get() == id || id in coordinated.get().orEmpty()
+    internal fun <T> coordinated(ids: Set<UUID>, action: () -> T): T {
+        val previous = coordinated.get()
+        coordinated.set(previous.orEmpty() + ids)
+        return try { action() } finally { if (previous == null) coordinated.remove() else coordinated.set(previous) }
+    }
     @JvmStatic fun manages(link: SubLevelLinks.Link): Boolean = CtfPortalAccess.carriage(link)?.let(passages::containsKey) == true
     @JvmStatic fun beforeCaptureRiders() { transaction.get()?.seats?.detach() }
     @JvmStatic fun filterCapturedRiders(captured: IPShipRiderCarry.Captured): IPShipRiderCarry.Captured {
@@ -85,10 +91,11 @@ object TrainPortalTransfers {
             }
             val portal = portals.minByOrNull { it.getDistanceToNearestPointInPortal(from.location) } ?: continue
             val destination = level.server.getLevel(to.dimension) ?: return false
-            // Preflight before the first wheel commits to the edge. No source mutation here.
+            // Check the root before the first wheel commits, then release excluded docking links.
             transferring.set(sub.uniqueId)
             val refusal = try { IPSableBridge.whyNotMovable(sub, source, destination) } finally { transferring.remove() }
             if (refusal != null) return false
+            TrainPortalDocking.detachExcluded(sub, portal, destination)
             passages[carriage] = Passage(portal, from, to, build.entityId)
             return true
         }
@@ -120,6 +127,7 @@ object TrainPortalTransfers {
     @JvmStatic fun tick(level: ServerLevel) {
         TrainPortalBearings.tick(level)
         TrainPortalMachines.tick(level)
+        TrainPortalDocking.tick(level)
         for (old in SubLevelLinks.links().toList()) {
             if (old.dimension != level.dimension()) continue
             val carriage = CtfPortalAccess.carriage(old) ?: continue
@@ -174,8 +182,11 @@ object TrainPortalTransfers {
         transferring.set(sub.uniqueId)
         val transfer = Transfer(old, target)
         transaction.set(transfer)
+        var docking: TrainPortalDocking.Passage? = null
         try {
             if (!TrainPortalMachines.prepare(sub)) return false
+            docking = TrainPortalDocking.prepare(sub, portal, destination) ?: return false
+            if (!docking.moveCompanions()) return false
             val hoses = TrainPortalHoses.capture(sub) ?: return false
             transfer.hoses = hoses
             val riders = TrainPortalRiders.capture(sub, portal)
@@ -199,6 +210,7 @@ object TrainPortalTransfers {
                 return false
             }
             check(transfer.bound) { "IP returned a train build without its carriage binding" }
+            docking.arrived(moved)
             hoses.restore(moved.sub(), portal)
             riders.restore(moved.sub())
             if (source !== destination) CtfPortalAccess.forgetSource(source, sub.uniqueId)
@@ -213,7 +225,9 @@ object TrainPortalTransfers {
             log.info("Transferred train build {} {} -> {}; carriage {} -> {}", sub.uniqueId,
                 source.dimension().location(), destination.dimension().location(), old.entityId, target.uuid)
             return true
-        } finally { transaction.remove(); transferring.remove() }
+        } finally {
+            try { docking?.rollback() } finally { transaction.remove(); transferring.remove() }
+        }
     }
 
     /** Runs inside IP's destination-load try/catch, before glue/riders and journal completion. */

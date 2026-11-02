@@ -15,7 +15,8 @@ object TrainPortalGuard {
     @JvmStatic fun owns(level: ServerLevel, sub: ServerSubLevel): Boolean =
         SubLevelLinks.linkForSubLevel(sub.uniqueId) != null ||
             SubLevelLinks.isOursEvenIfOrphaned(level, sub.uniqueId) ||
-            de.TeutonStudio.TeutonLib.integration.hybrid.HybridTrainRuntime.trainOwned(sub)
+            de.TeutonStudio.TeutonLib.integration.hybrid.HybridTrainRuntime.trainOwned(sub) ||
+            TrainPortalDocking.attachedToTrain(sub)
 
     /** IP also uses virtual carriage sides within one real dimension. Do not rely on
      * CTF's whollyIn(home) test to recognise a train whose side records already changed. */

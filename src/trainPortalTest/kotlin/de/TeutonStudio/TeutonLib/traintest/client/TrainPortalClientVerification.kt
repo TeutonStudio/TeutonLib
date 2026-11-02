@@ -63,6 +63,9 @@ object TrainPortalClientVerification {
     private var ready = false
     private var finishing = false
     private var finished = false
+    private var orangeFrames = 0
+
+    fun orangeFrame() { if (enabled && pending?.wait in 0..20) orangeFrames++ }
 
     private fun directory(): Path = Minecraft.getInstance().gameDirectory.toPath().resolve("train-portal-verification")
 
@@ -234,6 +237,9 @@ object TrainPortalClientVerification {
                 flywheelLighting.clear()
                 flywheelPasses.clear()
                 frameTimes.clear()
+                orangeFrames = 0
+                Minecraft.getInstance().entityRenderDispatcher.setRenderHitBoxes(
+                    name == "orange-frame" || java.lang.Boolean.getBoolean("teutonlib.trainDemoHitboxes"))
                 previousFrame = 0L
                 pending = Capture(name)
                 event.isCanceled = true
@@ -389,6 +395,13 @@ object TrainPortalClientVerification {
                         val data = ship.renderData
                         it.addProperty("renderData", data?.javaClass?.name)
                         it.addProperty("visibleSections", data?.visibleSectionCount)
+                        if (data is de.TeutonStudio.TeutonLib.client.train.ContraptionLevel) {
+                            val sections = data.graphicalSections().values
+                            it.addProperty("graphicalSections", sections.size)
+                            it.addProperty("modelBlocks", sections.sumOf { section -> section.models.size })
+                            it.addProperty("animatedBlocks", sections.sumOf { section -> section.animated.size })
+                            it.addProperty("capturedSections", data.capturedSections)
+                        }
                     })
                 }
             })
@@ -421,6 +434,16 @@ object TrainPortalClientVerification {
                 }) }
             })
             val sorted = frameTimes.sorted()
+            result.addProperty("orangeFrames", orangeFrames)
+            result.addProperty("hybridEnabled", de.TeutonStudio.TeutonLib.client.train.HybridTrainClient.enabled())
+            net.minecraft.world.item.CreativeModeTabs.tryRebuildTabContents(mc.level!!.enabledFeatures(), mc.player!!.canUseGameMasterBlocks(), mc.level!!.registryAccess())
+            val hiddenIds = listOf("functional_fob", "chunk_anchor_lever").map {
+                net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("create_train_functionality", it)
+            }
+            result.addProperty("hiddenItemsRegistered", hiddenIds.all { net.minecraft.core.registries.BuiltInRegistries.ITEM.containsKey(it) })
+            result.addProperty("hiddenItemsInCreative", net.minecraft.world.item.CreativeModeTabs.allTabs().any { tab ->
+                (tab.displayItems + tab.searchTabDisplayItems).any { net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(it.item) in hiddenIds }
+            })
             result.add("frameTimes", JsonObject().also {
                 it.addProperty("samples", sorted.size)
                 if (sorted.isNotEmpty()) {

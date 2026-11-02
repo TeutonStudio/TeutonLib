@@ -6,6 +6,7 @@
   "mixins": [
     "ServerConfigLocationMixin",
     "hybrid.swivel.HybridSwivelMixin",
+    "hybrid.swivel.HybridDockingMixin",
     "hybrid.HybridCarriageBlocksMixin",
     "hybrid.HybridStructureMixin",
     "hybrid.HybridRadarPersistenceMixin",
@@ -14,6 +15,13 @@
     "hybrid.HybridDefaultMixin",
     "hybrid.HybridConversionMixin",
     "hybrid.HybridStationMixin",
+    "hybrid.HybridBuildSubLevelMixin",
+    "hybrid.HybridBuildMassMixin",
+    "hybrid.HybridBuildMassChangeMixin",
+    "hybrid.HybridBuildPoseMixin",
+    "hybrid.HybridBuildMassUploadMixin",
+    "hybrid.HybridBuildMassResetMixin",
+    "hybrid.HybridBuildLoadStatsMixin",
     "hybrid.HybridLoadMixin",
     "hybrid.HybridChunkMixin",
     "hybrid.HybridDestroyMixin",
@@ -71,6 +79,10 @@
     "computer.WirelessModemRangeMixin"
   ],
   "client": [
+    "hybrid.client.ContraptionLevelFactoryMixin",
+    "hybrid.client.ContraptionLevelLifecycleMixin",
+    "hybrid.client.ContraptionLevelOutlineMixin",
+    "hybrid.client.ContraptionLevelFlywheelMixin",
     "hose.client.AbstractPulleyRendererMixin",
     "hose.client.AbstractPulleyVisualMixin",
     "train.client.CtfPortalRenderingMixin",

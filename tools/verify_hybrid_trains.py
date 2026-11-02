@@ -103,8 +103,12 @@ try:
             connection = socket.create_connection(("127.0.0.1", port), timeout=60)
             request(3, password)
             if restart:
+                poll("teutonlib_station_build_test loaded", 45)
                 poll("teutonlib_hybrid_train_test loaded", 45)
             else:
+                response = request(2, "teutonlib_station_build_test start")
+                assert response.startswith("RUNNING"), response
+                poll("teutonlib_station_build_test status", 60)
                 response = request(2, "teutonlib_hybrid_train_test start")
                 assert response.startswith("RUNNING"), response
                 poll("teutonlib_hybrid_train_test status", 60)

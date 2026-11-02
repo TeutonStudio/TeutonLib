@@ -58,6 +58,7 @@ class TeutonLib(modBus: IEventBus, container: ModContainer) {
         }
         if (de.TeutonStudio.TeutonLib.integration.HybridTrainCompatibility.active()) {
             NeoForge.EVENT_BUS.register(de.TeutonStudio.TeutonLib.integration.hybrid.HybridTrainCommands)
+            NeoForge.EVENT_BUS.register(de.TeutonStudio.TeutonLib.integration.hybrid.HybridTrainSync)
         }
         if (de.TeutonStudio.TeutonLib.integration.HybridTrainCompatibility.radarActive()) {
             de.TeutonStudio.TeutonLib.integration.hybrid.HybridRadarTypes.register(modBus)
@@ -111,6 +112,7 @@ class TeutonLib(modBus: IEventBus, container: ModContainer) {
 
     private fun payloads(event: RegisterPayloadHandlersEvent) {
         CsoStatePayload.Companion.register(event)
+        de.TeutonStudio.TeutonLib.network.HybridTrainStatePayload.register(event)
     }
 
     companion object {

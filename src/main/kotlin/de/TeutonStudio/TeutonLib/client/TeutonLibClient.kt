@@ -16,6 +16,13 @@ import org.lwjgl.opengl.GL11
 @Mod(value = TeutonLib.MOD_ID, dist = [Dist.CLIENT])
 class TeutonLibClient(modBus: IEventBus, container: ModContainer) {
     init {
+        if (de.TeutonStudio.TeutonLib.integration.HybridTrainCompatibility.active()) {
+            modBus.addListener<net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent>(
+                de.TeutonStudio.TeutonLib.client.train.HybridTrainClient::creative)
+            net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener<net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingOut> {
+                de.TeutonStudio.TeutonLib.client.train.HybridTrainClient.clear()
+            }
+        }
         container.registerExtensionPoint(
             IConfigScreenFactory::class.java,
             IConfigScreenFactory { mod, parent -> ConfigurationScreen(mod, parent) }

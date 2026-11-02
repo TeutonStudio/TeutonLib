@@ -152,5 +152,10 @@
   "teutonlib.hose_connector.flow": "Flow: 50% · Pump pressure preserved",
   "teutonlib.hose_connector.tension": "Tensile load: %s %%",
   "teutonlib.hose_connector.force": "Hose tension",
-  "teutonlib.train.mode_changed": "Train mode: %s (%s carriages)."
+  "teutonlib.train.mode_changed": "Train mode: %s (%s carriages).",
+  "teutonlib.configuration.trains": "Trains",
+  "teutonlib.configuration.trains.button": "Open",
+  "teutonlib.configuration.trains.tooltip": "Sable station construction and ContraptionLevel graphics.",
+  "teutonlib.configuration.hybridByDefault": "Enable Sable construction and ContraptionLevel",
+  "teutonlib.configuration.hybridByDefault.tooltip": "Build new trains directly on Sable; every two bogeys form a wagon. Driving uses cached geometry. Functional Fob and Chunk Anchor Lever are hidden from creative tabs; existing blocks are retained."
 }

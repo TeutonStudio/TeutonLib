@@ -36,6 +36,14 @@ object HybridTrainRuntime {
         return try { action() } finally { if (previous == null) maintenance.remove() else maintenance.set(previous) }
     }
 
+    /** Native machines may alter their own helper cells without opening the rest
+     * of a driving carriage to structural edits. */
+    fun <T> machineWrite(level: Level, positions: Set<BlockPos>, action: () -> T): T {
+        val previous = writes.get()
+        writes.set(previous.orEmpty() + WriteScope(level, positions))
+        return try { action() } finally { if (previous == null) writes.remove() else writes.set(previous) }
+    }
+
     fun <T> automatically(action: () -> T): T {
         val previous = automatic.get()
         automatic.set(true)
@@ -63,6 +71,7 @@ object HybridTrainRuntime {
         link: SubLevelLinks.Link?) {
         if (link == null || !ServerConfig.hybridTrains()) return
         val body = sub(level, link) ?: return
+        de.TeutonStudio.TeutonLib.integration.train.TrainPortalMachines.adopt(body)
         if (automatic.get() == true) {
             if (body.userDataTag?.contains(MODE_KEY) != true) setMode(body, Mode.DRIVING)
         } else if ((!TrainPortalCompatibility.active() || !TrainPortalTransfers.manages(link)) &&

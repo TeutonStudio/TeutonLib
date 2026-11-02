@@ -31,6 +31,12 @@ class DockingBinaryContractTest {
             "getTipPosition()Lnet/minecraft/world/phys/Vec3;", "getMagnetPosition()Lnet/minecraft/world/phys/Vec3;")) assertTrue(signature in methods, signature)
         assertTrue(read("DockingConnectorPair").methods.any { it.name == "dock" && it.desc == "(Z)V" })
         assertTrue(read("DockingConnectorPair").methods.any { it.name == "canConnect" && it.desc == "(Lorg/joml/Vector3d;Lorg/joml/Vector3d;Lorg/joml/Vector3d;)Z" })
+        for (signature in listOf(
+            "pairTo(L${prefix}DockingConnectorBlockEntity;)V",
+            "getOtherConnector()L${prefix}DockingConnectorBlockEntity;",
+            "getLatestSubLevel()Ldev/ryanhcode/sable/sublevel/SubLevel;",
+            "isLocked()Z")) assertTrue(signature in methods, signature)
+        assertTrue(read("DockingConnectorSoloInventory").methods.any { it.name == "unDock" && it.desc == "()V" })
     }
 
     @Test fun `renderer collision and both constraint builders consume connector geometry`() {

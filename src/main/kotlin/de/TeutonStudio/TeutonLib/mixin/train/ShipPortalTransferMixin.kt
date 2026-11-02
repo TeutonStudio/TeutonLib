@@ -2,6 +2,7 @@ package de.TeutonStudio.TeutonLib.mixin.train
 
 import de.TeutonStudio.TeutonLib.integration.train.TrainPortalGuard
 import de.TeutonStudio.TeutonLib.integration.train.TrainPortalTransfers
+import de.TeutonStudio.TeutonLib.integration.train.TrainPortalDocking
 import dev.ryanhcode.sable.sublevel.ServerSubLevel
 import net.minecraft.server.level.ServerLevel
 import org.spongepowered.asm.mixin.Mixin
@@ -54,7 +55,8 @@ abstract class ShipPortalTransferMixin {
             at = [At("HEAD")], cancellable = true, require = 1)
         private fun `teutonlib$keepTrainBuild`(sub: ServerSubLevel, source: ServerLevel,
             destination: ServerLevel, cir: CallbackInfoReturnable<String?>) {
-            if (TrainPortalGuard.owns(source, sub) && !TrainPortalTransfers.transferring(sub.uniqueId))
+            if ((TrainPortalGuard.owns(source, sub) || TrainPortalDocking.excludedFromPortal(sub)) &&
+                !TrainPortalTransfers.transferring(sub.uniqueId))
                 cir.returnValue = TrainPortalGuard.refusal
         }
     }

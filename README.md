@@ -3,6 +3,24 @@
 TeutonStudio-Bibliothek für **Minecraft 1.21.1 / NeoForge 21.1.234 / Java 21**.
 KotlinForForge **5.11.0** ist erforderlich. TeutonLib muss auf Server und Clients installiert sein.
 
+## Neu in 1.6.0: Bahnhofsbau, ContraptionLevel und Zug-Docking
+
+Neue Züge entstehen direkt auf stationären Sable-Bauplots. Je zwei Bogeys bilden
+einen Wagen; getrennte Bauteile bleiben während des Bauens im selben Plot. Der
+Fahrbetrieb verwendet ein **ContraptionLevel** mit zwischengespeicherter Geometrie
+und laufenden BlockEntity-/Flywheel-Animationen. **F3+B** zeichnet dessen Rahmen
+orange. Portal-Clipping und Beleuchtung verwenden die vorhandene Portalbrücke.
+`[trains] hybridByDefault` schaltet das System um und blendet bei Aktivierung
+Functional Fob und Chunk Anchor Lever im Kreativmenü aus; vorhandene Blöcke bleiben
+erhalten. Angedockte mobile Plattformen werden bei ausreichender Portalöffnung
+koordiniert mitgenommen und im Ziel wieder verbunden; zu breite Gegenstellen
+werden vorher gelöst. [Release-Notizen](docs/release-1.6.0.md) ·
+[Bedienung und technische Grenzen](docs/hybrid-trains.md).
+
+Die [GitHub-Wiki](https://github.com/TeutonStudio/TeutonLib/wiki) enthält für jede
+Funktion eine eigene Seite mit Bedienung, Voraussetzungen und Konfiguration.
+Ihre versionierten Quellen liegen unter [docs/wiki](docs/wiki/Home.md).
+
 ## Neu in 1.5.15: Schlauchkupplung am Item Drain
 
 Creates **Item Drain** nimmt den getragenen Schlauchrollenkopf per

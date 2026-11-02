@@ -53,7 +53,11 @@ import com.mojang.brigadier.arguments.DoubleArgumentType
 class TrainPortalVerification {
     init {
         NeoForge.EVENT_BUS.register(this)
-        if (net.neoforged.fml.ModList.get().isLoaded("create_radar")) NeoForge.EVENT_BUS.register(HybridTrainVerification)
+        NeoForge.EVENT_BUS.register(StationBuildVerification)
+        if (net.neoforged.fml.ModList.get().isLoaded("create_radar")) {
+            NeoForge.EVENT_BUS.register(HybridTrainVerification)
+            NeoForge.EVENT_BUS.register(TrainDemo)
+        }
     }
 
     @SubscribeEvent fun commands(event: RegisterCommandsEvent) {
@@ -63,6 +67,11 @@ class TrainPortalVerification {
                 context.source.sendSuccess({ Component.literal(result) }, false); 1
             })
         event.dispatcher.register(Commands.literal("teutonlib_train_visual").requires { it.hasPermission(4) }
+            .then(Commands.literal("hybrid").then(Commands.argument("enabled", com.mojang.brigadier.arguments.BoolArgumentType.bool()).executes { ctx ->
+                val enabled = com.mojang.brigadier.arguments.BoolArgumentType.getBool(ctx, "enabled")
+                de.TeutonStudio.TeutonLib.ServerConfig.HYBRID_TRAINS.set(enabled)
+                ctx.source.sendSuccess({ Component.literal("hybrid=$enabled") }, false); 1
+            }))
             .then(Commands.literal("aether-prepare").executes { ctx ->
                 val source = ctx.source.level
                 val player = source.server.playerList.players.firstOrNull() ?: FakePlayerFactory.getMinecraft(source)

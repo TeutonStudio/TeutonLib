@@ -3,6 +3,7 @@ package de.TeutonStudio.TeutonLib.integration.train
 import com.simibubi.create.content.contraptions.bearing.ClockworkBearingBlockEntity
 import com.simibubi.create.content.contraptions.bearing.MechanicalBearingBlockEntity
 import de.TeutonStudio.TeutonLib.integration.HybridTrainCompatibility
+import de.TeutonStudio.TeutonLib.integration.TrainPortalCompatibility
 import dev.ryanhcode.sable.api.sublevel.SubLevelContainer
 import dev.ryanhcode.sable.sublevel.ServerSubLevel
 import net.minecraft.nbt.CompoundTag
@@ -29,6 +30,16 @@ object TrainPortalMachines {
 
     fun prepare(sub: ServerSubLevel): Boolean = prepare(sub, mutableSetOf())
 
+    /** A station assembly creates a new simulation from Create's captured
+     * blocks. The per-controller resume record travels in that block's NBT. */
+    fun adopt(sub: ServerSubLevel) {
+        if (sub.plot.loadedChunks.any { holder -> holder.chunk.blockEntities.values.any { it.persistentData.contains(KEY) } }) {
+            val tag = sub.userDataTag?.copy() ?: CompoundTag()
+            tag.putBoolean(PENDING, true)
+            sub.userDataTag = tag
+        }
+    }
+
     private fun prepare(sub: ServerSubLevel, visiting: MutableSet<UUID>): Boolean {
         if (!visiting.add(sub.uniqueId)) return false
         val data = sub.userDataTag?.copy() ?: CompoundTag()
@@ -42,7 +53,7 @@ object TrainPortalMachines {
             be.setChanged()
             val child = adapter.child(be)
             if (child != null && !prepare(child, visiting)) return false
-            if (child != null) TrainPortalVisuals.beforeHandoff(child)
+            if (child != null && TrainPortalCompatibility.active()) TrainPortalVisuals.beforeHandoff(child)
             try {
                 adapter.stop(be)
                 if (adapter.running(be)) return false

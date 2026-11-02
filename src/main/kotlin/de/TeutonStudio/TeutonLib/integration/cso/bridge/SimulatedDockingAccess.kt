@@ -16,7 +16,10 @@ object SimulatedDockingAccess {
         val locked: Method,
         val extended: Method,
         val retracted: Method,
-        val hasOther: Method
+        val hasOther: Method,
+        val subLevel: Method,
+        val detach: Method,
+        val pair: Method
     )
     private val cache = ConcurrentHashMap<Class<*>, Accessors>()
     private val connectorType: Class<*>? by lazy {
@@ -30,6 +33,17 @@ object SimulatedDockingAccess {
     fun extended(connector: BlockEntity): Boolean = boolean(connector) { it.extended }
     fun retracted(connector: BlockEntity): Boolean = boolean(connector) { it.retracted }
     fun hasOther(connector: BlockEntity): Boolean = boolean(connector) { it.hasOther }
+    fun subLevel(connector: BlockEntity): dev.ryanhcode.sable.sublevel.ServerSubLevel? =
+        accessors(connector).subLevel.invoke(connector) as? dev.ryanhcode.sable.sublevel.ServerSubLevel
+
+    /** Invoke the original cleanup, including both native resource buffers and our cog edges. */
+    fun detach(connector: BlockEntity) {
+        accessors(connector).detach.invoke(connector)
+        val inventory = connector.javaClass.getField("inventory").get(connector)
+        inventory.javaClass.getMethod("unDock").invoke(inventory)
+    }
+
+    fun pair(connector: BlockEntity, peer: BlockEntity) { accessors(connector).pair.invoke(connector, peer) }
     fun available(): Boolean = connectorType != null
     fun isConnector(blockEntity: BlockEntity): Boolean =
         connectorType?.isInstance(blockEntity) == true ||
@@ -43,7 +57,8 @@ object SimulatedDockingAccess {
     private fun accessors(connector: BlockEntity) = cache.computeIfAbsent(connector.javaClass) { type ->
         try { Accessors(
             type.getMethod("getOtherConnector"), type.getMethod("isLocked"), type.getMethod("isExtended"),
-            type.getMethod("isRetracted"), type.getMethod("hasOtherConnector")
+            type.getMethod("isRetracted"), type.getMethod("hasOtherConnector"),
+            type.getMethod("getLatestSubLevel"), type.getMethod("unDock"), type.getMethod("pairTo", connectorType)
         ) }
         catch (ex: ReflectiveOperationException) { throw IllegalStateException("Unsupported Simulated DockingConnectorBlockEntity API: ${type.name}", ex) }
     }

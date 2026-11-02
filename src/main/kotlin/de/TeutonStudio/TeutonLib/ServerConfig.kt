@@ -31,7 +31,7 @@ object ServerConfig {
         builder.translation("teutonlib.configuration.createSableOptimization").push("createSableOptimization")
         CSO_ENABLED = builder.comment("Enable cogwheel bridges across locked Sable/Simulated docks.",
             "Takes effect during play. The server controls all clients.",
-            "Requires Create 6.0.10, Sable 2.0.5 and Simulated 1.3.2.").translation("teutonlib.configuration.createSableOptimization.enabled").define("enabled", true)
+            "Requires Create 6.0.10, Sable 2.0.6 and Simulated 1.3.2.").translation("teutonlib.configuration.createSableOptimization.enabled").define("enabled", true)
         builder.pop(2)
         builder.translation("teutonlib.configuration.compat").push("compat")
         builder.translation("teutonlib.configuration.simulated").push("simulated")
@@ -73,12 +73,13 @@ object ServerConfig {
         HOSE_BREAK_DELAY = builder.comment("Continuous overload duration in physics seconds before release.")
             .defineInRange("breakDelaySeconds", 0.25, 0.01, 60.0)
         builder.pop(2)
-        builder.push("trains")
+        builder.translation("teutonlib.configuration.trains").push("trains")
         HYBRID_TRAINS = builder.comment(
-            "Use hybrid carriages by default: fixed structure, live Sable simulation and explicit editing mode.",
+            "Enable station construction in Sable plots and cached ContraptionLevel graphics while driving.",
             "Overrides CTF trainHandling for automatic conversion. Existing inventories and child contraptions stay in one plot.",
-            "Use /teutonlib train edit or /teutonlib train run beside a stopped train."
-        ).define("hybridByDefault", true)
+            "Hides Functional Fob and Chunk Anchor Lever from creative tabs, while keeping existing blocks and recipes.",
+            "Use /teutonlib train edit or /teutonlib train run beside a stopped train. Existing construction sessions can be finished after disabling."
+        ).translation("teutonlib.configuration.hybridByDefault").define("hybridByDefault", true)
         builder.pop()
         SPEC = builder.build()
     }

@@ -60,9 +60,12 @@ print(result.width, result.height, result.elements, result.pixels)
 Unterstützt werden:
 
 - `rect`, `line`, `polyline`, `polygon`, `circle`, `ellipse` und `text`;
-- geradlinige `path`-Kommandos `M`, `L`, `H`, `V` und `Z`, jeweils absolut oder relativ;
 - `viewBox`, `fill`, `stroke`, `stroke-width`, `font-size`, `translate(...)` und `scale(...)`;
 - die Skalierungsarten `contain` (Standard), `stretch` und `cover`.
+
+Aktuelle Grenze in 1.6.0: Der vorhandene `path`-Parser erzeugt bei üblichen
+SVG-Pfaden keine Punkte. Diese Elemente bleiben leer; für geradlinige Konturen
+`line`, `polyline` oder `polygon` verwenden.
 
 Farben werden auf die 16 Farben von CC:Tweaked abgebildet. Ein ControlDesk-Display
 erhält dasselbe Raster monochrom.

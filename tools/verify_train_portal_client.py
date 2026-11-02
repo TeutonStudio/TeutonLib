@@ -79,16 +79,37 @@ class Rcon:
 
     def request(self, command, kind=2):
         self.sequence += 1
+        request_id = self.sequence
         body = struct.pack("<ii", self.sequence, kind) + command.encode() + b"\0\0"
         self.socket.sendall(struct.pack("<i", len(body)) + body)
-        size = struct.unpack("<i", self.exact(4))[0]
-        if not 10 <= size <= 1_000_000:
-            raise RuntimeError(f"Invalid RCON response length: {size}")
-        packet = self.exact(size)
-        response_id = struct.unpack("<i", packet[:4])[0]
-        if response_id != self.sequence:
-            raise RuntimeError("Test server rejected or desynchronized RCON")
-        return packet[8:-2].decode()
+        # Minecraft splits long command output into multiple packets with the
+        # same ID. An empty command provides an ordered response boundary; it
+        # has no game side effects and its response is never returned to callers.
+        boundary_id = None
+        if kind == 2 and command.strip() != "stop":
+            self.sequence += 1
+            boundary_id = self.sequence
+        boundary_sent = False
+        chunks = []
+        while True:
+            size = struct.unpack("<i", self.exact(4))[0]
+            if not 10 <= size <= 1_000_000:
+                raise RuntimeError(f"Invalid RCON response length: {size}")
+            packet = self.exact(size)
+            response_id = struct.unpack("<i", packet[:4])[0]
+            if response_id == boundary_id:
+                return b"".join(chunks).decode()
+            if response_id != request_id:
+                raise RuntimeError("Test server rejected or desynchronized RCON")
+            chunks.append(packet[8:-2])
+            if boundary_id is None:
+                return b"".join(chunks).decode()
+            if not boundary_sent:
+                # RconClient cannot reliably parse coalesced requests. Wait for
+                # its first response before sending the boundary command.
+                boundary = struct.pack("<ii", boundary_id, 2) + b"\0\0"
+                self.socket.sendall(struct.pack("<i", len(boundary)) + boundary)
+                boundary_sent = True
 
     def close(self):
         self.socket.close()
@@ -132,8 +153,17 @@ def stop_process(process):
         process.wait(timeout=10)
 
 
-def verify_capture(snapshot, ship_id, dimension, mode, owner_dimension=None, build_count=2, verify_flywheel=False):
+def verify_capture(snapshot, ship_id, dimension, mode, owner_dimension=None, build_count=2, verify_flywheel=False, hybrid_enabled=True):
     assert snapshot["dimension"] == dimension, snapshot
+    assert snapshot["hybridEnabled"] == hybrid_enabled and snapshot["hiddenItemsRegistered"], snapshot
+    assert snapshot["hiddenItemsInCreative"] != hybrid_enabled, snapshot
+    graphical = [entry for entry in snapshot["sublevels"] if entry["ship"] == ship_id]
+    expected_type = ".ContraptionLevel" if hybrid_enabled else ".VanillaChunkedSubLevelRenderData"
+    assert graphical and all(entry["renderData"].endswith(expected_type) for entry in graphical), graphical
+    if hybrid_enabled:
+        assert all(entry["graphicalSections"] > 0 and entry["modelBlocks"] > 0 and entry["animatedBlocks"] > 0 for entry in graphical), graphical
+    if snapshot["name"] == "orange-frame":
+        assert snapshot["orangeFrames"] > 0, snapshot
     properties = snapshot["dimensionProperties"][dimension]
     has_sky = properties["hasSkyLight"]
     assert has_sky == (dimension != "minecraft:the_nether"), properties
@@ -372,7 +402,7 @@ def main():
                 assert "FAIL" not in response.upper(), response
                 return wait_until(stationary, processes, 60, f"moving train by {distance} blocks")
 
-            def capture(name, dimension, expectations):
+            def capture(name, dimension, expectations, hybrid_enabled=True):
                 if dimension == "minecraft:overworld":
                     camera = "72 103 9 -138.4 17"
                 elif name == "target-clear":
@@ -398,7 +428,7 @@ def main():
                 snapshot = wait_until(captured, processes, 60, f"capturing {name}")
                 for ship_id, mode, owner_dimension in expectations:
                     verify_capture(snapshot, ship_id, dimension, mode, owner_dimension, len(ship_ids),
-                                   "--verify-flywheel" in sys.argv[1:])
+                                   "--verify-flywheel" in sys.argv[1:], hybrid_enabled)
                 verify_couplings(snapshot, source_x, target_x)
                 if flywheel_backend is not None:
                     expected_backend = "InstancedDrawManager" if flywheel_backend == "instancing" else "IndirectDrawManager"
@@ -410,6 +440,11 @@ def main():
             source = "minecraft:overworld"
             front, rear = ship_ids
             capture("baseline", source, [(ship, "clear", source) for ship in ship_ids])
+            capture("orange-frame", source, [(ship, "clear", source) for ship in ship_ids])
+            connection.request("teutonlib_train_visual hybrid false")
+            capture("hybrid-disabled", source, [(ship, "clear", source) for ship in ship_ids], False)
+            connection.request("teutonlib_train_visual hybrid true")
+            capture("hybrid-enabled", source, [(ship, "clear", source) for ship in ship_ids])
             if not any(flag in sys.argv[1:] for flag in ("--rider-only", "--seated-only", "--seated-rollback-only")):
                 step(4)
                 capture("source-before", source, [(front, "real", source), (rear, "clear", source)])

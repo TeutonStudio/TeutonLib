@@ -152,5 +152,10 @@
   "teutonlib.hose_connector.flow": "Durchfluss: 50 % · Pumpendruck bleibt erhalten",
   "teutonlib.hose_connector.tension": "Zugauslastung: %s %%",
   "teutonlib.hose_connector.force": "Schlauchzug",
-  "teutonlib.train.mode_changed": "Zugmodus: %s (%s Wagen)."
+  "teutonlib.train.mode_changed": "Zugmodus: %s (%s Wagen).",
+  "teutonlib.configuration.trains": "Züge",
+  "teutonlib.configuration.trains.button": "Öffnen",
+  "teutonlib.configuration.trains.tooltip": "Sable-Baubetrieb am Bahnhof und ContraptionLevel-Darstellung.",
+  "teutonlib.configuration.hybridByDefault": "Sable-Baubetrieb und ContraptionLevel aktivieren",
+  "teutonlib.configuration.hybridByDefault.tooltip": "Neue Züge direkt auf Sable bauen; je zwei Bogeys bilden einen Wagen. Im Fahrbetrieb wird die Geometrie zwischengespeichert. Functional Fob und Chunk Anchor Lever werden im Kreativmenü ausgeblendet; vorhandene Blöcke bleiben erhalten."
 }

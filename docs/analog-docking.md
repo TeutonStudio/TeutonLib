@@ -1,7 +1,7 @@
 # Analoge Docking Connector
 
 TeutonLib erweitert die vorhandenen Connector von **Simulated 1.3.2** für Minecraft
-1.21.1 / NeoForge, Create 6.0.10 und Sable 2.0.5. Es werden keine neuen Blöcke,
+1.21.1 / NeoForge, Create 6.0.10 und Sable 2.0.6. Es werden keine neuen Blöcke,
 Registrierungen oder Transferbehälter eingeführt. Ohne diese unterstützten optionalen
 Mods werden die beiden Analog-Mixins durch `CsoMixinPlugin` nicht angewendet.
 

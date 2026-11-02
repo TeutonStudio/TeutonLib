@@ -48,6 +48,7 @@ object HybridTrainVerification {
     private var result = "IDLE"
     private var rotorId: UUID? = null
     private var oldAngle = 0f
+    private var loadedAt: Int? = null
     private val bearingOffset = BlockPos(5, 7, 0)
     private val furnaceOffset = BlockPos(2, 7, 0)
     private val lampOffset = BlockPos(3, 7, 0)
@@ -244,6 +245,10 @@ object HybridTrainVerification {
         check(level.getBlockEntity(link.plotOrigin.offset(furnaceOffset)) is FurnaceBlockEntity) { "Restart lost the machine deck" }
         rotorId = UUID.fromString(values.getProperty("rotor"))
         if (level.getEntity(checkNotNull(rotorId)) == null) return "RUNNING loading rotor"
+        // Relinking can precede the loaded block entities' first kinetic ticks.
+        // Check motion after initialization, before committing the mode switch.
+        val initializedAt = loadedAt ?: server.tickCount.also { loadedAt = it }
+        if (server.tickCount - initializedAt < 25) return "RUNNING initializing loaded machinery"
         verifyRotor(link, body)
         check(rotorId == UUID.fromString(values.getProperty("rotor"))) { "Restart replaced the rotor UUID" }
         check((level.getBlockEntity(link.plotOrigin.offset(furnaceOffset)) as FurnaceBlockEntity).getItem(2).`is`(Items.GLASS))
