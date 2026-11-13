@@ -1,0 +1,91 @@
+# TeutonLib Wiki — English
+
+[Deutsch — Hauptsprache](Home) · **English**
+
+TeutonStudio’s shared Minecraft library combines computer UI/APIs with optional Create/Sable, train, energy, fluid and compatibility integrations. **SableSchlauch and CreateSableOptimization are integrated**; remove their separate JARs.
+
+Minecraft **1.21.1**, NeoForge **21.1.234+**, Java **21**, KotlinForForge **5.11.0–<6**. Install on server and every client. Optional integrations have exact version gates.
+
+[Download 1.6.0](https://github.com/TeutonStudio/TeutonLib/releases/tag/v1.6.0) · [README](https://github.com/TeutonStudio/TeutonLib#readme) · [Issues](https://github.com/TeutonStudio/TeutonLib/issues)
+
+Each guide has its own illustration and reciprocal language link. Gameplay captures, addon consumers and nonvisual desktop test/code captures are explicitly distinguished.
+
+## Getting started
+
+- [Installation](Installation-en)
+- [Configuration and commands](Konfiguration-und-Befehle-en)
+- [Development and verification](Entwicklung-und-Pruefungen-en)
+
+## Trains and portals
+
+- [Station construction](Bahnhofsbau-en)
+- [Hybrid trains](Hybridzuege-en)
+- [Bearings and child contraptions](Lager-und-Untercontraptions-en)
+- [Radar type and persistence](Radar-Typ-und-Speicherung-en)
+- [Create Big Cannons on hybrid trains](Create-Big-Cannons-auf-Hybridzuegen-en)
+- [Train docking](Zug-Docking-en)
+- [Train portal transfer](Zug-Portaltransfer-en)
+- [Portal rendering and lighting](Portal-Darstellung-und-Beleuchtung-en)
+
+## Create, energy and fluids
+
+- [Cogwheel bridges](Zahnradbruecken-en)
+- [Analog docking connectors](Analoge-Dockingports-en)
+- [FE input through New Age motor extensions](New-Age-FE-Eingang-en)
+- [New Age motor speed on Sable](New-Age-Motordrehzahl-auf-Sable-en)
+- [Physical hose pulley](Physische-Schlauchrolle-en)
+- [Hose coupling on the Item Drain](Schlauchkupplung-am-Item-Drain-en)
+- [FluidLogistics and Factory Logistics](FluidLogistics-und-Factory-Logistics-en)
+- [FluidLogistics and TFMG](FluidLogistics-und-TFMG-en)
+- [Mekanism connection models on Sable](Mekanism-Anschlussmodelle-en)
+
+## Computers and control
+
+- [Computer UI: sources and Lua API](Computer-UI-en)
+- [Computer channels](Computer-Kanaele-en)
+- [Peripheral Link](Peripheral-Link-en)
+- [Directional Gearshift](Directional-Gearshift-en)
+- [Helicopter peripherals: gimbal sensor](Helikopter-Peripherie-en)
+- [Gyroscopic bearing control](Gyroskop-Steuerung-en)
+- [Optical sensor: local laser direction](Optischer-Sensor-en)
+- [Radio and GPS on Sable](Funk-und-GPS-en)
+- [Graphics API: portable SVG output](Grafik-API-en)
+- [Bitmap font](Bitmap-Schrift-en)
+
+## Developer APIs
+
+- [Peripheral topology and attachments](Peripheral-Topologie-und-Attachments-en)
+- [Computer workspaces and hosted runtime](Computer-Workspace-und-Kernel-en)
+- [Embedded computer kernel](Embedded-Computer-Kernel-en)
+- [Persistent groups and signals](Persistente-Kanalgruppen-und-Signale-en)
+- [Persistent channel groups](Persistente-Kanalgruppen-en)
+- [Signal bank](Signalbank-en)
+- [Sable geometry API](Sable-Geometrie-API-en)
+- [Docking state API](Docking-Zustands-API-en)
+- [Network sessions and budgets](Netzwerk-Sitzungen-und-Budgets-en)
+
+## Android and Zalith
+
+- [Android and Zalith compatibility](Android-und-Zalith-Kompatibilitaet-en)
+- [Ponder and Catnip on Android](Ponder-und-Catnip-auf-Android-en)
+- [PowerGrid on Android](PowerGrid-auf-Android-en)
+- [Essential on Android](Essential-auf-Android-en)
+- [Immersive Melodies on Android](Immersive-Melodies-auf-Android-en)
+- [Visual Recipe Editor on Android](Visual-Recipe-Editor-auf-Android-en)
+
+## Resources and diagnostics
+
+- [Resource repairs](Ressourcenreparaturen-en)
+- [Create Radar resource repair](Create-Radar-Ressourcenreparatur-en)
+- [EnderIO resources without Athena](EnderIO-ohne-Athena-en)
+- [NTGL animation repairs](NTGL-Animationsreparaturen-en)
+- [Design 'n' Decor sound resource](Design-n-Decor-Soundreparatur-en)
+- [Package metadata diagnostics](Paketmetadaten-Diagnose-en)
+
+## Development and documentation scope
+
+Release guides describe **1.6.0, published November 2, 2026**. This documentation/image review is dated **November 13, 2026**. Local station/wrench repairs are labelled on their pages. [Sable tank surfaces](Sable-Tankoberflaeche-en) are an **unreleased development feature**.
+
+The [gyroscopic bearing guide](Gyroskop-Steuerung-en) records the missing direct Lua methods found during capture. The known standing-rider Aether position error and possible docked-load sag remain limitations. Desktop mobile-adapter tests are not Android-device recordings.
+
+[Media provenance and verification scope](Bildnachweise-en) · [Wiki sources](https://github.com/TeutonStudio/TeutonLib/tree/master/docs/wiki)

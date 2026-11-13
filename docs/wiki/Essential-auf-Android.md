@@ -1,5 +1,7 @@
 # Essential auf Android
 
+**Deutsch** · [English](Essential-auf-Android-en) · [Übersicht](Home)
+
 Für **Essential 1.3.10.9** behandelt TeutonLib die lokale Discord-IPC-Verbindung auf Android als optional nicht verfügbar. Ein typgerechter, sicher schließbarer Socket-Adapter meldet einen getrennten Zustand, anstatt einen ungeeigneten Desktop-Socketpfad zu verwenden.
 
 ## Verwendung
@@ -20,3 +22,12 @@ Die mobilen Startoptionen `-Dteutonlib.mobile.mode=on` beziehungsweise `off` gel
 - [Optionaler Essential-Mixin](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/EssentialDiscordIpcMixin.java)
 
 [Wiki-Startseite](Home) · [Android und Zalith](Android-und-Zalith-Kompatibilitaet)
+
+## Abbildung
+
+
+Der tatsächliche Essential-Socket-Test prüft connected=false, definierte Fehler und sicheres Schließen. Desktop-Aufnahme, kein Android-Spieltest.
+
+![Essential auf Android: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-MobileDependencyCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

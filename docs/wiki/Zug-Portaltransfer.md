@@ -1,5 +1,7 @@
 # Zug-Portaltransfer
 
+**Deutsch** · [English](Zug-Portaltransfer-en) · [Übersicht](Home)
+
 TeutonLib überträgt baubare Create-Zugaufbauten gemeinsam mit ihrem Wagen durch passende Portalgleise von Immersive Portals: Aeronautics. Die vorhandene Sable-Simulation, Inventare, Maschinen und gespeicherte Wagenzuordnung reisen mit.
 
 ## Unterstützte Kombination
@@ -62,3 +64,14 @@ Die Runner verwenden eigene lokale Testwelten. Die Serverprüfung erfasst echte 
 Weiter: [Hybridzüge](Hybridzuege) · [Portal-Darstellung und Beleuchtung](Portal-Darstellung-und-Beleuchtung) · [Zug-Docking](Zug-Docking)
 
 Quelle für 1.6.0: [Koordinierter Wagentransfer](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/train/TrainPortalTransfers.kt).
+
+## Abbildung
+
+
+Echte Portaldurchfahrt mit demselben Maschinenaufbau auf Quell- und Zielseite. Die bekannte Abweichung stehender Mitfahrer bleibt bestehen.
+
+![Zug-Portaltransfer: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/train-portal-source.png)
+
+![Zug-Portaltransfer: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/train-portal-destination.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

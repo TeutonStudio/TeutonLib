@@ -1,5 +1,7 @@
 # Schlauchkupplung am Item Drain
 
+**Deutsch** · [English](Schlauchkupplung-am-Item-Drain-en) · [Übersicht](Home)
+
 Creates vorhandener **Item Drain** (`create:item_drain`) nimmt oben einen [physischen Schlauchkopf](Physische-Schlauchrolle) auf und verbindet die Rohre an der Rolle mit den Rohren am Drain. Es gibt keinen zusätzlichen Kupplungsblock, kein zusätzliches Item und kein Kupplungsrezept.
 
 ## Verbinden und Lösen
@@ -40,3 +42,12 @@ UUID-Verbindungen überstehen Montage und Neustarts. Entladene Chunks pausieren 
 - [Bedienung, Lebenszyklus und Testumfang](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/sable-hose-pulley.md)
 
 [Wiki-Startseite](Home) · [Physische Schlauchrolle](Physische-Schlauchrolle)
+
+## Abbildung
+
+
+Echter Entity-Kopf im Item Drain in der getrennten grafischen Schlauchprüfung.
+
+![Schlauchkupplung am Item Drain: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/hose-seated.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

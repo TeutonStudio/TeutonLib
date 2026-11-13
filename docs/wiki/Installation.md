@@ -1,5 +1,7 @@
 # Installation
 
+**Deutsch** · [English](Installation-en) · [Übersicht](Home)
+
 Diese Wiki beschreibt **TeutonLib 1.6.0** für Minecraft **1.21.1**.
 
 ## Grundvoraussetzungen
@@ -39,3 +41,12 @@ Ohne passende optionale Mods bleibt die betreffende Integration inaktiv. TeutonL
 [Konfiguration und Befehle](Konfiguration-und-Befehle) · [Alle Funktionen](Home) · [Entwicklung und Prüfungen](Entwicklung-und-Pruefungen)
 
 Quellen: [Mod-Metadaten](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/templates/META-INF/neoforge.mods.toml), [Versionen](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/gradle.properties).
+
+## Abbildung
+
+
+Der eingebaute NeoForge-Editor für TeutonLib; eine zusätzliche Config-Mod ist nicht erforderlich.
+
+![Installation: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-config.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

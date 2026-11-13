@@ -1,0 +1,945 @@
+{
+  "review_date": "2026-11-13",
+  "release": "1.6.0",
+  "release_commit": "15f1a2a",
+  "features": [
+    {
+      "page": "Installation.md",
+      "english_page": "Installation-en.md",
+      "title": "Installation",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/wiki-config.png"
+      ],
+      "caption_de": "Der eingebaute NeoForge-Editor für TeutonLib; eine zusätzliche Config-Mod ist nicht erforderlich.",
+      "caption_en": "Built-in NeoForge configuration editor for TeutonLib; no extra config mod is required.",
+      "development": false
+    },
+    {
+      "page": "Konfiguration-und-Befehle.md",
+      "english_page": "Konfiguration-und-Befehle-en.md",
+      "title": "Configuration and commands",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/wiki-config.png"
+      ],
+      "caption_de": "TeutonLib im nativen Konfigurationseditor. Servereinstellungen sind nur bei einer passenden geladenen Welt bearbeitbar.",
+      "caption_en": "TeutonLib in the native configuration editor. Server options require an appropriate loaded world.",
+      "development": false
+    },
+    {
+      "page": "Bahnhofsbau.md",
+      "english_page": "Bahnhofsbau-en.md",
+      "title": "Station construction",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/train-construction.png"
+      ],
+      "caption_de": "Historische Spielaufnahme des ersten Wagens am Bahnhof aus der 1.6.0-Demo. Die lokale Vorschau-Reparatur vom 12.11.2026 ist damit nicht belegt.",
+      "caption_en": "Historical first-carriage station scene from the 1.6.0 demo; this is not evidence of the November 12 local preview repair.",
+      "development": false
+    },
+    {
+      "page": "Hybridzuege.md",
+      "english_page": "Hybridzuege-en.md",
+      "title": "Hybrid trains",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/train-machines.png",
+        "assets/screenshots/train-bounds.png"
+      ],
+      "caption_de": "Echter Hybridzug mit Maschinen und orangefarbenem ContraptionLevel-Rahmen aus der 1.6.0-Demo.",
+      "caption_en": "Actual hybrid train with machines and orange ContraptionLevel bounds from the 1.6.0 demo.",
+      "development": false
+    },
+    {
+      "page": "Lager-und-Untercontraptions.md",
+      "english_page": "Lager-und-Untercontraptions-en.md",
+      "title": "Bearings and child contraptions",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/train-bearings.png"
+      ],
+      "caption_de": "Laufende native Lager-Nutzlast auf dem Hybrid-Testzug. Persistenz und Wiederanlauf sind zusätzlich im historischen Spieltest geprüft.",
+      "caption_en": "Native running bearing payload on the hybrid test train; persistence/restart have separate historical gameplay checks.",
+      "development": false
+    },
+    {
+      "page": "Radar-Typ-und-Speicherung.md",
+      "english_page": "Radar-Typ-und-Speicherung-en.md",
+      "title": "Radar type and persistence",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/train-radar.png"
+      ],
+      "caption_de": "Echtes Radar auf dem Hybridzug. Das Bild zeigt den Aufbau; den gespeicherten Typ prüft der separat dokumentierte Spieltest.",
+      "caption_en": "Actual radar on the hybrid train. The image shows the payload; saved type is checked by the separately documented gameplay test.",
+      "development": false
+    },
+    {
+      "page": "Create-Big-Cannons-auf-Hybridzuegen.md",
+      "english_page": "Create-Big-Cannons-auf-Hybridzuegen-en.md",
+      "title": "Create Big Cannons on hybrid trains",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-HybridTrainCompatibilityTest.png"
+      ],
+      "caption_de": "Tatsächlich ausgeführte Desktop-Prüfung der versionsgebundenen Hybridintegration einschließlich Kanonen-Zielklassen. Keine Aufnahme eines Schusses.",
+      "caption_en": "Executed desktop check of version-gated hybrid integration including cannon target classes; not a firing recording.",
+      "development": false
+    },
+    {
+      "page": "Zug-Docking.md",
+      "english_page": "Zug-Docking-en.md",
+      "title": "Train docking",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/dock-locked.png",
+        "assets/screenshots/dock-arrived.png",
+        "assets/screenshots/dock-left-behind.png"
+      ],
+      "caption_de": "Native Verriegelung, Gegenstelle nach passender Portalpassage und bei zu kleiner Öffnung zurückgelassene Plattform.",
+      "caption_en": "Native locking, partner after a fitting portal transfer, and platform left behind when the opening is too small.",
+      "development": false
+    },
+    {
+      "page": "Zug-Portaltransfer.md",
+      "english_page": "Zug-Portaltransfer-en.md",
+      "title": "Train portal transfer",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/train-portal-source.png",
+        "assets/screenshots/train-portal-destination.png"
+      ],
+      "caption_de": "Echte Portaldurchfahrt mit demselben Maschinenaufbau auf Quell- und Zielseite. Die bekannte Abweichung stehender Mitfahrer bleibt bestehen.",
+      "caption_en": "Actual portal crossing with the same machine payload on source/destination sides; the known standing-rider issue remains.",
+      "development": false
+    },
+    {
+      "page": "Portal-Darstellung-und-Beleuchtung.md",
+      "english_page": "Portal-Darstellung-und-Beleuchtung-en.md",
+      "title": "Portal rendering and lighting",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/train-portal-source.png",
+        "assets/screenshots/train-portal-destination.png",
+        "assets/screenshots/train-bounds.png"
+      ],
+      "caption_de": "Portal-Clipping, Beleuchtung der Zielwelt und ContraptionLevel-Rahmen in der echten Testszene.",
+      "caption_en": "Portal clipping, destination-world lighting and ContraptionLevel bounds in the actual test scene.",
+      "development": false
+    },
+    {
+      "page": "Zahnradbruecken.md",
+      "english_page": "Zahnradbruecken-en.md",
+      "title": "Cogwheel bridges",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/cogwheel-bridge-historical.png"
+      ],
+      "caption_de": "Historische Spielaufnahme des inzwischen integrierten CSO-Moduls: Antrieb und Zahnräder an einer Dockingverbindung. Kein neuer TeutonLib-Abnahmetest.",
+      "caption_en": "Historical gameplay capture of the now-integrated CSO module: drive and cogwheels at a dock; not a fresh TeutonLib acceptance test.",
+      "development": false
+    },
+    {
+      "page": "Analoge-Dockingports.md",
+      "english_page": "Analoge-Dockingports-en.md",
+      "title": "Analog docking connectors",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/dock-locked.png",
+        "assets/screenshots/test-DockingLengthTest.png"
+      ],
+      "caption_de": "Reale native Dockingverbindung und ausgeführte Prüfung der OFF/HALF/FULL-Längen. Das Spielbild allein belegt keine bestimmte Redstone-Stärke.",
+      "caption_en": "Actual native dock and executed OFF/HALF/FULL length tests. The gameplay image alone does not establish a particular redstone strength.",
+      "development": false
+    },
+    {
+      "page": "New-Age-FE-Eingang.md",
+      "english_page": "New-Age-FE-Eingang-en.md",
+      "title": "FE input through New Age motor extensions",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/motor-extension.png",
+        "assets/gifs/flux-motor.gif"
+      ],
+      "caption_de": "Realer Aufbau FE-Quelle → Motorerweiterung → Motor und vorhandene Flux-Demo.",
+      "caption_en": "Actual FE source → motor extension → motor arrangement and existing Flux demonstration.",
+      "development": false
+    },
+    {
+      "page": "New-Age-Motordrehzahl-auf-Sable.md",
+      "english_page": "New-Age-Motordrehzahl-auf-Sable-en.md",
+      "title": "New Age motor speed on Sable",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-NewAgeMotorCompatibilityTest.png"
+      ],
+      "caption_de": "Ausgeführte Desktop-Prüfung der unterstützten Motorvarianten und der versionsgebundenen Drehrichtungsintegration; keine neue Fahrtaufnahme.",
+      "caption_en": "Executed desktop checks of supported motor variants and the version-gated rotation integration; not a new movement recording.",
+      "development": false
+    },
+    {
+      "page": "Physische-Schlauchrolle.md",
+      "english_page": "Physische-Schlauchrolle-en.md",
+      "title": "Physical hose pulley",
+      "status": "illustrated",
+      "media": [
+        "assets/gifs/hose-wrench.gif"
+      ],
+      "caption_de": "Echte Spielaufnahme: Schlauchkopf mit dem Schraubenschlüssel tragen und werfen.",
+      "caption_en": "Actual gameplay: carry and throw the hose head with a wrench.",
+      "development": false
+    },
+    {
+      "page": "Schlauchkupplung-am-Item-Drain.md",
+      "english_page": "Schlauchkupplung-am-Item-Drain-en.md",
+      "title": "Hose coupling on the Item Drain",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/hose-seated.png"
+      ],
+      "caption_de": "Echter Entity-Kopf im Item Drain in der getrennten grafischen Schlauchprüfung.",
+      "caption_en": "Actual entity head seated in the Item Drain in the separate graphical hose test.",
+      "development": false
+    },
+    {
+      "page": "Mekanism-Anschlussmodelle.md",
+      "english_page": "Mekanism-Anschlussmodelle-en.md",
+      "title": "Mekanism connection models on Sable",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/mekanism-modes.png",
+        "assets/screenshots/mekanism-moving.png"
+      ],
+      "caption_de": "Echte Rohrmodell-Aufnahmen nach Modusänderung und während Sable-Bewegung.",
+      "caption_en": "Actual pipe-model captures after mode change and during Sable movement.",
+      "development": false
+    },
+    {
+      "page": "FluidLogistics-und-Factory-Logistics.md",
+      "english_page": "FluidLogistics-und-Factory-Logistics-en.md",
+      "title": "FluidLogistics and Factory Logistics",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-LogisticsCompatibilityTest.png"
+      ],
+      "caption_de": "Ausgeführte Desktop-Prüfung der Versions- und Klassenverträge des gemeinsamen Ressourcenadapters; keine neue Bestelloberfläche.",
+      "caption_en": "Executed desktop version/class contract checks for the shared resource adapter; no new ordering UI is introduced.",
+      "development": false
+    },
+    {
+      "page": "FluidLogistics-und-TFMG.md",
+      "english_page": "FluidLogistics-und-TFMG-en.md",
+      "title": "FluidLogistics and TFMG",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-FluidPropagationCompatibilityTest.png"
+      ],
+      "caption_de": "Ausgeführte Desktop-Prüfung der Pumpen- und Propagations-Zielklassen; die weiterführende Flüssigkeitsprüfung ist separat dokumentiert.",
+      "caption_en": "Executed desktop checks of pump/propagation target classes; the broader fluid-flow verification is documented separately.",
+      "development": false
+    },
+    {
+      "page": "Computer-UI.md",
+      "english_page": "Computer-UI-en.md",
+      "title": "Computer UI: sources and Lua API",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/wiki-sources.png"
+      ],
+      "caption_de": "Echter CC-Blockcomputer mit TeutonLib-Quellenreiter in der separaten Aufnahmewelt.",
+      "caption_en": "Actual CC block computer with TeutonLib Sources tab in the disposable capture world.",
+      "development": false
+    },
+    {
+      "page": "Computer-Kanaele.md",
+      "english_page": "Computer-Kanaele-en.md",
+      "title": "Computer channels",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/wiki-channels.png",
+        "assets/screenshots/wiki-channel-ui.png"
+      ],
+      "caption_de": "Echter CC-Blockcomputer mit zwei über die native Lua-API angelegten Kanälen.",
+      "caption_en": "Actual CC block computer with two channels created through the native Lua API.",
+      "development": false
+    },
+    {
+      "page": "Peripheral-Link.md",
+      "english_page": "Peripheral-Link-en.md",
+      "title": "Peripheral Link",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/peripheral-link-ui.png"
+      ],
+      "caption_de": "Echter Peripheral-Link-Bildschirm mit Testdaten aus der UI-Prüfung; Methoden und Status sind hier Prüfdaten, kein Live-Inventar.",
+      "caption_en": "Actual Peripheral Link screen with UI verification fixture data; methods/status here are test data, not a live inventory.",
+      "development": false
+    },
+    {
+      "page": "Directional-Gearshift.md",
+      "english_page": "Directional-Gearshift-en.md",
+      "title": "Directional Gearshift",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/wiki-gearshift.png"
+      ],
+      "caption_de": "Tatsächliche Lua-Abfrage nach setOutputs(true, false) am nativen Directional Gearshift.",
+      "caption_en": "Actual Lua readback after setOutputs(true, false) on the native Directional Gearshift.",
+      "development": false
+    },
+    {
+      "page": "Helikopter-Peripherie.md",
+      "english_page": "Helikopter-Peripherie-en.md",
+      "title": "Helicopter peripherals: gimbal sensor",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/wiki-gimbal.png"
+      ],
+      "caption_de": "Tatsächliche Pitch-/Yaw-/Roll-Abfrage und weiterhin zweiachsiges Legacy-Format am nativen Gimbalsensor.",
+      "caption_en": "Actual pitch/yaw/roll readback and unchanged two-axis legacy format from the native gimbal sensor.",
+      "development": false
+    },
+    {
+      "page": "Gyroskop-Steuerung.md",
+      "english_page": "Gyroskop-Steuerung-en.md",
+      "title": "Gyroscopic bearing control",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/wiki-gyroscope.png"
+      ],
+      "caption_de": "Die tatsächlichen Lua-Aufrufe setTargetDirection und adjustTilt werden am nativen Lager über Peripheral Link angenommen; keine vollständige Flugregelung.",
+      "caption_en": "Actual setTargetDirection and adjustTilt Lua calls accepted by the native bearing through a Peripheral Link; this is not a complete flight controller.",
+      "development": false
+    },
+    {
+      "page": "Optischer-Sensor.md",
+      "english_page": "Optischer-Sensor-en.md",
+      "title": "Optical sensor: local laser direction",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/wiki-optical.png",
+        "assets/screenshots/test-OpticalSensorPeripheralExtensionsTest.png"
+      ],
+      "caption_de": "Echte Lua-Ausgabe des lokalen Richtungsvektors über Peripheral Link und ausgeführte Prüfung der sechs Richtungen.",
+      "caption_en": "Actual local-direction Lua readback through a Peripheral Link and executed checks of all six directions.",
+      "development": false
+    },
+    {
+      "page": "Funk-und-GPS.md",
+      "english_page": "Funk-und-GPS-en.md",
+      "title": "Radio and GPS on Sable",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/addon-wiki-sable-gps.png"
+      ],
+      "caption_de": "Echter GPS-Fix eines Sable-montierten CC-Aeroworks-Computers mit vier GPS-Hosts. CC-Aeroworks ist hier ein zusätzlicher Nutzer der TeutonLib-Integration.",
+      "caption_en": "Actual GPS fix from a Sable-mounted Aeroworks computer and four GPS hosts. Aeroworks is an additional consumer of TeutonLib integration.",
+      "development": false
+    },
+    {
+      "page": "Grafik-API.md",
+      "english_page": "Grafik-API-en.md",
+      "title": "Graphics API: portable SVG output",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/wiki-graphics.png"
+      ],
+      "caption_de": "Echte Ausgabe von teutonlib.svg und teutonlib.font im CC-Terminal ohne CCVisual oder CC-Aeroworks.",
+      "caption_en": "Actual teutonlib.svg and teutonlib.font output on a CC terminal without CCVisual or Aeroworks.",
+      "development": false
+    },
+    {
+      "page": "Bitmap-Schrift.md",
+      "english_page": "Bitmap-Schrift-en.md",
+      "title": "Bitmap font",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/wiki-graphics.png"
+      ],
+      "caption_de": "Die Texte RPM und READY stammen tatsächlich aus der 3×5-Bitmap-Schrift; Formen aus dem SVG-Modul.",
+      "caption_en": "RPM and READY are actual 3×5 bitmap-font output; shapes come from the SVG module.",
+      "development": false
+    },
+    {
+      "page": "Computer-Workspace-und-Kernel.md",
+      "english_page": "Computer-Workspace-und-Kernel-en.md",
+      "title": "Computer workspaces and hosted runtime",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/addon-wiki-operator-terminal.png",
+        "assets/screenshots/test-ComputerWorkspaceTest.png"
+      ],
+      "caption_de": "Realer CC-Aeroworks-Workspace als Addon-Nutzer und ausgeführte Snapshot-/Befehlsprüfung. Das Addon stellt die Fachoberfläche bereit.",
+      "caption_en": "Real Aeroworks workspace as an addon consumer plus executed snapshot/command checks. The addon supplies the domain UI.",
+      "development": false
+    },
+    {
+      "page": "Embedded-Computer-Kernel.md",
+      "english_page": "Embedded-Computer-Kernel-en.md",
+      "title": "Embedded computer kernel",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/addon-wiki-operator-terminal.png"
+      ],
+      "caption_de": "Echter eingebetteter CC-Computer im zusätzlichen Addon CC-Aeroworks als Nutzer des HostedComputer-Kernels. TeutonLib registriert keinen solchen Pultblock.",
+      "caption_en": "Actual embedded CC computer in the additional Aeroworks addon consuming HostedComputer. TeutonLib registers no such desk block.",
+      "development": false
+    },
+    {
+      "page": "Peripheral-Topologie-und-Attachments.md",
+      "english_page": "Peripheral-Topologie-und-Attachments-en.md",
+      "title": "Peripheral topology and attachments",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/wiki-sources.png",
+        "assets/screenshots/test-PublicApiCompatibilityTest.png"
+      ],
+      "caption_de": "Reale Geräteansicht und ausgeführte Prüfung öffentlicher API-Signaturen. Das Bild belegt nicht jeden Attach/Detach-Fehlerfall.",
+      "caption_en": "Actual device view and executed public API signature check. The image does not establish every attach/detach failure case.",
+      "development": false
+    },
+    {
+      "page": "Persistente-Kanalgruppen-und-Signale.md",
+      "english_page": "Persistente-Kanalgruppen-und-Signale-en.md",
+      "title": "Persistent groups and signals",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/addon-wiki-channel-groups.png",
+        "assets/screenshots/test-PersistentChannelBanksTest.png"
+      ],
+      "caption_de": "Realer Addon-Gruppeneditor und ausgeführte Bank-Prüfungen. Gruppen- und Signalbank sind getrennte APIs.",
+      "caption_en": "Actual addon group editor and executed bank tests. Group and signal banks are separate APIs.",
+      "development": false
+    },
+    {
+      "page": "Persistente-Kanalgruppen.md",
+      "english_page": "Persistente-Kanalgruppen-en.md",
+      "title": "Persistent channel groups",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/addon-wiki-channel-groups.png",
+        "assets/screenshots/test-PersistentChannelBanksTest.png"
+      ],
+      "caption_de": "CC-Aeroworks als realer Nutzer der Gruppenbank; die Prüfung zeigt Erhalt fehlender Ziele und Definitionspersistenz.",
+      "caption_en": "Aeroworks as an actual group-bank consumer; tests cover retained missing targets and definition persistence.",
+      "development": false
+    },
+    {
+      "page": "Signalbank.md",
+      "english_page": "Signalbank-en.md",
+      "title": "Signal bank",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-PersistentChannelBanksTest.png"
+      ],
+      "caption_de": "Ausgeführte Prüfung von Signalfreigabe, Pulsende und Rücksetzen nach dem Laden. Die Signalbank hat keine eigene GUI.",
+      "caption_en": "Executed checks of signal authority, pulse expiry and reset after loading. SignalBank has no standalone GUI.",
+      "development": false
+    },
+    {
+      "page": "Sable-Geometrie-API.md",
+      "english_page": "Sable-Geometrie-API-en.md",
+      "title": "Sable geometry API",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/addon-wiki-sable-gps.png"
+      ],
+      "caption_de": "Die sichtbare Weltposition wird in einem realen Sable-GPS-Nutzer ausgegeben; nicht jeder Interaktions- und Renderhelfer wird damit einzeln geprüft.",
+      "caption_en": "Visible world position read in a real Sable GPS consumer; this does not separately validate every interaction/render helper.",
+      "development": false
+    },
+    {
+      "page": "Docking-Zustands-API.md",
+      "english_page": "Docking-Zustands-API-en.md",
+      "title": "Docking state API",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/dock-locked.png",
+        "assets/screenshots/addon-wiki-dock-telemetry.png"
+      ],
+      "caption_de": "Reale verriegelte native Verbindung und ausgelesener Dockingzustand in einem zusätzlichen CC-Aeroworks-Nutzer.",
+      "caption_en": "Actual native locked connection and docking-state readback in an additional Aeroworks consumer.",
+      "development": false
+    },
+    {
+      "page": "Netzwerk-Sitzungen-und-Budgets.md",
+      "english_page": "Netzwerk-Sitzungen-und-Budgets-en.md",
+      "title": "Network sessions and budgets",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-SessionPrimitivesTest.png"
+      ],
+      "caption_de": "Ausgeführte Desktop-Vertragstests für Sitzungsablauf, Gestenreihenfolge und Spieler-Tickbudgets; keine eigene Spieloberfläche.",
+      "caption_en": "Executed desktop contract tests for session expiry, gesture order and per-player tick budgets; no standalone game UI.",
+      "development": false
+    },
+    {
+      "page": "Android-und-Zalith-Kompatibilitaet.md",
+      "english_page": "Android-und-Zalith-Kompatibilitaet-en.md",
+      "title": "Android and Zalith compatibility",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-MobileEnvironmentTest.png"
+      ],
+      "caption_de": "Ausgeführte Desktop-Prüfung der Android-Erkennung. Keine Aufnahme eines Android-/Zalith-Geräts.",
+      "caption_en": "Executed desktop Android-detection tests. This is not an Android/Zalith device capture.",
+      "development": false
+    },
+    {
+      "page": "Ponder-und-Catnip-auf-Android.md",
+      "english_page": "Ponder-und-Catnip-auf-Android-en.md",
+      "title": "Ponder and Catnip on Android",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-MobileDependencyCompatibilityTest.png"
+      ],
+      "caption_de": "Ausgeführte Desktop-Prüfung der exakt unterstützten Einsprungmethoden. Kein Funktionsnachweis auf einem Android-Gerät.",
+      "caption_en": "Executed desktop check of the exact supported target methods. Not a functional validation on an Android device.",
+      "development": false
+    },
+    {
+      "page": "PowerGrid-auf-Android.md",
+      "english_page": "PowerGrid-auf-Android-en.md",
+      "title": "PowerGrid on Android",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-MobileDependencyCompatibilityTest.png"
+      ],
+      "caption_de": "Ausgeführte Desktop-Prüfung der exakt unterstützten Einsprungmethoden. Kein Funktionsnachweis auf einem Android-Gerät.",
+      "caption_en": "Executed desktop check of the exact supported target methods. Not a functional validation on an Android device.",
+      "development": false
+    },
+    {
+      "page": "Immersive-Melodies-auf-Android.md",
+      "english_page": "Immersive-Melodies-auf-Android-en.md",
+      "title": "Immersive Melodies on Android",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-MobileDependencyCompatibilityTest.png"
+      ],
+      "caption_de": "Ausgeführte Desktop-Prüfung der exakt unterstützten Einsprungmethoden. Kein Funktionsnachweis auf einem Android-Gerät.",
+      "caption_en": "Executed desktop check of the exact supported target methods. Not a functional validation on an Android device.",
+      "development": false
+    },
+    {
+      "page": "Visual-Recipe-Editor-auf-Android.md",
+      "english_page": "Visual-Recipe-Editor-auf-Android-en.md",
+      "title": "Visual Recipe Editor on Android",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-MobileDependencyCompatibilityTest.png"
+      ],
+      "caption_de": "Ausgeführte Desktop-Prüfung der exakt unterstützten Einsprungmethoden. Kein Funktionsnachweis auf einem Android-Gerät.",
+      "caption_en": "Executed desktop check of the exact supported target methods. Not a functional validation on an Android device.",
+      "development": false
+    },
+    {
+      "page": "Essential-auf-Android.md",
+      "english_page": "Essential-auf-Android-en.md",
+      "title": "Essential on Android",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-MobileDependencyCompatibilityTest.png"
+      ],
+      "caption_de": "Der tatsächliche Essential-Socket-Test prüft connected=false, definierte Fehler und sicheres Schließen. Desktop-Aufnahme, kein Android-Spieltest.",
+      "caption_en": "The actual Essential socket test checks connected=false, defined errors and safe close. Desktop capture, not an Android gameplay test.",
+      "development": false
+    },
+    {
+      "page": "Ressourcenreparaturen.md",
+      "english_page": "Ressourcenreparaturen-en.md",
+      "title": "Resource repairs",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-ResourceCompatibilityTest.png"
+      ],
+      "caption_de": "Tatsächlich ausgeführte Desktop-Prüfung der Originaldatei-Hashes und konkreten Ressourcenregeln. Die Tests nennen die jeweils behandelte Ressource.",
+      "caption_en": "Actually executed desktop checks of original file hashes and concrete resource rules. Tests identify the affected resources.",
+      "development": false
+    },
+    {
+      "page": "Create-Radar-Ressourcenreparatur.md",
+      "english_page": "Create-Radar-Ressourcenreparatur-en.md",
+      "title": "Create Radar resource repair",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-ResourceCompatibilityTest.png"
+      ],
+      "caption_de": "Tatsächlich ausgeführte Desktop-Prüfung der Originaldatei-Hashes und konkreten Ressourcenregeln. Die Tests nennen die jeweils behandelte Ressource.",
+      "caption_en": "Actually executed desktop checks of original file hashes and concrete resource rules. Tests identify the affected resources.",
+      "development": false
+    },
+    {
+      "page": "EnderIO-ohne-Athena.md",
+      "english_page": "EnderIO-ohne-Athena-en.md",
+      "title": "EnderIO resources without Athena",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-ResourceCompatibilityTest.png"
+      ],
+      "caption_de": "Tatsächlich ausgeführte Desktop-Prüfung der Originaldatei-Hashes und konkreten Ressourcenregeln. Die Tests nennen die jeweils behandelte Ressource.",
+      "caption_en": "Actually executed desktop checks of original file hashes and concrete resource rules. Tests identify the affected resources.",
+      "development": false
+    },
+    {
+      "page": "NTGL-Animationsreparaturen.md",
+      "english_page": "NTGL-Animationsreparaturen-en.md",
+      "title": "NTGL animation repairs",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-ResourceCompatibilityTest.png"
+      ],
+      "caption_de": "Tatsächlich ausgeführte Desktop-Prüfung der Originaldatei-Hashes und konkreten Ressourcenregeln. Die Tests nennen die jeweils behandelte Ressource.",
+      "caption_en": "Actually executed desktop checks of original file hashes and concrete resource rules. Tests identify the affected resources.",
+      "development": false
+    },
+    {
+      "page": "Design-n-Decor-Soundreparatur.md",
+      "english_page": "Design-n-Decor-Soundreparatur-en.md",
+      "title": "Design 'n' Decor sound resource",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-ResourceCompatibilityTest.png"
+      ],
+      "caption_de": "Tatsächlich ausgeführte Desktop-Prüfung der Originaldatei-Hashes und konkreten Ressourcenregeln. Die Tests nennen die jeweils behandelte Ressource.",
+      "caption_en": "Actually executed desktop checks of original file hashes and concrete resource rules. Tests identify the affected resources.",
+      "development": false
+    },
+    {
+      "page": "Paketmetadaten-Diagnose.md",
+      "english_page": "Paketmetadaten-Diagnose-en.md",
+      "title": "Package metadata diagnostics",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/metadata-diagnostic.png",
+        "assets/screenshots/metadata-fingerprint.png"
+      ],
+      "caption_de": "Screenshot des tatsächlichen Diagnosepfads: Dateiname, Modversion, Fingerabdruck und erneutes Auslösen des ursprünglichen Fehlers. Codeansicht, kein nachgestellter Spielerabsturz.",
+      "caption_en": "Screenshot of the actual diagnostic path: filename, mod version, fingerprint and rethrow of the original error. Code inspection, not a staged player crash.",
+      "development": false
+    },
+    {
+      "page": "Entwicklung-und-Pruefungen.md",
+      "english_page": "Entwicklung-und-Pruefungen-en.md",
+      "title": "Development and verification",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/test-summary.png"
+      ],
+      "caption_de": "Aktuell ausgeführte 160 JUnit-Tests des unveränderten Release-Quellstands: keine Fehler oder übersprungenen Tests.",
+      "caption_en": "Current execution of 160 JUnit tests from unchanged release sources: no failures or skipped tests.",
+      "development": false
+    },
+    {
+      "page": "Sable-Tankoberflaeche.md",
+      "english_page": "Sable-Tankoberflaeche-en.md",
+      "title": "Sable tank fluid surface — development",
+      "status": "illustrated",
+      "media": [
+        "assets/screenshots/tank-tilted-development.png",
+        "assets/screenshots/tank-sideways-development.png"
+      ],
+      "caption_de": "Unveröffentlichter Entwicklungsstand: echte gerenderte Tankoberflächen bei geneigtem und seitlichem Tank. Nicht in der Release-JAR 1.6.0 enthalten.",
+      "caption_en": "Unreleased development build: actual rendered fluid surfaces in tilted and sideways tanks. Not included in release 1.6.0.",
+      "development": true
+    }
+  ],
+  "media": [
+    {
+      "path": "assets/screenshots/train-construction.png",
+      "source": "TeutonLib/run/smoke/train-demo/20261102-082003/client/screenshots/demo-02-wagen-eins.png",
+      "kind": "gameplay",
+      "scope": "Historical 1.6.0 test carriage at the station; not the November 12 native-preview repair."
+    },
+    {
+      "path": "assets/screenshots/train-machines.png",
+      "source": "TeutonLib/run/smoke/train-demo/20261102-082003/client/screenshots/demo-04-maschinen.png",
+      "kind": "gameplay",
+      "scope": "Real hybrid-train machine payload in the 1.6.0 demonstration."
+    },
+    {
+      "path": "assets/screenshots/train-bearings.png",
+      "source": "TeutonLib/run/smoke/train-demo/20261102-082003/client/screenshots/demo-05-lager.png",
+      "kind": "gameplay",
+      "scope": "Native running bearing payload on the hybrid test train."
+    },
+    {
+      "path": "assets/screenshots/train-radar.png",
+      "source": "TeutonLib/run/smoke/train-demo/20261102-082003/client/screenshots/demo-06-radar-schlauch.png",
+      "kind": "gameplay",
+      "scope": "Real radar and hose payload; persistence assertions are separate from the visible scene."
+    },
+    {
+      "path": "assets/screenshots/train-bounds.png",
+      "source": "TeutonLib/run/smoke/train-demo/20261102-082003/client/screenshots/demo-08-rahmen.png",
+      "kind": "gameplay",
+      "scope": "F3+B orange ContraptionLevel bounds on the real train."
+    },
+    {
+      "path": "assets/screenshots/train-portal-source.png",
+      "source": "TeutonLib/run/smoke/train-demo/20261102-082003/client/screenshots/demo-10-durchfahrt.png",
+      "kind": "gameplay",
+      "scope": "Native portal crossing seen from the source world."
+    },
+    {
+      "path": "assets/screenshots/train-portal-destination.png",
+      "source": "TeutonLib/run/smoke/train-demo/20261102-082003/client/screenshots/demo-12-geraete-danach.png",
+      "kind": "gameplay",
+      "scope": "Machine payload after arrival in the destination world; no claim that standing-rider handover is fixed."
+    },
+    {
+      "path": "assets/screenshots/dock-locked.png",
+      "source": "TeutonLib/run/smoke/train-docking-demo/20261102-133629-wide/client/screenshots/demo-03-verriegelt.png",
+      "kind": "gameplay",
+      "scope": "Native locked dock and independent platform before the wide portal test."
+    },
+    {
+      "path": "assets/screenshots/dock-arrived.png",
+      "source": "TeutonLib/run/smoke/train-docking-demo/20261102-133629-wide/client/screenshots/demo-07-dock-danach.png",
+      "kind": "gameplay",
+      "scope": "Docked partner following a fitting wide portal transfer."
+    },
+    {
+      "path": "assets/screenshots/dock-left-behind.png",
+      "source": "TeutonLib/run/smoke/train-docking-demo/20261102-133928-narrow/client/screenshots/train-portal-docking-left-behind.png",
+      "kind": "gameplay",
+      "scope": "Oversized platform detached and left in source world."
+    },
+    {
+      "path": "assets/gifs/hose-wrench.gif",
+      "source": "TeutonLib/media/teutonlib-schlauch-schraubenschluessel.gif",
+      "kind": "gameplay",
+      "scope": "Existing native wrench-carry/throw recording; captions are German."
+    },
+    {
+      "path": "assets/screenshots/hose-seated.png",
+      "source": "TeutonLib/run/smoke/hose-pulley-client/20261101-220945-1bdb6960/client/screenshots/hose-pulley-connector-seated.png",
+      "kind": "gameplay",
+      "scope": "Physical head seated in the native Item Drain, version 1.5.15-era verification."
+    },
+    {
+      "path": "assets/gifs/flux-motor.gif",
+      "source": "TeutonLib/media/teutonlib-flux-point-demo.gif",
+      "kind": "gameplay",
+      "scope": "Existing real Flux Point/New Age scene; not proof of every full Flux network topology."
+    },
+    {
+      "path": "assets/screenshots/motor-extension.png",
+      "source": "TeutonLib/run/client/screenshots/flux-point-extension-last-crop.png",
+      "kind": "gameplay",
+      "scope": "Historical real FE source → extension → motor arrangement."
+    },
+    {
+      "path": "assets/screenshots/mekanism-moving.png",
+      "source": "TeutonLib/run/smoke/mekanism-models/20261031-160045-5f4f94fc/client/screenshots/mekanism-model-moving.png",
+      "kind": "gameplay",
+      "scope": "Historical Sodium-client pipe model during native Sable movement."
+    },
+    {
+      "path": "assets/screenshots/mekanism-modes.png",
+      "source": "TeutonLib/run/smoke/mekanism-models/20261031-160045-5f4f94fc/client/screenshots/mekanism-model-swapped.png",
+      "kind": "gameplay",
+      "scope": "Historical pipe connection-mode change on Sable."
+    },
+    {
+      "path": "assets/screenshots/peripheral-link-ui.png",
+      "source": "TeutonLib/run/client/screenshots/teutonlib-peripheral-link-ui-4.png",
+      "kind": "gameplay",
+      "scope": "Real native UI rendered with verification-fixture inventory/method data; not a live linked inventory."
+    },
+    {
+      "path": "assets/screenshots/cogwheel-bridge-historical.png",
+      "source": "CreateSableOptimization/docs/images/cso-v0-client.png",
+      "kind": "historical-gameplay",
+      "scope": "Historical native scene of predecessor CSO cogwheel/docking integration, now part of TeutonLib; not a fresh TeutonLib runtime validation."
+    },
+    {
+      "path": "assets/screenshots/addon-wiki-sable-gps.png",
+      "source": "CC-Aeroworks/wiki/assets/screenshots/wiki-sable-gps.png",
+      "kind": "addon-gameplay",
+      "scope": "Real CC-Aeroworks consumer of TeutonLib API; additional addon installed, not a standalone block registered by the library."
+    },
+    {
+      "path": "assets/screenshots/addon-wiki-dock-telemetry.png",
+      "source": "CC-Aeroworks/wiki/assets/screenshots/wiki-dock-telemetry.png",
+      "kind": "addon-gameplay",
+      "scope": "Real CC-Aeroworks consumer of TeutonLib API; additional addon installed, not a standalone block registered by the library."
+    },
+    {
+      "path": "assets/screenshots/addon-wiki-operator-terminal.png",
+      "source": "CC-Aeroworks/wiki/assets/screenshots/wiki-operator-terminal.png",
+      "kind": "addon-gameplay",
+      "scope": "Real CC-Aeroworks consumer of TeutonLib API; additional addon installed, not a standalone block registered by the library."
+    },
+    {
+      "path": "assets/screenshots/addon-wiki-channel-groups.png",
+      "source": "CC-Aeroworks/wiki/assets/screenshots/wiki-channel-groups.png",
+      "kind": "addon-gameplay",
+      "scope": "Real CC-Aeroworks consumer of TeutonLib API; additional addon installed, not a standalone block registered by the library."
+    },
+    {
+      "path": "assets/screenshots/tank-tilted-development.png",
+      "source": "TeutonLib/run/smoke/tank-fluid-client/20261105-172046-75931ee0/client/screenshots/tank-fluid-tilted-50.png",
+      "kind": "gameplay",
+      "scope": "Unreleased local tank-surface development test at 50 percent fill and tilted orientation."
+    },
+    {
+      "path": "assets/screenshots/tank-sideways-development.png",
+      "source": "TeutonLib/run/smoke/tank-fluid-client/20261105-172046-75931ee0/client/screenshots/tank-fluid-sideways-90.png",
+      "kind": "gameplay",
+      "scope": "Unreleased local tank-surface development test at 90 percent fill and sideways orientation."
+    },
+    {
+      "path": "assets/screenshots/test-MobileDependencyCompatibilityTest.png",
+      "source": "Release 15f1a2a / Gradle test HTML report captured 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; no Android-device or in-game functional test is implied."
+    },
+    {
+      "path": "assets/screenshots/test-PublicApiCompatibilityTest.png",
+      "source": "Release 15f1a2a / Gradle test HTML report captured 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; no Android-device or in-game functional test is implied."
+    },
+    {
+      "path": "assets/screenshots/test-ComputerWorkspaceTest.png",
+      "source": "Release 15f1a2a / Gradle test HTML report captured 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; no Android-device or in-game functional test is implied."
+    },
+    {
+      "path": "assets/screenshots/test-PersistentChannelBanksTest.png",
+      "source": "Release 15f1a2a / Gradle test HTML report captured 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; no Android-device or in-game functional test is implied."
+    },
+    {
+      "path": "assets/screenshots/test-SessionPrimitivesTest.png",
+      "source": "Release 15f1a2a / Gradle test HTML report captured 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; no Android-device or in-game functional test is implied."
+    },
+    {
+      "path": "assets/screenshots/test-MobileEnvironmentTest.png",
+      "source": "Release 15f1a2a / Gradle test HTML report captured 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; no Android-device or in-game functional test is implied."
+    },
+    {
+      "path": "assets/screenshots/test-ResourceCompatibilityTest.png",
+      "source": "Release 15f1a2a / Gradle test HTML report captured 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; no Android-device or in-game functional test is implied."
+    },
+    {
+      "path": "assets/screenshots/test-FluidPropagationCompatibilityTest.png",
+      "source": "Release 15f1a2a / Gradle test HTML report captured 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; no Android-device or in-game functional test is implied."
+    },
+    {
+      "path": "assets/screenshots/test-LogisticsCompatibilityTest.png",
+      "source": "Release 15f1a2a / Gradle test HTML report captured 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; no Android-device or in-game functional test is implied."
+    },
+    {
+      "path": "assets/screenshots/test-NewAgeMotorCompatibilityTest.png",
+      "source": "Release 15f1a2a / Gradle test HTML report captured 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; no Android-device or in-game functional test is implied."
+    },
+    {
+      "path": "assets/screenshots/test-DockingLengthTest.png",
+      "source": "Release 15f1a2a / Gradle test HTML report captured 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; no Android-device or in-game functional test is implied."
+    },
+    {
+      "path": "assets/screenshots/test-OpticalSensorPeripheralExtensionsTest.png",
+      "source": "Release 15f1a2a / Gradle test HTML report captured 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; no Android-device or in-game functional test is implied."
+    },
+    {
+      "path": "assets/screenshots/test-summary.png",
+      "source": "Release 15f1a2a / executed Gradle report, 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; not gameplay/device validation."
+    },
+    {
+      "path": "assets/screenshots/test-HybridTrainCompatibilityTest.png",
+      "source": "Release 15f1a2a / executed Gradle report, 2026-11-13",
+      "kind": "desktop-contract-test",
+      "scope": "Actual executed desktop JUnit result; not gameplay/device validation."
+    },
+    {
+      "path": "assets/screenshots/wiki-config.png",
+      "source": "/tmp/teutonlib-docs-publish-20261113/build/wiki-capture-run/screenshots/wiki-config.png",
+      "kind": "gameplay",
+      "scope": "Fresh native 1.6.0 client screenshot in a disposable test world with a temporary documentation fixture."
+    },
+    {
+      "path": "assets/screenshots/wiki-optical.png",
+      "source": "/tmp/teutonlib-docs-publish-20261113/build/wiki-capture-run/screenshots/wiki-optical.png",
+      "kind": "gameplay",
+      "scope": "Fresh native 1.6.0 client screenshot in a disposable test world with a temporary documentation fixture."
+    },
+    {
+      "path": "assets/screenshots/wiki-graphics.png",
+      "source": "/tmp/teutonlib-docs-publish-20261113/build/wiki-capture-run/screenshots/wiki-graphics.png",
+      "kind": "gameplay",
+      "scope": "Fresh native 1.6.0 client screenshot in a disposable test world with a temporary documentation fixture."
+    },
+    {
+      "path": "assets/screenshots/wiki-channel-ui.png",
+      "source": "/tmp/teutonlib-docs-publish-20261113/build/wiki-capture-run/screenshots/wiki-channel-ui.png",
+      "kind": "gameplay",
+      "scope": "Fresh native 1.6.0 client screenshot in a disposable test world with a temporary documentation fixture."
+    },
+    {
+      "path": "assets/screenshots/wiki-sources.png",
+      "source": "/tmp/teutonlib-docs-publish-20261113/build/wiki-capture-run/screenshots/wiki-sources.png",
+      "kind": "gameplay",
+      "scope": "Fresh native 1.6.0 client screenshot in a disposable test world with a temporary documentation fixture."
+    },
+    {
+      "path": "assets/screenshots/wiki-channels.png",
+      "source": "/tmp/teutonlib-docs-publish-20261113/build/wiki-capture-run/screenshots/wiki-channels.png",
+      "kind": "gameplay",
+      "scope": "Fresh native 1.6.0 client screenshot in a disposable test world with a temporary documentation fixture."
+    },
+    {
+      "path": "assets/screenshots/wiki-gyroscope.png",
+      "source": "/tmp/teutonlib-docs-publish-20261113/build/wiki-capture-run/screenshots/wiki-gyroscope.png",
+      "kind": "gameplay",
+      "scope": "Fresh native 1.6.0 client screenshot in a disposable test world with a temporary documentation fixture."
+    },
+    {
+      "path": "assets/screenshots/wiki-gimbal.png",
+      "source": "/tmp/teutonlib-docs-publish-20261113/build/wiki-capture-run/screenshots/wiki-gimbal.png",
+      "kind": "gameplay",
+      "scope": "Fresh native 1.6.0 client screenshot in a disposable test world with a temporary documentation fixture."
+    },
+    {
+      "path": "assets/screenshots/wiki-gearshift.png",
+      "source": "/tmp/teutonlib-docs-publish-20261113/build/wiki-capture-run/screenshots/wiki-gearshift.png",
+      "kind": "gameplay",
+      "scope": "Fresh native 1.6.0 client screenshot in a disposable test world with a temporary documentation fixture."
+    },
+    {
+      "path": "assets/screenshots/metadata-diagnostic.png",
+      "source": "Published v1.6.0 ResourceCompatibility.kt, lines 180–211",
+      "kind": "source-inspection",
+      "scope": "Actual implementation view; no runtime failure staged."
+    },
+    {
+      "path": "assets/screenshots/metadata-fingerprint.png",
+      "source": "Published v1.6.0 ResourceCompatibility.kt, lines 180–211",
+      "kind": "source-inspection",
+      "scope": "Actual implementation view; no runtime failure staged."
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # Funk und GPS auf Sable
 
+**Deutsch** · [English](Funk-und-GPS-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 verwendet für [Peripheral Links](Peripheral-Link) sichtbare Weltpositionen und ergänzt CC:Tweakeds höhenabhängige Funkmodemreichweite auf Sable. CC:Tweakeds bestehender GPS-Dienst bleibt zuständig für Hosts, Nachrichten und Trilateration. Es gibt keinen zusätzlichen TeutonLib-GPS-Block und keine eigene `gps`-Lua-API.
 
 ## Koordinaten bewegter Konstruktionen
@@ -38,3 +40,12 @@ Die Entfernungslosigkeit von [Computer-Kanal-Fernabfragen](Computer-Kanaele) ist
 [Weltgeometrie-Fassade](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/sable/SubLevelGeometry.kt), [Sable-Adapter](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/sable/SableSubLevelGeometry.kt), [Modem-Höhenkorrektur](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/mixin/computer/WirelessModemRangeMixin.kt), [echte Funk-/GPS-Prüfaufbauten](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/peripheralTest/kotlin/de/TeutonStudio/TeutonLib/peripheraltest/SableVerification.kt).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Echter GPS-Fix eines Sable-montierten CC-Aeroworks-Computers mit vier GPS-Hosts. CC-Aeroworks ist hier ein zusätzlicher Nutzer der TeutonLib-Integration.
+
+![Funk und GPS auf Sable: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/addon-wiki-sable-gps.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

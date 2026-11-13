@@ -1,5 +1,7 @@
 # Zug-Docking
 
+**Deutsch** · [English](Zug-Docking-en) · [Übersicht](Home)
+
 Simulated-Docking-Connectoren an Hybridwagen verbinden den Zug mit eigenständigen Sable-Körpern. Verriegelte Anschlüsse verwenden weiterhin Simulateds native Physikverbindung sowie Item-, Flüssigkeits-, FE- und ComputerCraft-Verbindungen. Eine angedockte Plattform bleibt eine eigene Sable-Konstruktion.
 
 ## Voraussetzungen und Bedienung
@@ -59,3 +61,16 @@ Ohne `--check` zeichnet derselbe Ablauf das Minecraft-Bild mit durchgehend aktiv
 Weiter: [Hybridzüge](Hybridzuege) · [Zug-Portaltransfer](Zug-Portaltransfer) · [Portal-Darstellung und Beleuchtung](Portal-Darstellung-und-Beleuchtung)
 
 Quelle für 1.6.0: [Native Dockinggruppen und Portalpassung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/train/TrainPortalDocking.kt).
+
+## Abbildung
+
+
+Native Verriegelung, Gegenstelle nach passender Portalpassage und bei zu kleiner Öffnung zurückgelassene Plattform.
+
+![Zug-Docking: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/dock-locked.png)
+
+![Zug-Docking: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/dock-arrived.png)
+
+![Zug-Docking: 3](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/dock-left-behind.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

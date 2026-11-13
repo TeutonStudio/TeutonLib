@@ -1,5 +1,7 @@
 # Bitmap-Schrift
 
+**Deutsch** · [English](Bitmap-Schrift-en) · [Übersicht](Home)
+
 `teutonlib.font` ist das mit TeutonLib v1.6.0 ausgelieferte CC:Tweaked-Lua-Modul für eine kompakte **3×5-Bitmap-Schrift**. Es verwendet dieselben Terminal-, Monitor-, Pixel- und benutzerdefinierten Ziele wie die [Grafik-API](Grafik-API). Eine zusätzliche Grafikmod ist nicht nötig.
 
 ## Text ausgeben
@@ -41,3 +43,12 @@ target.present(rows, {clear = true, background = colors.black})
 [Schrift und Zeichensatz](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/resources/data/computercraft/lua/rom/modules/main/teutonlib/font.lua), [Ausgabeadapter](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/resources/data/computercraft/lua/rom/modules/main/teutonlib/render_target.lua).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Die Texte RPM und READY stammen tatsächlich aus der 3×5-Bitmap-Schrift; Formen aus dem SVG-Modul.
+
+![Bitmap-Schrift: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-graphics.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

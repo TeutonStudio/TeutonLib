@@ -1,5 +1,7 @@
 # Directional Gearshift
 
+**Deutsch** · [English](Directional-Gearshift-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 stellt den **Directional Gearshift von Create Simulated** als vollständiges CC:Tweaked-Peripheral vom Typ `directional_gearshift` bereit. Er benötigt CC:Tweaked, Create und Simulated. Das Gerät ist direkt, über Kabel und über einen [Peripheral Link](Peripheral-Link) erreichbar.
 
 ## Zwei Eingänge steuern
@@ -39,3 +41,12 @@ Die Kompatibilitätsmethoden `getName()` und `setName(name)` legen keinen Namen 
 [Alle Lua-Methoden und Zustandsänderung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/simulated/DirectionalGearshiftPeripheral.kt), [Capability-Registrierung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/simulated/DirectionalGearshiftIntegration.kt).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Tatsächliche Lua-Abfrage nach setOutputs(true, false) am nativen Directional Gearshift.
+
+![Directional Gearshift: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-gearshift.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

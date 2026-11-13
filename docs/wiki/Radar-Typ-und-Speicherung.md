@@ -1,5 +1,7 @@
 # Radar-Typ und Speicherung
 
+**Deutsch** · [English](Radar-Typ-und-Speicherung-en) · [Übersicht](Home)
+
 TeutonLib 1.6.0 erhält den eigenen Contraption-Typ von Create: Radars beim Speichern und Laden. Die Originalversion meldet ihre Radar-Contraption als gewöhnliches Create-Lager; TeutonLib registriert dafür `teutonlib:radar`, damit der geladene Aufbau wieder eine echte Radar-Contraption wird.
 
 ## Voraussetzungen
@@ -32,3 +34,12 @@ Die separate [Radar-Ressourcenreparatur](Create-Radar-Ressourcenreparatur) betri
 [Hybridzüge](Hybridzuege) · [Lager und Untercontraptions](Lager-und-Untercontraptions) · [Alle Funktionen](Home)
 
 Quellen für 1.6.0: [Typregistrierung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/hybrid/HybridRadarTypes.kt), [Radar-Persistenz](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/mixin/hybrid/HybridRadarPersistenceMixin.kt), [Versions- und Klassenprüfung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/HybridTrainCompatibility.kt).
+
+## Abbildung
+
+
+Echtes Radar auf dem Hybridzug. Das Bild zeigt den Aufbau; den gespeicherten Typ prüft der separat dokumentierte Spieltest.
+
+![Radar-Typ und Speicherung: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/train-radar.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

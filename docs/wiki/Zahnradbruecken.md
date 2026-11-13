@@ -1,5 +1,7 @@
 # Zahnradbrücken über Sable-Dockingverbindungen
 
+**Deutsch** · [English](Zahnradbruecken-en) · [Übersicht](Home)
+
 Sichtbar ineinandergreifende Create-Zahnräder übertragen Rotation zwischen zwei verschiedenen, starr gekoppelten Sable-/Simulated-Sublevels oder zwischen Welt und Sublevel. TeutonLib enthält dafür die Zahnrad-Brückenlogik von Create Sable Optimization.
 
 ## Voraussetzungen
@@ -41,3 +43,12 @@ Abschalten entfernt die virtuellen Verbindungen und lässt Create die betroffene
 - [Laufzeit und Synchronisierung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/CsoRuntime.kt)
 
 [Wiki-Startseite](Home) · [Analoge Dockingports](Analoge-Dockingports)
+
+## Abbildung
+
+
+Historische Spielaufnahme des inzwischen integrierten CSO-Moduls: Antrieb und Zahnräder an einer Dockingverbindung. Kein neuer TeutonLib-Abnahmetest.
+
+![Zahnradbrücken über Sable-Dockingverbindungen: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/cogwheel-bridge-historical.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

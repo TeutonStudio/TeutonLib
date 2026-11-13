@@ -1,5 +1,7 @@
 # Design 'n' Decor: Soundressource
 
+**Deutsch** · [English](Design-n-Decor-Soundreparatur-en) · [Übersicht](Home)
+
 Für **Design 'n' Decor 2.2b** ersetzt TeutonLib die bekannte, per SHA-256 identifizierte Ressource `dndecor:sounds.json` beim Lesen durch ein leeres JSON-Objekt (`{}`).
 
 ## Verwendung und Wirkung
@@ -17,3 +19,12 @@ Andere Modversionen, veränderte Dateien und Sounddefinitionen in Nutzerpaketen 
 - [Design-'n'-Decor-Regel und Hashprüfung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/compat/resources/ResourceCompatibility.kt)
 
 [Wiki-Startseite](Home) · [Ressourcenreparaturen](Ressourcenreparaturen)
+
+## Abbildung
+
+
+Tatsächlich ausgeführte Desktop-Prüfung der Originaldatei-Hashes und konkreten Ressourcenregeln. Die Tests nennen die jeweils behandelte Ressource.
+
+![Design 'n' Decor: Soundressource: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-ResourceCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

@@ -1,5 +1,7 @@
 # Konfiguration und Befehle
 
+**Deutsch** · [English](Konfiguration-und-Befehle-en) · [Übersicht](Home)
+
 TeutonLib 1.6.0 verwendet NeoForges eingebauten Konfigurationseditor unter **Mods → TeutonLib → Config**. Die Beschriftungen sind auf Deutsch und Englisch verfügbar. Die zusätzliche Mod Configured wird dafür nicht benötigt.
 
 ## Dateien und Editor
@@ -69,3 +71,12 @@ Die Zugbefehle benötigen die aktive [Hybridintegration](Hybridzuege) und wähle
 Mobile JVM-Startparameter stehen unter [Android und Zalith](Android-und-Zalith-Kompatibilitaet).
 
 Quellen: [ServerConfig](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/ServerConfig.kt), [ClientConfig](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/ClientConfig.kt), [Zugbefehle](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/hybrid/HybridTrainCommands.kt).
+
+## Abbildung
+
+
+TeutonLib im nativen Konfigurationseditor. Servereinstellungen sind nur bei einer passenden geladenen Welt bearbeitbar.
+
+![Konfiguration und Befehle: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-config.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

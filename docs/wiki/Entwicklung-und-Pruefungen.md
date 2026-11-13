@@ -1,5 +1,7 @@
 # Entwicklung und Prüfungen
 
+**Deutsch** · [English](Entwicklung-und-Pruefungen-en) · [Übersicht](Home)
+
 TeutonLib 1.6.0 verwendet Kotlin, Gradle Kotlin DSL und Java 21. Einige kleine dependency-isolierte bzw. statische Mixins sind in Java geschrieben. CC-Laufzeitmodule verwenden Lua; externe Prüftreiber Python.
 
 ## Build
@@ -40,3 +42,12 @@ Die Wiki-Quellen liegen versioniert unter [docs/wiki](https://github.com/TeutonS
 TeutonLib und Beispielcode stehen unter MIT; `TEMPLATE_LICENSE.txt` gilt für die ursprünglich von NeoForged gelieferten MDK-Dateien.
 
 [Installation](Installation) · [Alle Funktionen](Home)
+
+## Abbildung
+
+
+Aktuell ausgeführte 160 JUnit-Tests des unveränderten Release-Quellstands: keine Fehler oder übersprungenen Tests.
+
+![Entwicklung und Prüfungen: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-summary.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

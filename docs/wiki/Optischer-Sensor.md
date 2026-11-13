@@ -1,5 +1,7 @@
 # Optischer Sensor: lokale Laserrichtung
 
+**Deutsch** · [English](Optischer-Sensor-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 erweitert den **Optical Sensor von Create Simulated** hinter einem [Peripheral Link](Peripheral-Link) um `getLocalDirection()`. Voraussetzung sind CC:Tweaked, Create, Simulated und ein verbundener Link zum Sensor. Die Zusatzmethode wird ausdrücklich nur im Linkpfad ergänzt.
 
 ## Richtung lesen
@@ -25,3 +27,14 @@ Siehe auch [Helikopter-Peripherie](Helikopter-Peripherie) für Gimbalwinkel und 
 [Link-Erweiterung und Vektorbildung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/heli/OpticalSensorPeripheralExtensions.kt), [optionale Erweiterungsauswahl](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/heli/HeliPeripheralExtensions.kt).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Echte Lua-Ausgabe des lokalen Richtungsvektors über Peripheral Link und ausgeführte Prüfung der sechs Richtungen.
+
+![Optischer Sensor: lokale Laserrichtung: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-optical.png)
+
+![Optischer Sensor: lokale Laserrichtung: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-OpticalSensorPeripheralExtensionsTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

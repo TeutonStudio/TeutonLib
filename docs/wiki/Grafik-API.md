@@ -1,5 +1,7 @@
 # Grafik-API: portable SVG-Ausgabe
 
+**Deutsch** · [English](Grafik-API-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 liefert das reine Lua-Modul `teutonlib.svg` für CC:Tweaked. Es rendert einen unterstützten SVG-Teilumfang auf Terminals, Monitoren und über Adapter auf Pixelanzeigen. CCVisual und CC Aeroworks sind für Terminal-/Monitorausgabe nicht erforderlich. [Bitmap-Schrift](Bitmap-Schrift) ist zusätzlich direkt verwendbar.
 
 ## Erstes Bild
@@ -72,3 +74,12 @@ end)
 [SVG-Modul](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/resources/data/computercraft/lua/rom/modules/main/teutonlib/svg.lua), [Renderziele](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/resources/data/computercraft/lua/rom/modules/main/teutonlib/render_target.lua), [ausführliche Grafikreferenz](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/computer-graphics.md).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Echte Ausgabe von teutonlib.svg und teutonlib.font im CC-Terminal ohne CCVisual oder CC-Aeroworks.
+
+![Grafik-API: portable SVG-Ausgabe: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-graphics.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

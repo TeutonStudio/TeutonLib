@@ -1,5 +1,7 @@
 # Persistente Kanalgruppen und Signale
 
+**Deutsch** · [English](Persistente-Kanalgruppen-und-Signale-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 stellt Addons unter `de.TeutonStudio.TeutonLib.api.computer.channel` zwei eigenständige Bausteine bereit:
 
 | Baustein | Aufgabe | Persistenz |
@@ -16,3 +18,14 @@ Die normale [Computer-Kanalbank](Computer-Kanaele) ist eine andere Funktion: Sie
 [Gruppenbank](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/computer/channel/PersistentChannelGroupBank.kt), [Signalbank](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/computer/channel/SignalBank.kt).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Realer Addon-Gruppeneditor und ausgeführte Bank-Prüfungen. Gruppen- und Signalbank sind getrennte APIs.
+
+![Persistente Kanalgruppen und Signale: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/addon-wiki-channel-groups.png)
+
+![Persistente Kanalgruppen und Signale: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-PersistentChannelBanksTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

@@ -1,5 +1,7 @@
 # Mekanism-Anschlussmodelle auf Sable
 
+**Deutsch** · [English](Mekanism-Anschlussmodelle-en) · [Übersicht](Home)
+
 TeutonLib aktualisiert Mekanism-Rohranschlüsse auf Sable-Konstruktionen zuverlässig, wenn ihre Verbindung mit dem Konfigurator geändert wird. Ziehen-/Drücken-Modelle erreichen dabei auch während der Fahrt den richtigen Rohrblock auf dem Client.
 
 ## Voraussetzungen
@@ -33,3 +35,14 @@ Die Funktion korrigiert die Synchronisierung und Darstellung der Anschlüsse; si
 - [Empfängerprüfung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/mixin/mekanism/MekanismPacketTrackingMixin.kt)
 
 [Wiki-Startseite](Home)
+
+## Abbildung
+
+
+Echte Rohrmodell-Aufnahmen nach Modusänderung und während Sable-Bewegung.
+
+![Mekanism-Anschlussmodelle auf Sable: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/mekanism-modes.png)
+
+![Mekanism-Anschlussmodelle auf Sable: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/mekanism-moving.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

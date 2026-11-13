@@ -1,5 +1,7 @@
 # Signalbank
 
+**Deutsch** · [English](Signalbank-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 bietet mit `de.TeutonStudio.TeutonLib.api.computer.channel.SignalBank` eine Entwickler-API für addondefinierte Signalausgänge und zeitbegrenzte Pulse. Das Addon stellt das physische Ausgabebackend und die Zuständigkeitsprüfung bereit. Diese Klasse erzeugt keine zusätzlichen Standard-Lua-Befehle.
 
 ## Signalausgänge mit Pulsen
@@ -31,3 +33,12 @@ Das Beispiel setzt einen eigenen `SignalBackend` sowie Host und Freigabezustand 
 Siehe auch [persistente Kanalgruppen](Persistente-Kanalgruppen), [Computer-Kanäle](Computer-Kanaele) und [gemeinsame API-Übersicht](Persistente-Kanalgruppen-und-Signale).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Ausgeführte Prüfung von Signalfreigabe, Pulsende und Rücksetzen nach dem Laden. Die Signalbank hat keine eigene GUI.
+
+![Signalbank: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-PersistentChannelBanksTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

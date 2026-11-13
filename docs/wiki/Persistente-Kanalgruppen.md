@@ -1,5 +1,7 @@
 # Persistente Kanalgruppen
 
+**Deutsch** · [English](Persistente-Kanalgruppen-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 bietet mit `de.TeutonStudio.TeutonLib.api.computer.channel.PersistentChannelGroupBank` eine Entwickler-API für addondefinierte Gruppen aus Aliasen und stabilen Ziel-IDs. Das Addon stellt Bedienoberfläche, Zielauflösung und Speicherung bereit. Diese Klasse erzeugt keine zusätzlichen Standard-Lua-Befehle.
 
 ## Gruppen mit stabilen Zielbindungen
@@ -28,3 +30,14 @@ Das Addon entscheidet über gültige Namen und Ziel-IDs und speichert `serialize
 Siehe auch [Signalbank](Signalbank), [Computer-Kanäle](Computer-Kanaele) und [gemeinsame API-Übersicht](Persistente-Kanalgruppen-und-Signale).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+CC-Aeroworks als realer Nutzer der Gruppenbank; die Prüfung zeigt Erhalt fehlender Ziele und Definitionspersistenz.
+
+![Persistente Kanalgruppen: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/addon-wiki-channel-groups.png)
+
+![Persistente Kanalgruppen: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-PersistentChannelBanksTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

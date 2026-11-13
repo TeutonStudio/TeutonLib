@@ -1,5 +1,7 @@
 # Computer-UI: Quellen und Lua-API
 
+**Deutsch** · [English](Computer-UI-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 ergänzt normale und erweiterte **CC:Tweaked-Blockcomputer** um die Reiter **Quellen** und **Kanäle** in der nativen Seitenleiste. CC:Tweaked genügt für diese Oberfläche. Pocket Computer und Turtles erhalten die zusätzlichen Reiter nicht. [Kanäle und Lua-Befehle](Computer-Kanaele) sind separat dokumentiert.
 
 ## Quellen ansehen
@@ -33,3 +35,12 @@ Normale Computer verwenden eine monochrome Darstellung, erweiterte Computer Farb
 [Standard-Workspace](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/computer/StandardComputerWorkspace.kt), [Clientrenderer](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/client/computer/WorkspacePanels.kt), [automatische CC-Einbindung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/mixin/computer/client/ComputerScreenMixin.kt), [ausführliche Bedienung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/computer-channels.md).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Echter CC-Blockcomputer mit TeutonLib-Quellenreiter in der separaten Aufnahmewelt.
+
+![Computer-UI: Quellen und Lua-API: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-sources.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

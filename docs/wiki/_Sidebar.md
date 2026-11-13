@@ -1,12 +1,12 @@
-[**TeutonLib 1.6.0 — Übersicht**](Home)
+[**TeutonLib — Deutsch**](Home) · [English](English)
 
-## Einstieg
+### Einstieg
 
 - [Installation](Installation)
 - [Konfiguration und Befehle](Konfiguration-und-Befehle)
 - [Entwicklung und Prüfungen](Entwicklung-und-Pruefungen)
 
-## Züge und Portale
+### Züge und Portale
 
 - [Bahnhofsbau](Bahnhofsbau)
 - [Hybridzüge](Hybridzuege)
@@ -17,7 +17,7 @@
 - [Zug-Portaltransfer](Zug-Portaltransfer)
 - [Portal-Darstellung und Beleuchtung](Portal-Darstellung-und-Beleuchtung)
 
-## Create, Energie und Flüssigkeiten
+### Create, Energie und Flüssigkeiten
 
 - [Zahnradbrücken über Sable-Dockingverbindungen](Zahnradbruecken)
 - [Analoge Dockingports](Analoge-Dockingports)
@@ -29,7 +29,7 @@
 - [FluidLogistics und TFMG](FluidLogistics-und-TFMG)
 - [Mekanism-Anschlussmodelle auf Sable](Mekanism-Anschlussmodelle)
 
-## Computer und Steuerung
+### Computer und Steuerung
 
 - [Computer-UI: Quellen und Lua-API](Computer-UI)
 - [Computer-Kanäle](Computer-Kanaele)
@@ -42,7 +42,7 @@
 - [Grafik-API: portable SVG-Ausgabe](Grafik-API)
 - [Bitmap-Schrift](Bitmap-Schrift)
 
-## Entwickler-APIs
+### Entwickler-APIs
 
 - [Peripheral-Topologie und Attachments](Peripheral-Topologie-und-Attachments)
 - [Computer-Workspace und eingebetteter Kernel](Computer-Workspace-und-Kernel)
@@ -54,7 +54,7 @@
 - [Docking-Zustands-API](Docking-Zustands-API)
 - [Netzwerk-Sitzungen und Budgets](Netzwerk-Sitzungen-und-Budgets)
 
-## Android und Zalith
+### Android und Zalith
 
 - [Android- und Zalith-Kompatibilität](Android-und-Zalith-Kompatibilitaet)
 - [Ponder und Catnip auf Android](Ponder-und-Catnip-auf-Android)
@@ -63,7 +63,7 @@
 - [Immersive Melodies auf Android](Immersive-Melodies-auf-Android)
 - [Visual Recipe Editor auf Android](Visual-Recipe-Editor-auf-Android)
 
-## Ressourcen und Diagnose
+### Ressourcen und Diagnose
 
 - [Ressourcenreparaturen](Ressourcenreparaturen)
 - [Create-Radar-Ressourcenreparatur](Create-Radar-Ressourcenreparatur)
@@ -71,3 +71,9 @@
 - [NTGL-Animationsreparaturen](NTGL-Animationsreparaturen)
 - [Design 'n' Decor: Soundressource](Design-n-Decor-Soundreparatur)
 - [Paketmetadaten-Diagnose](Paketmetadaten-Diagnose)
+
+### Dokumentation
+
+- [Entwicklung: Tankoberfläche](Sable-Tankoberflaeche)
+- [Bildnachweise und Prüfgrenzen](Bildnachweise)
+- [English overview](English)

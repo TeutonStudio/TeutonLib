@@ -1,10 +1,14 @@
 # TeutonLib Wiki
 
-Willkommen in der deutschen Dokumentation für **TeutonLib 1.6.0**. Jede Funktion hat eine eigene Seite mit Voraussetzungen, Bedienung, Konfiguration oder API-Vertrag.
+**Deutsch** · [English](English)
 
-TeutonLib erweitert Minecraft **1.21.1** mit NeoForge **ab 21.1.234**, Java **21** und KotlinForForge **ab 5.11.0 bis kleiner 6**. Die Mod gehört auf Server und Clients. Weitere Mods sind je Funktion optional; ihre genauen Versionsgrenzen stehen auf den Einzelseiten.
+TeutonLib ist die gemeinsame Minecraft-Bibliothek von TeutonStudio. Sie verbindet Computeroberflächen und APIs mit Create-/Sable-, Zug-, Energie-, Flüssigkeits- und Kompatibilitätsfunktionen. **SableSchlauch und CreateSableOptimization sind darin aufgegangen**; die separaten JARs dürfen nicht zusätzlich installiert werden.
 
-[Release 1.6.0 und Downloads](https://github.com/TeutonStudio/TeutonLib/releases/tag/v1.6.0) · [Release-Notizen](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/release-1.6.0.md) · [Quellcode](https://github.com/TeutonStudio/TeutonLib/tree/v1.6.0) · [Fehler melden](https://github.com/TeutonStudio/TeutonLib/issues)
+Minecraft **1.21.1** · NeoForge **ab 21.1.234** · Java **21** · KotlinForForge **5.11.0 bis kleiner 6**. Auf Server und allen Clients installieren; weitere Mods sind je Funktion optional und versionsgebunden.
+
+[Download 1.6.0](https://github.com/TeutonStudio/TeutonLib/releases/tag/v1.6.0) · [Kurze englische README](https://github.com/TeutonStudio/TeutonLib#readme) · [Fehler melden](https://github.com/TeutonStudio/TeutonLib/issues)
+
+Deutsch ist die Hauptsprache. Jede unten verlinkte Anleitung hat eine englische Fassung und eine direkt eingebundene Abbildung. Spielaufnahmen zeigen die Bedienung; reine Bibliotheks-/Kompatibilitätsfunktionen zeigen ihre tatsächliche Prüfung oder den Diagnosepfad. [Bildherkunft und Grenzen](Bildnachweise).
 
 ## Einstieg
 
@@ -78,10 +82,13 @@ TeutonLib erweitert Minecraft **1.21.1** mit NeoForge **ab 21.1.234**, Java **21
 - [Design 'n' Decor: Soundressource](Design-n-Decor-Soundreparatur)
 - [Paketmetadaten-Diagnose](Paketmetadaten-Diagnose)
 
-## Bekannte Grenzen
+## Entwicklung und Dokumentationsstand
 
-Bei stehenden Mitfahrern wurde in der Aether-Prüfung eine Positionsabweichung bei der Wagenkörperübergabe festgestellt. Angedockte Lasten können unter Gewicht und Hebelwirkung durchhängen. Einzelheiten und Prüfgrenzen stehen unter [Zug-Portaltransfer](Zug-Portaltransfer) und [Zug-Docking](Zug-Docking). Das ContraptionLevel verwendet weiterhin einen echten Sable-Simulationsplot.
+Die Release-Anleitungen beziehen sich auf **1.6.0 vom 02.11.2026**. Die Prüfung und Bebilderung wurden am **13.11.2026** ergänzt. Die laufenden lokalen Weiterentwicklungen sind ausdrücklich gekennzeichnet:
 
-## Dokumentationsstand
+- [Sable-Tankoberfläche — noch unveröffentlicht](Sable-Tankoberflaeche)
+- Lokale Bahnhofsbau- und Schraubenschlüsselkorrekturen auf den betreffenden Seiten.
 
-Die Wiki gehört zum Release **v1.6.0 vom 02.11.2026**. Ihre Markdown-Quellen sind im Hauptrepository unter [docs/wiki](https://github.com/TeutonStudio/TeutonLib/tree/v1.6.0/docs/wiki) und im Vorlagen-ZIP enthalten. Historische Abnahmen sind als solche gekennzeichnet; Build, Spieltests und bekannte Einschränkungen werden auf den jeweiligen Seiten getrennt beschrieben.
+Die [Gyroskop-Anleitung](Gyroskop-Steuerung) nennt die beim Prüfen gefundene Einschränkung des direkten Lua-Zugriffs. Die bekannte Aether-Abweichung stehender Mitfahrer und mögliches Durchhängen angedockter Lasten sind weiterhin dokumentiert. Screenshots ändern diese Prüfgrenzen nicht.
+
+[Versionierte Wiki-Quellen](https://github.com/TeutonStudio/TeutonLib/tree/master/docs/wiki) · [Bildnachweise und Prüfgrenzen](Bildnachweise)

@@ -1,5 +1,7 @@
 # Android- und Zalith-Kompatibilität
 
+**Deutsch** · [English](Android-und-Zalith-Kompatibilitaet-en) · [Übersicht](Home)
+
 TeutonLib aktiviert auf Android eng begrenzte Kompatibilitätspfade für bestimmte Modversionen. Die Erkennung erfolgt früh genug für die Mixin-Auswahl und benötigt keine zusätzlichen Spielblöcke.
 
 ## Erkennung und Launcher-Einstellungen
@@ -39,3 +41,12 @@ Meldungen unter `TeutonLib/Compatibility` nennen aktivierte Fallbacks und ungepr
 - [Releasebeschreibung der mobilen Integration](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/release-1.5.3.md)
 
 [Wiki-Startseite](Home) · [Ressourcenreparaturen](Ressourcenreparaturen)
+
+## Abbildung
+
+
+Ausgeführte Desktop-Prüfung der Android-Erkennung. Keine Aufnahme eines Android-/Zalith-Geräts.
+
+![Android- und Zalith-Kompatibilität: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-MobileEnvironmentTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

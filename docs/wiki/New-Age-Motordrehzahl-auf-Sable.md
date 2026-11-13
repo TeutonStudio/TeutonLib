@@ -1,5 +1,7 @@
 # New-Age-Motordrehzahl auf Sable
 
+**Deutsch** · [English](New-Age-Motordrehzahl-auf-Sable-en) · [Übersicht](Home)
+
 TeutonLib stellt das Create-Rotationsnetz von New-Age-Motoren nach dem Zusammenbau auf einer Sable-Konstruktion wieder her. Angeschlossene Wellen werden anschließend wieder angetrieben; Drehzahl- und Richtungswechsel vergleichen die tatsächliche kinetische Drehzahl.
 
 ## Voraussetzungen
@@ -30,3 +32,12 @@ Die [FE-Annahme an Motorerweiterungen](New-Age-FE-Eingang) ist eine eigenständi
 - [Prüfablauf und Grenzen](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/release-1.5.13.md)
 
 [Wiki-Startseite](Home) · [FE-Eingang an Motorerweiterungen](New-Age-FE-Eingang)
+
+## Abbildung
+
+
+Ausgeführte Desktop-Prüfung der unterstützten Motorvarianten und der versionsgebundenen Drehrichtungsintegration; keine neue Fahrtaufnahme.
+
+![New-Age-Motordrehzahl auf Sable: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-NewAgeMotorCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

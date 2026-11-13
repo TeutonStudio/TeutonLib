@@ -1,5 +1,7 @@
 # Sable-Geometrie-API
 
+**Deutsch** · [English](Sable-Geometrie-API-en) · [Übersicht](Home)
+
 Für Addon-Entwickler bietet TeutonLib 1.6.0 öffentliche Fassaden unter `de.TeutonStudio.TeutonLib.api.sable`. Ihre Signaturen verwenden Minecraft-Typen; die Sable-Implementierung wird erst nach der Prüfung auf die geladene Mod verwendet.
 
 ## Weltposition und Entfernung
@@ -26,3 +28,12 @@ Ein Addon muss zusätzlich Menüidentität, Dimension und eigene Zugriffsrechte 
 [Funk und GPS](Funk-und-GPS) · [Peripheral Link](Peripheral-Link) · [Alle Funktionen](Home)
 
 Quellen: [Geometrie](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/sable/SubLevelGeometry.kt), [Interaktion](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/sable/SubLevelInteractionGeometry.kt), [Renderpose](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/sable/SubLevelRenderPose.kt).
+
+## Abbildung
+
+
+Die sichtbare Weltposition wird in einem realen Sable-GPS-Nutzer ausgegeben; nicht jeder Interaktions- und Renderhelfer wird damit einzeln geprüft.
+
+![Sable-Geometrie-API: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/addon-wiki-sable-gps.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

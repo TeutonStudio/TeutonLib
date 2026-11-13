@@ -1,5 +1,7 @@
 # PowerGrid auf Android
 
+**Deutsch** · [English](PowerGrid-auf-Android-en) · [Übersicht](Home)
+
 TeutonLib verhindert mit **PowerGrid 0.5.5.1** auf Android den ungeeigneten Versuch, den nativen Desktop-Solver zu laden. Stattdessen bleibt PowerGrids vorhandener Java-Solver `JavaMNA` aktiv.
 
 ## Verwendung
@@ -18,3 +20,12 @@ Der Mixin wird bei anderen PowerGrid-Versionen nicht aktiviert. Über `-Dteutonl
 - [Umgebungs- und Versionsauswahl](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/CsoMixinPlugin.kt)
 
 [Wiki-Startseite](Home) · [Android und Zalith](Android-und-Zalith-Kompatibilitaet)
+
+## Abbildung
+
+
+Ausgeführte Desktop-Prüfung der exakt unterstützten Einsprungmethoden. Kein Funktionsnachweis auf einem Android-Gerät.
+
+![PowerGrid auf Android: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-MobileDependencyCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

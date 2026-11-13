@@ -1,5 +1,7 @@
 # FE-Eingang an New-Age-Motorerweiterungen
 
+**Deutsch** · [English](New-Age-FE-Eingang-en) · [Übersicht](Home)
+
 Grundlegende und fortgeschrittene Motorerweiterungen von Create New Age nehmen Forge Energy von Flux Points, Kabeln und anderen FE-Quellen an. Die Energie fließt direkt in den angeschlossenen Motor.
 
 ## Aufbau und Bedienung
@@ -34,3 +36,14 @@ Die opt-in-Energieprüfung deckt beide Erweiterungen, drei Motorarten, sechs Aus
 - [Konfiguration](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/ServerConfig.kt)
 
 [Wiki-Startseite](Home) · [New-Age-Motordrehzahl auf Sable](New-Age-Motordrehzahl-auf-Sable)
+
+## Abbildung
+
+
+Realer Aufbau FE-Quelle → Motorerweiterung → Motor und vorhandene Flux-Demo.
+
+![FE-Eingang an New-Age-Motorerweiterungen: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/motor-extension.png)
+
+![FE-Eingang an New-Age-Motorerweiterungen: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/gifs/flux-motor.gif)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

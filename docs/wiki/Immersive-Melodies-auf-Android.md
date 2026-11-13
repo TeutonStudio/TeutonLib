@@ -1,5 +1,7 @@
 # Immersive Melodies auf Android
 
+**Deutsch** · [English](Immersive-Melodies-auf-Android-en) · [Übersicht](Home)
+
 Mit **Immersive Melodies 0.6.4+1.21.1** überspringt TeutonLib auf Android ausschließlich die Erkennung von Hardware-MIDI-Geräten.
 
 ## Verwendung und Wirkung
@@ -16,3 +18,12 @@ Andere Versionen erhalten den Eingriff nicht. Mit `-Dteutonlib.mobile.mode=off` 
 - [Exakte Versionsauswahl](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/CsoMixinPlugin.kt)
 
 [Wiki-Startseite](Home) · [Android und Zalith](Android-und-Zalith-Kompatibilitaet)
+
+## Abbildung
+
+
+Ausgeführte Desktop-Prüfung der exakt unterstützten Einsprungmethoden. Kein Funktionsnachweis auf einem Android-Gerät.
+
+![Immersive Melodies auf Android: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-MobileDependencyCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

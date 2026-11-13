@@ -1,10 +1,14 @@
 # Bahnhofsbau
 
+**Deutsch** · [English](Bahnhofsbau-en) · [Übersicht](Home)
+
+**Dokumentationsstand:** Release 1.6.0 mit ausdrücklich lokalen Ergänzungen aus der Bahnhofsbau-Reparatur vom 12.11.2026. Vorschau-Offset, Leerplot-Persistenz und Wiederanlauf beim Abbrechen stammen aus diesem unveröffentlichten Entwicklungsstand.
+
 Ab TeutonLib 1.6.0 entstehen neue Hybridzüge direkt am Create-Bahnhof auf stationären Sable-Bauplots. Bogeys und Wagenaufbauten sind schon während des Bauens echte Sable-Blöcke. Jeder Wagen erhält einen eigenen Bauplot.
 
 ## Voraussetzungen
 
-Die Funktion verwendet Minecraft **1.21.1**, NeoForge **21.1.234**, Create **6.0.10**, Sable **2.0.6** und Create: Train Functionality **0.1.47**. TeutonLib und seine erforderliche KotlinForForge-Version müssen auf Server und Clients installiert sein. Die Hybridfunktion muss in der Welt aktiviert sein:
+Die Funktion verwendet Minecraft **1.21.1**, NeoForge **21.1.251**, Create **6.0.10**, Sable **2.0.6** und Create: Train Functionality **0.1.47**. TeutonLib und seine erforderliche KotlinForForge-Version müssen auf Server und Clients installiert sein. Die Hybridfunktion muss in der Welt aktiviert sein:
 
 ```toml
 [trains]
@@ -20,6 +24,9 @@ Die Einstellung steht in `<Weltordner>/serverconfig/teutonlib-server.toml` und i
 3. Den jeweiligen Wagen auf seinem Bauplot aufbauen. Die normalen Mindestabstände und die Bahnhofsausrichtung gelten weiterhin. Getrennte Teile innerhalb desselben Wagenplots müssen für die Erfassung nicht miteinander verklebt sein.
 4. Creates normale Anforderungen an Steuerung, Bogeys und Gleise erfüllen und **Zug bauen** wählen. Create führt seine eigene Prüfung und den Zusammenbau aus; TeutonLib übernimmt anschließend die Wagen als Hybridzüge.
 
+Die blaue Gleisvorschau berücksichtigt die Bogeys in den Bauplots. Vorschau,
+Abstandsprüfung und tatsächliche Platzierung verwenden Creates native Gleisoffsets.
+
 Die Bauplots bleiben am Bahnhof fixiert. Sables automatische Auftrennung ist für diese Plots ausgesetzt, damit voneinander getrennte Bogeys und noch unfertige Wagenteile zusammenbleiben. Die Erfassung bleibt auf den eigenen Wagenplot begrenzt.
 
 ## Inventare und Maschinen
@@ -32,9 +39,13 @@ Laufende Lager und unterstützte Unter-Contraptions werden für die Übergabe vo
 
 Der gesamte Baubereich muss an seinen Weltpositionen frei bleiben. Zwischenzeitlich dort platzierte Weltblöcke verhindern die Übergabe, bevor Wagen verschoben werden. Überlappende Wagenplots werden ebenfalls abgewiesen.
 
-Beim regulären Verlassen des Baubetriebs bleiben die gebauten Blöcke und Inventare in der Welt erhalten. Ist die Rückgabe durch andere Blöcke versperrt, zuerst den Bereich freimachen. Wird der Bahnhof entfernt und ist eine Rückgabe nicht möglich, bleiben die Bauwerke als gewöhnliche Sable-Konstruktionen erhalten.
+Beim regulären Verlassen des Baubetriebs bleiben die gebauten Blöcke und Inventare in der Welt erhalten. Ist die Rückgabe durch andere Blöcke versperrt, zuerst den Bereich freimachen. Wird der Bahnhof entfernt und ist eine Rückgabe nicht möglich, bleiben die Bauwerke als zugeordnete Bauplots erhalten; sie werden nicht gelöscht.
 
-Unfertige Bauplots werden mit der Welt gespeichert. Ihre Identität und Fracht bleiben über einen Serverneustart erhalten.
+Unfertige Bauplots werden mit der Welt gespeichert. Das gilt auch vor der ersten
+Platzierung und nach Entfernen des letzten Blocks. Leere Plots behalten Masse null
+und benötigen keinen Hilfsblock. Ihre Identität und die Fracht bebauter Plots bleiben
+über einen Serverneustart erhalten. Beim Abbrechen zurückgegebene, vorbereitete
+Lager laufen in der normalen Welt mit ihrer Nutzlast wieder an.
 
 ## Häufige Fragen
 
@@ -51,12 +62,29 @@ Bei deaktivierter Hybridfunktion verwenden neue Bahnhofssitzungen wieder Creates
 
 ```sh
 ./gradlew build compileTrainPortalTestKotlin --offline
-python3 tools/verify_hybrid_trains.py
+python3 tools/verify_station_build.py
+python3 tools/verify_station_preview.py
+# Breitere, separate Regression einschließlich Radar und Portalen:
 python3 tools/verify_hybrid_trains.py --packaged
 ```
 
 Die separate Testwelt prüft leeren Bauplot, native Bogey-Platzierung, Wagenaufteilung, stationäre Lage, fehlgeschlagenen Zusammenbau, blockierte Übergabe, Fracht und laufende Lager. Ein zweiter Serverstart prüft den gespeicherten Bauplot und die Rückgabe beim Abbrechen. Die Testmod gehört nicht zur veröffentlichten JAR.
 
+Die Clientprüfung verwendet getrennte Gleisstrecken in vier Richtungen, einen
+begehbaren Boden, Kreativflug und eine feste Kamera. Sie vergleicht echte
+Client-Platzierungen mit den vom Renderer verwendeten nativen Vorschaupositionen.
+Ergebnisse und Grenzen der Reparatur vom 12.11.2026 stehen im
+[Prüfbericht](https://github.com/TeutonStudio/TeutonLib/blob/master/docs/wiki-review-2026-11-13.md).
+
 Weiter: [Hybridzüge](Hybridzuege) · [Zug-Portaltransfer](Zug-Portaltransfer) · [Zug-Docking](Zug-Docking)
 
 Quellen für 1.6.0: [Bahnhofslaufzeit](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/hybrid/StationBuildRuntime.kt), [Bahnhofsprüfung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/trainPortalTest/kotlin/de/TeutonStudio/TeutonLib/traintest/StationBuildVerification.kt).
+
+## Abbildung
+
+
+Historische Spielaufnahme des ersten Wagens am Bahnhof aus der 1.6.0-Demo. Die lokale Vorschau-Reparatur vom 12.11.2026 ist damit nicht belegt.
+
+![Bahnhofsbau: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/train-construction.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

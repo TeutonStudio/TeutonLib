@@ -1,5 +1,7 @@
 # FluidLogistics und Factory Logistics
 
+**Deutsch** · [English](FluidLogistics-und-Factory-Logistics-en) · [Übersicht](Home)
+
 TeutonLib behebt die kollidierenden Bestands- und Promise-Queue-Mixins von FluidLogistics und Factory Logistics. Beide Mods verwenden anschließend denselben maßgeblichen Ressourcenbestand und dieselben Lieferzusagen.
 
 ## Voraussetzungen
@@ -41,3 +43,12 @@ Der Adapter ist unabhängig von [FluidLogistics und TFMG](FluidLogistics-und-TFM
 - [Ausführliche Dokumentation und Prüfungen](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/logistics-compatibility.md)
 
 [Wiki-Startseite](Home) · [FluidLogistics und TFMG](FluidLogistics-und-TFMG)
+
+## Abbildung
+
+
+Ausgeführte Desktop-Prüfung der Versions- und Klassenverträge des gemeinsamen Ressourcenadapters; keine neue Bestelloberfläche.
+
+![FluidLogistics und Factory Logistics: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-LogisticsCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

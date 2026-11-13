@@ -1,5 +1,7 @@
 # Computer-Workspace und eingebetteter Kernel
 
+**Deutsch** · [English](Computer-Workspace-und-Kernel-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 stellt Addons gemeinsame Computeroberflächen und mit `HostedComputer` eine wiederverwendbare CC:Tweaked-Laufzeit für eigene Blockentities bereit. Diese APIs liegen unter `de.TeutonStudio.TeutonLib.api.computer`. Sie erzeugen allein keinen neuen Computerblock. Für die normale Bedienung siehe [Computer-UI](Computer-UI).
 
 ## Server-Workspace
@@ -46,3 +48,14 @@ Für die eigentliche CC-Laufzeit eines Addon-Blocks steht ein eigener [Embedded-
 Siehe auch [Peripheral-Topologie](Peripheral-Topologie-und-Attachments) und [persistente Kanalgruppen und Signale](Persistente-Kanalgruppen-und-Signale).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Realer CC-Aeroworks-Workspace als Addon-Nutzer und ausgeführte Snapshot-/Befehlsprüfung. Das Addon stellt die Fachoberfläche bereit.
+
+![Computer-Workspace und eingebetteter Kernel: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/addon-wiki-operator-terminal.png)
+
+![Computer-Workspace und eingebetteter Kernel: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-ComputerWorkspaceTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

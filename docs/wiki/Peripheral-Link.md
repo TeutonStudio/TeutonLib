@@ -1,5 +1,7 @@
 # Peripheral Link
 
+**Deutsch** · [English](Peripheral-Link-en) · [Übersicht](Home)
+
 Der **Peripheral Link** (`teutonlib:peripheral_link`) verbindet ein entferntes Peripheral mit einem CC:Tweaked-Blockcomputer. TeutonLib v1.6.0 registriert ihn bei installiertem **CC:Tweaked und Create**. Es gibt keinen separaten Empfängerblock. Addons können über die öffentliche Ziel-/Topologie-API eigene Computer, etwa Pultreihen, anbinden.
 
 ## Herstellen und koppeln
@@ -69,3 +71,12 @@ Zusätzliche Gerätefunktionen: [optischer Sensor](Optischer-Sensor), [Direction
 [Rezepte](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/resources/data/teutonlib/recipe/peripheral_link_from_components.json), [Item und Kopplung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/PeripheralLinkItem.kt), [Register und Gültigkeit](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/LinkRegistry.kt), [CraftOS-Erweiterung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/resources/data/computercraft/lua/rom/modules/main/teutonlib/peripheral_links.lua).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Echter Peripheral-Link-Bildschirm mit Testdaten aus der UI-Prüfung; Methoden und Status sind hier Prüfdaten, kein Live-Inventar.
+
+![Peripheral Link: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/peripheral-link-ui.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

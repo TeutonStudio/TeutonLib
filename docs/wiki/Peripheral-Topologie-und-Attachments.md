@@ -1,5 +1,7 @@
 # Peripheral-Topologie und Attachments
 
+**Deutsch** · [English](Peripheral-Topologie-und-Attachments-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 bietet unter `de.TeutonStudio.TeutonLib.api.computer.peripheral` eine öffentliche Entwickler-API für addondefinierte Peripheral-Netze. Sie übernimmt Bindungslebensdauer, Methodenaufrufe und Mount-Bereinigung. Die öffentliche API verwendet keine CC-Aeroworks-Fachklassen. Für die Spielerbedienung siehe [Peripheral Link](Peripheral-Link).
 
 ## Einen Graphen beschreiben
@@ -49,3 +51,14 @@ Die Metadatenschlüssel `PeripheralEndpointMetadata.LINK`, `ANCHOR_POSITION`, `D
 [Topologietypen](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/computer/peripheral/PeripheralTopology.kt), [Runtime](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/computer/peripheral/PeripheralAttachmentRuntime.kt), [Gerätebindung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/computer/peripheral/PeripheralDeviceBinding.kt), [Providerregister](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/computer/peripheral/PeripheralProviders.kt).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Reale Geräteansicht und ausgeführte Prüfung öffentlicher API-Signaturen. Das Bild belegt nicht jeden Attach/Detach-Fehlerfall.
+
+![Peripheral-Topologie und Attachments: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-sources.png)
+
+![Peripheral-Topologie und Attachments: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-PublicApiCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

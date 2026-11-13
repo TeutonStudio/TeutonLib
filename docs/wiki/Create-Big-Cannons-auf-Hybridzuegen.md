@@ -1,5 +1,7 @@
 # Create Big Cannons auf Hybridzügen
 
+**Deutsch** · [English](Create-Big-Cannons-auf-Hybridzuegen-en) · [Übersicht](Home)
+
 TeutonLib 1.6.0 unterstützt normale und feste Create-Big-Cannons-Kanonenlager auf Hybridzügen. CBC behält seine native Zusammensetzung, Munition und Schussberechnung. TeutonLib ergänzt die Zusammenarbeit mit der Struktursperre und der Übergabe des laufenden Wagenaufbaus.
 
 ## Voraussetzungen
@@ -31,3 +33,12 @@ Die separate Testwelt prüft beide Lagertypen, erhaltene CBC- und Autokanonenmun
 [Hybridzüge](Hybridzuege) · [Lager und Untercontraptions](Lager-und-Untercontraptions) · [Zug-Portaltransfer](Zug-Portaltransfer)
 
 Quellen für 1.6.0: [CBC-Adapter](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/train/CannonPortalAdapter.kt), [Maschinenübergabe](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/train/TrainPortalMachines.kt), [Kompatibilitätsprüfung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/HybridTrainCompatibility.kt).
+
+## Abbildung
+
+
+Tatsächlich ausgeführte Desktop-Prüfung der versionsgebundenen Hybridintegration einschließlich Kanonen-Zielklassen. Keine Aufnahme eines Schusses.
+
+![Create Big Cannons auf Hybridzügen: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-HybridTrainCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

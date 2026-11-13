@@ -1,10 +1,14 @@
 # Physische Schlauchrolle
 
+**Deutsch** · [English](Physische-Schlauchrolle-en) · [Übersicht](Home)
+
 Creates Schlauchrolle erhält eine persistente physische Schlauchspitze. Der Kopf fällt durch Gravitation, kollidiert mit Blöcken und bleibt durch die Schlauchlänge an seiner Rolle gebunden. Auf bewegten und gedrehten Sable-Konstruktionen verwendet die Bindung den projizierten Weltanker.
 
 ## Voraussetzungen und Installation
 
 Die Integration benötigt exakt **Create 6.0.10 und Sable 2.0.6**. Beide Mods bleiben optional. Die frühere separate SableSchlauch-Mod mit der ID `hosepulley_sable_bridge` muss entfernt werden. TeutonLib muss auf Server und Clients installiert sein.
+
+**Entwicklungsnotiz:** Die lokale Korrektur zum Abwählen bzw. Hotbar-Wechsel des Schraubenschlüssels ist noch nicht als neues Release veröffentlicht. Die historische GIF zeigt Tragen und Werfen.
 
 ## Bedienung
 
@@ -37,7 +41,7 @@ Die Servereinstellung gilt für alle Clients und wird im Spiel übernommen. Dars
 
 ## Grenzen und Speicherung
 
-Die Leine ist eine kugelförmige Längenbeschränkung und wickelt sich nicht um Hindernisse. Beim Ausfahren begrenzen feste Hindernisse in der senkrechten Weltspalte und die untere Baugrenze die Länge. Blockiert eine Kollision das Einziehen, hat sie Vorrang vor der idealen Leinenlänge.
+Die Schlauchlänge ist auf feste **256 Blöcke (Meter)** begrenzt, unabhängig vom Bodenabstand, von Blöcken unter der Rolle und von der unteren Baugrenze. Die Leine ist eine kugelförmige Längenbeschränkung und wickelt sich nicht um Hindernisse. Der Kopf kollidiert weiterhin mit der Welt. Blockiert eine Kollision das Einziehen, hat sie Vorrang vor der idealen Leinenlänge.
 
 Rolle und Kopf speichern ihre UUID-Verbindung über Chunkentladung und Neustarts. Tragen endet beim Neustart. Der Abbau der geladenen Rolle entfernt ihre Spitze. Die Physik läuft auf dem Server; Clients erhalten die Positionen synchronisiert und verwenden Creates vorhandene Modelle.
 
@@ -48,3 +52,12 @@ Rolle und Kopf speichern ihre UUID-Verbindung über Chunkentladung und Neustarts
 - [Ausführliche Dokumentation und Tests](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/sable-hose-pulley.md)
 
 [Wiki-Startseite](Home) · [Schlauchkupplung am Item Drain](Schlauchkupplung-am-Item-Drain)
+
+## Abbildung
+
+
+Echte Spielaufnahme: Schlauchkopf mit dem Schraubenschlüssel tragen und werfen.
+
+![Physische Schlauchrolle: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/gifs/hose-wrench.gif)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

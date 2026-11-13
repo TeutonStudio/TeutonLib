@@ -1,5 +1,7 @@
 # Hybridzüge
 
+**Deutsch** · [English](Hybridzuege-en) · [Übersicht](Home)
+
 Hybridzüge verbinden Creates Gleisfahrt mit einem laufenden Sable-Aufbau. Create verwaltet Gleise, Fahrplan und Zugsteuerung; die Wagen behalten echte Maschinen, Inventare, Flüssigkeitstanks und Unter-Contraptions. TeutonLib verwendet dafür den Wagentyp `teutonlib:hybrid_carriage`.
 
 ## Voraussetzungen und Aktivierung
@@ -78,3 +80,14 @@ Die Serverprüfung erfasst Bahnhofsbau, beide Modi, Schreibsperre, Maschinen, ec
 Weiter: [Bahnhofsbau](Bahnhofsbau) · [Zug-Portaltransfer](Zug-Portaltransfer) · [Zug-Docking](Zug-Docking)
 
 Quellen für 1.6.0: [Hybridlaufzeit](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/hybrid/HybridTrainRuntime.kt), [Darstellung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/client/train/ContraptionLevel.kt), [Versionsprüfung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/HybridTrainCompatibility.kt).
+
+## Abbildung
+
+
+Echter Hybridzug mit Maschinen und orangefarbenem ContraptionLevel-Rahmen aus der 1.6.0-Demo.
+
+![Hybridzüge: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/train-machines.png)
+
+![Hybridzüge: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/train-bounds.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

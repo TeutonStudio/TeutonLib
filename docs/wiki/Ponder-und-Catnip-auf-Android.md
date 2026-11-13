@@ -1,5 +1,7 @@
 # Ponder und Catnip auf Android
 
+**Deutsch** · [English](Ponder-und-Catnip-auf-Android-en) · [Übersicht](Home)
+
 TeutonLib ergänzt einen adaptiven Framebufferpfad für Ponder-/Catnip-Oberflächen. Er behandelt Android-Grafiktreiber, die einen formal vollständigen Framebuffer melden, dessen Stencil-Maske aber nicht korrekt arbeitet.
 
 ## Voraussetzungen und Verwendung
@@ -34,3 +36,12 @@ Die Funktion ist clientseitig. Dedizierte Server laden keine OpenGL-Kompatibilit
 - [Ponder-Einsprungpunkt](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/PonderRenderTargetMixin.java)
 
 [Wiki-Startseite](Home) · [Android und Zalith](Android-und-Zalith-Kompatibilitaet)
+
+## Abbildung
+
+
+Ausgeführte Desktop-Prüfung der exakt unterstützten Einsprungmethoden. Kein Funktionsnachweis auf einem Android-Gerät.
+
+![Ponder und Catnip auf Android: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-MobileDependencyCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

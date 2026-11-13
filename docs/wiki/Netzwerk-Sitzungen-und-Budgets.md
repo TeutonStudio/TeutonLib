@@ -1,5 +1,7 @@
 # Netzwerk-Sitzungen und Budgets
 
+**Deutsch** · [English](Netzwerk-Sitzungen-und-Budgets-en) · [Übersicht](Home)
+
 TeutonLib 1.6.0 stellt drei allgemeine Hilfsklassen unter `de.TeutonStudio.TeutonLib.api.network` bereit. Sie haben keine eigene Paketregistrierung, Speicherung oder GUI; ein Addon bindet sie in seine vorhandenen Server-Pakethandler ein.
 
 ## PlayerSessionState
@@ -27,3 +29,12 @@ if (!budget.tryConsume(player.uuid, serverTick, requestedEntries)) return
 Diese Helfer ersetzen keine Prüfung von Paketinhalt, Menüidentität oder Berechtigungen und dürfen nicht als clientseitige Autorisierung verwendet werden.
 
 Quelle: [Netzwerk-API](https://github.com/TeutonStudio/TeutonLib/tree/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/network). [Alle Funktionen](Home).
+
+## Abbildung
+
+
+Ausgeführte Desktop-Vertragstests für Sitzungsablauf, Gestenreihenfolge und Spieler-Tickbudgets; keine eigene Spieloberfläche.
+
+![Netzwerk-Sitzungen und Budgets: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-SessionPrimitivesTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)
