@@ -1,5 +1,7 @@
 package de.TeutonStudio.TeutonLib.mixin.hose
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation
 import com.simibubi.create.content.fluids.hosePulley.HosePulleyBlockEntity
 import de.TeutonStudio.TeutonLib.integration.hose.HosePulleyBridge
 import de.TeutonStudio.TeutonLib.integration.hose.HosePulleyHost
@@ -8,6 +10,7 @@ import net.createmod.catnip.animation.LerpedFloat
 import net.minecraft.core.BlockPos
 import net.minecraft.core.HolderLookup
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.world.level.block.state.BlockState
 import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.Shadow
 import org.spongepowered.asm.mixin.Unique
@@ -47,9 +50,15 @@ abstract class HosePulleyBlockEntityMixin : HosePulleyHost {
         if (speed <= 0) return
         val pulley = this as Any as HosePulleyBlockEntity
         if (!HoseHeadPolicy.enabled(pulley)) return
-        val limit = HosePulleyBridge.maximumLength(pulley, offset.value + speed)
+        val limit = HosePulleyBridge.MAX_LENGTH
         cir.returnValue = minOf(speed, (limit - offset.value).coerceAtLeast(0f))
     }
+
+    // A physical head can move sideways; blocks in Create's vertical column do not limit its hose.
+    @WrapOperation(method = ["tick", "onSpeedChanged", "lazyTick"], at = [At(value = "INVOKE",
+        target = "Lnet/minecraft/world/level/block/state/BlockState;canBeReplaced()Z")], require = 3)
+    private fun `teutonlib$ignoreVerticalObstacles`(state: BlockState, original: Operation<Boolean>): Boolean =
+        HoseHeadPolicy.enabled(this as Any as HosePulleyBlockEntity) || original.call(state)
 
     @Inject(method = ["tick"], at = [At("TAIL")])
     private fun `teutonlib$tickHoseHead`(ci: CallbackInfo) {
@@ -71,8 +80,8 @@ abstract class HosePulleyBlockEntityMixin : HosePulleyHost {
     private fun `teutonlib$clamp`(): Boolean {
         val pulley = this as Any as HosePulleyBlockEntity
         if (!HoseHeadPolicy.enabled(pulley)) return false
-        if (pulley.level == null || pulley.speed < 0) return false
-        val limit = HosePulleyBridge.maximumLength(pulley, offset.value)
+        if (pulley.level == null) return false
+        val limit = HosePulleyBridge.MAX_LENGTH
         if (offset.value < limit || offset.value == limit && pulley.speed <= 0) return false
         val changed = offset.value > limit || isMoving
         if (offset.value > limit) {

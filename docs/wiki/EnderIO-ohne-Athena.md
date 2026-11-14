@@ -1,5 +1,7 @@
 # EnderIO-Ressourcen ohne Athena
 
+**Deutsch** · [English](EnderIO-ohne-Athena-en) · [Übersicht](Home)
+
 Für **EnderIO 8.2.10-beta** blendet TeutonLib drei bekannte Athena-Teilmodelle aus, wenn die Mod `athena` nicht geladen ist. Mit installiertem Athena bleibt diese Reparatur vollständig inaktiv.
 
 ## Betroffene Ressourcen
@@ -23,3 +25,12 @@ Bei abweichendem Fingerabdruck bleibt die jeweilige Originalressource erhalten; 
 - [Athena-Prüfung und EnderIO-Regeln](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/compat/resources/ResourceCompatibility.kt)
 
 [Wiki-Startseite](Home) · [Ressourcenreparaturen](Ressourcenreparaturen)
+
+## Abbildung
+
+
+Tatsächlich ausgeführte Desktop-Prüfung der Originaldatei-Hashes und konkreten Ressourcenregeln. Die Tests nennen die jeweils behandelte Ressource.
+
+![EnderIO-Ressourcen ohne Athena: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-ResourceCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

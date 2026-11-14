@@ -245,11 +245,62 @@ class MotorEnergyVerification {
                 level.setBlockAndUpdate(ORIGIN.east(), state("basic_motor_extension", Direction.EAST))
                 level.setBlockAndUpdate(ORIGIN.east(2), state("basic_motor", Direction.EAST))
                 require(!input(level, Direction.WEST).canReceive(), "no extension chains")
+                verifyFluxModels(level)
                 verifyFluxPoint(level)
             } finally {
                 ServerConfig.MOTOR_EXTENSION_ENERGY_TRANSFER.set(previous)
                 clear(level)
             }
+        }
+
+        private fun verifyFluxModels(level: ServerLevel) {
+            val connections = de.TeutonStudio.TeutonLib.integration.energy.FluxPointConnections
+            val block = BuiltInRegistries.BLOCK.get(ResourceLocation.parse("fluxnetworks:flux_point"))
+            val plug = BuiltInRegistries.BLOCK.get(ResourceLocation.parse("fluxnetworks:flux_plug"))
+            require(connections.REAR.values.all { block.defaultBlockState().hasProperty(it) && !block.defaultBlockState().getValue(it) }, "rear properties default false")
+            require(connections.REAR.values.none { plug.defaultBlockState().hasProperty(it) }, "plug must not acquire point properties")
+            val sideProperties = mapOf(Direction.DOWN to BlockStateProperties.DOWN, Direction.UP to BlockStateProperties.UP,
+                Direction.NORTH to BlockStateProperties.NORTH, Direction.SOUTH to BlockStateProperties.SOUTH,
+                Direction.WEST to BlockStateProperties.WEST, Direction.EAST to BlockStateProperties.EAST)
+            for (extension in listOf("basic_motor_extension", "advanced_motor_extension")) for (side in Direction.entries) {
+                setup(level, extension, "reinforced_motor", side)
+                val pos = ORIGIN.relative(side.opposite)
+                var state = block.defaultBlockState().setValue(sideProperties.getValue(side),true)
+                level.setBlockAndUpdate(pos,state)
+                connections.reconcile(level,pos)
+                state = level.getBlockState(pos)
+                require(state.getValue(connections.REAR.getValue(side)), "rear selected $extension/$side")
+                val shape = state.getShape(level,pos).bounds()
+                val minimum = when (side.axis) { Direction.Axis.X -> shape.minX; Direction.Axis.Y -> shape.minY; else -> shape.minZ }
+                val maximum = when (side.axis) { Direction.Axis.X -> shape.maxX; Direction.Axis.Y -> shape.maxY; else -> shape.maxZ }
+                require(if (side.axisDirection == Direction.AxisDirection.NEGATIVE) kotlin.math.abs(minimum+.125) < 1e-9 else kotlin.math.abs(maximum-1.125) < 1e-9, "rear reaches exact recessed face $side")
+                ServerConfig.MOTOR_EXTENSION_ENERGY_TRANSFER.set(false)
+                connections.reconcile(level,pos)
+                require(!level.getBlockState(pos).getValue(connections.REAR.getValue(side)), "disabled integration clears rear")
+                ServerConfig.MOTOR_EXTENSION_ENERGY_TRANSFER.set(true)
+                level.setBlockAndUpdate(ORIGIN.relative(side), state("reinforced_motor",side.opposite))
+                connections.reconcile(level,pos)
+                require(!level.getBlockState(pos).getValue(connections.REAR.getValue(side)), "wrong motor clears rear")
+                level.setBlockAndUpdate(ORIGIN.relative(side), state("reinforced_motor",side))
+                for (input in Direction.entries.filter { it.axis != side.axis }) {
+                    val sidePos = ORIGIN.relative(input.opposite)
+                    level.setBlockAndUpdate(sidePos,block.defaultBlockState().setValue(sideProperties.getValue(input),true))
+                    connections.reconcile(level,sidePos)
+                    require(!level.getBlockState(sidePos).getValue(connections.REAR.getValue(input)), "side input remains normal")
+                }
+            }
+            clear(level)
+            var all = block.defaultBlockState()
+            for (side in Direction.entries) {
+                val extensionPos = ORIGIN.relative(side)
+                level.setBlockAndUpdate(extensionPos,state("basic_motor_extension",side))
+                level.setBlockAndUpdate(ORIGIN.relative(side,2),state("basic_motor",side))
+                all = all.setValue(sideProperties.getValue(side),true)
+            }
+            level.setBlockAndUpdate(ORIGIN,all)
+            connections.reconcile(level,ORIGIN)
+            require(connections.REAR.values.all { level.getBlockState(ORIGIN).getValue(it) }, "six simultaneous rear arms")
+            clear(level)
         }
 
         @Throws(Exception::class)

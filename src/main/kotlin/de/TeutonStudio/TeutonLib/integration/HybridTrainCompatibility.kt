@@ -8,6 +8,7 @@ import java.security.MessageDigest
 object HybridTrainCompatibility {
     val supported = mapOf("create" to "6.0.10", "sable" to "2.0.6", "create_train_functionality" to "0.1.47")
     val contracts = mapOf(
+        "dev/ryanhcode/sable/sublevel/storage/serialization/SubLevelSerializer.class" to "8566d2675c2f5abe99dd7805ace85d20c73f60d6cfd26d66bee4aba4b9ac94b2",
         "createtrainfunctionality/AutoConvert.class" to "6f22853a3992da74b4a167776802dc976dc621ec71f0897432f586bcc920e085",
         "createtrainfunctionality/SubLevelLinks.class" to "c06803e111abe238cf6a024163e9a66a5cf09bb21d253c39bc916986b2df20f3",
         "com/simibubi/create/content/contraptions/Contraption.class" to "2f4906644fcf6fbbb99110ae0aafcb39aa427347e6742ea8768a0a24cccf164a",

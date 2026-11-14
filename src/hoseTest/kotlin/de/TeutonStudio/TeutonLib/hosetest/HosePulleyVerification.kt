@@ -47,7 +47,7 @@ import kotlin.math.ceil
 /** Exercises transformed Create block entities and actual Sable assembly in disposable worlds. */
 @Mod("teutonlib_hose_test")
 class HosePulleyVerification {
-    init { NeoForge.EVENT_BUS.register(this); NeoForge.EVENT_BUS.register(HoseConnectorVerification()) }
+    init { NeoForge.EVENT_BUS.register(this); NeoForge.EVENT_BUS.register(HoseConnectorVerification()); NeoForge.EVENT_BUS.register(HoseCableVerification()) }
 
     @SubscribeEvent
     fun commands(event: RegisterCommandsEvent) {
@@ -142,12 +142,13 @@ class HosePulleyVerification {
             verifyLava(level, pulley, physicalHead)
 
             level.setBlockAndUpdate(ORIGIN.below(4), Blocks.STONE.defaultBlockState())
-            length(pulley, 6f)
+            length(pulley, 3.9f)
             drive(pulley, 32f)
+            val beforeExtension = offset(pulley).value
             pulley.tick()
-            check(offset(pulley).value <= 3.001f) { "hose extended through an obstacle: ${offset(pulley).value}" }
+            check(offset(pulley).value > beforeExtension) { "ground below pulley blocked physical hose extension" }
             repeat(3) { pulley.lazyTick(); pulley.tick() }
-            check(offset(pulley).value <= 3.001f) { "lazyTick restarted hose through obstacle" }
+            check(offset(pulley).value > 4f) { "vertical obstacle rounded or stopped physical hose extension" }
             level.removeBlock(ORIGIN.below(4), false)
             length(pulley, 6f)
             drive(pulley, -32f)
@@ -159,11 +160,17 @@ class HosePulleyVerification {
             repeat(4) { pulley.tick() }
             check(offset(pulley).value == stopped) { "unpowered hose must remain stopped" }
 
-            val worldBottom = (ORIGIN.y - level.minBuildHeight).toFloat()
-            length(pulley, worldBottom + 20f)
+            length(pulley, 255.99f)
             drive(pulley, 32f)
             repeat(4) { pulley.tick(); pulley.lazyTick() }
-            check(offset(pulley).value in 0f..worldBottom) { "hose exceeded world bottom: ${offset(pulley).value}" }
+            check(offset(pulley).value == 256f && physicalHead.hoseLength == 256f) { "hose did not stop at exactly 256 blocks" }
+            length(pulley, 300f)
+            pulley.tick()
+            check(offset(pulley).value == 256f) { "old overlong hose was not clamped to 256 blocks" }
+            drive(pulley, -32f)
+            pulley.tick()
+            check(offset(pulley).value < 256f) { "hose must retract from its 256-block limit" }
+            verifyLowPulley(level)
             drive(pulley, 0f)
             length(pulley, 5f)
             pulley.tick()
@@ -176,13 +183,40 @@ class HosePulleyVerification {
             verifyInteractions(level, physicalHead)
             physicalHead.setHoseLength(Float.NaN)
             check(physicalHead.hoseLength == 0f) { "invalid hose length must not enter entity state" }
+            physicalHead.setHoseLength(300f)
+            check(physicalHead.hoseLength == 256f) { "entity length must not exceed 256 blocks" }
             level.removeBlock(ORIGIN, false)
             repeat(4) { physicalHead.tick() }
             check(physicalHead.isRemoved) { "removing the pulley must remove its physical head" }
 
             verifySable(level)
             verifyModes(level)
-            return "PASS hose: transformed Create, spawn, UUID/no duplicates, lava/fire and saved Fire NBT, obstacle/lazyTick, retraction/stop, world bottom, physics/tether, wrench carry/throw/ride, NBT, owner removal, moved/rotated Sable anchor, native lava SIMULATE/EXECUTE at physical head before/after rotation, missing-head/dry-head stale-source exclusion and native filling, ALWAYS/SABLE_ONLY/NEVER live transitions and native fluid fallback"
+            return "PASS hose: transformed Create, spawn, UUID/no duplicates, lava/fire and saved Fire NBT, ground-independent extension/lazyTick, exact 256-block limit/old length clamp, retraction/stop, low pulley below world bottom and native obstacle fallback, physics/tether, wrench carry/throw/ride, NBT, owner removal, moved/rotated Sable anchor, native lava SIMULATE/EXECUTE at physical head before/after rotation, missing-head/dry-head stale-source exclusion and native filling, ALWAYS/SABLE_ONLY/NEVER live transitions and native fluid fallback"
+        }
+
+        private fun verifyLowPulley(level: ServerLevel) {
+            val position = BlockPos(12, level.minBuildHeight + 8, 8)
+            clear(level, position)
+            val pulley = place(level, position)
+            try {
+                level.setBlockAndUpdate(position.below(4), Blocks.STONE.defaultBlockState())
+                length(pulley, 3.9f)
+                ServerConfig.HOSE_HEAD_MODE.set(HoseHeadMode.NEVER)
+                drive(pulley, 32f)
+                pulley.tick()
+                check(offset(pulley).value == 3f) { "normal Create hose must retain its obstacle check" }
+                ServerConfig.HOSE_HEAD_MODE.set(HoseHeadMode.ALWAYS)
+                length(pulley, 255.99f)
+                drive(pulley, 32f)
+                repeat(4) { pulley.tick(); pulley.lazyTick() }
+                check(offset(pulley).value == 256f && head(level, pulley).hoseLength == 256f) {
+                    "low pulley must allow 256 blocks despite ground and world bottom"
+                }
+            } finally {
+                ServerConfig.HOSE_HEAD_MODE.set(HoseHeadMode.ALWAYS)
+                clear(level, position)
+                level.removeBlock(position.below(4), false)
+            }
         }
 
         private fun verifyLava(level: ServerLevel, pulley: HosePulleyBlockEntity, physicalHead: HoseHeadEntity) {

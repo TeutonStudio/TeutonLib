@@ -259,6 +259,11 @@ object HosePulleyClientVerification {
                 check(data.get(de.TeutonStudio.TeutonLib.client.hose.HoseDrainModel.LOCKED) == true) { "Drain did not select the locked model" }
                 check(kotlin.math.abs(head.position().distanceTo(socket.socketWorld())) < .05) { "Client head does not sit in drain" }
             }
+            val cable = heads.singleOrNull()?.let { de.TeutonStudio.TeutonLib.client.hose.HoseCableClient.points(it.uuid) }.orEmpty()
+            if (capture.physical) {
+                check(cable.size >= 2) { "Client has no synchronized cable route" }
+                check(de.TeutonStudio.TeutonLib.client.hose.HoseCableClient.wasRendered(heads.single().uuid)) { "Cable world renderer did not draw the physical head and strand" }
+            }
             val report = JsonObject().also {
                 it.addProperty("passed", true)
                 it.addProperty("name", capture.name)
@@ -267,6 +272,7 @@ object HosePulleyClientVerification {
                 it.addProperty("docked", heads.singleOrNull()?.dockId != null)
                 heads.singleOrNull()?.let { head -> it.addProperty("headUuid", head.uuid.toString()) }
                 it.addProperty("headRenderInvocations", renders)
+                it.addProperty("cablePoints", cable.size)
                 it.add("native", nativeVisual(capture.physical))
                 it.add("appliedMixins", applied)
                 it.addProperty("renderer", GL11.glGetString(GL11.GL_RENDERER))

@@ -1,30 +1,10 @@
 package de.TeutonStudio.TeutonLib.integration.hose
 
 import com.simibubi.create.content.fluids.hosePulley.HosePulleyBlockEntity
-import de.TeutonStudio.TeutonLib.api.sable.SubLevelGeometry
-import net.minecraft.core.BlockPos
 import net.minecraft.server.level.ServerLevel
-import net.minecraft.world.phys.Vec3
-import kotlin.math.ceil
-import kotlin.math.floor
 
 object HosePulleyBridge {
-    /** Scan only the deployed column; never load terrain just to find an obstacle. */
-    fun maximumLength(pulley: HosePulleyBlockEntity, length: Float): Float {
-        val level = pulley.level ?: return length
-        val pos = pulley.blockPos
-        val anchor = SubLevelGeometry.projectToWorld(level, Vec3(pos.x + .5, pos.y.toDouble(), pos.z + .5))
-        val bottom = (floor(anchor.y) - level.minBuildHeight - 1).coerceAtLeast(0.0).toFloat()
-        val cursor = BlockPos.containing(anchor).mutable().move(0, -1, 0)
-        val end = minOf(ceil(length.toDouble()).toInt(), bottom.toInt())
-        for (step in 0 until end) {
-            if (!level.hasChunkAt(cursor) || !level.getBlockState(cursor).getCollisionShape(level, cursor).isEmpty) {
-                return minOf(bottom, step.toFloat())
-            }
-            cursor.move(0, -1, 0)
-        }
-        return bottom
-    }
+    const val MAX_LENGTH = 256f
 
     fun tick(pulley: HosePulleyBlockEntity, length: Float) {
         val level = pulley.level as? ServerLevel ?: return

@@ -83,12 +83,14 @@ object NewAgeMotorEnergy {
     fun isMotorExtensionConnection(level: Level, pointPos: BlockPos, side: Direction): Boolean {
         if (!ModList.get().isLoaded("create_new_age") || !ServerConfig.SPEC.isLoaded() || !ServerConfig.MOTOR_EXTENSION_ENERGY_TRANSFER.asBoolean) return false
         val extensionPos = pointPos.relative(side)
+        if (!level.hasChunkAt(extensionPos)) return false
         val extension = level.getBlockState(extensionPos)
         if (!EXTENSIONS.contains(BuiltInRegistries.BLOCK.getKey(extension.block)) ||
             !extension.hasProperty<Direction>(BlockStateProperties.FACING)
         ) return false
         val facing = extension.getValue<Direction>(BlockStateProperties.FACING)
         val motorPos = extensionPos.relative(facing)
+        if (!level.hasChunkAt(motorPos)) return false
         val motor = level.getBlockState(motorPos)
         if (!MOTORS.contains(BuiltInRegistries.BLOCK.getKey(motor.block)) ||
             !motor.hasProperty<Direction>(BlockStateProperties.FACING) ||
@@ -98,6 +100,12 @@ object NewAgeMotorEnergy {
         val entity = level.getBlockEntity(extensionPos) ?: return false
         return resolveMotor(entity) != null
     }
+
+    /** Only the recessed rear face needs a longer arm; side FE inputs stay ordinary. */
+    @JvmStatic
+    fun isRearMotorExtensionConnection(level: Level, pointPos: BlockPos, side: Direction): Boolean =
+        isMotorExtensionConnection(level, pointPos, side) &&
+            level.getBlockState(pointPos.relative(side)).getValue(BlockStateProperties.FACING) == side
 
     @JvmStatic
     private fun id(path: String): ResourceLocation {

@@ -1,7 +1,6 @@
 package de.TeutonStudio.TeutonLib.integration.hose
 
 import de.TeutonStudio.TeutonLib.TeutonLib
-import de.TeutonStudio.TeutonLib.integration.sable.HoseConnectorPhysics
 import java.util.function.Supplier
 import net.neoforged.bus.api.IEventBus
 import net.neoforged.neoforge.common.NeoForge
@@ -17,6 +16,6 @@ object HoseConnectors {
 
     fun register(bus: IEventBus) {
         forces.register(bus)
-        NeoForge.EVENT_BUS.register(HoseConnectorPhysics)
+        NeoForge.EVENT_BUS.register(de.TeutonStudio.TeutonLib.integration.sable.HoseCablePhysics)
     }
 }

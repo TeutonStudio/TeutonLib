@@ -1,0 +1,135 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "fluxnetworks:block/flux_point"
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "teutonlib_rear_down": "false"
+      },
+      "apply": {
+        "model": "fluxnetworks:block/flux_connection"
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "teutonlib_rear_down": "true"
+      },
+      "apply": {
+        "model": "teutonlib:block/flux_connection_rear"
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "teutonlib_rear_up": "false"
+      },
+      "apply": {
+        "model": "fluxnetworks:block/flux_connection",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "teutonlib_rear_up": "true"
+      },
+      "apply": {
+        "model": "teutonlib:block/flux_connection_rear",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "teutonlib_rear_north": "false"
+      },
+      "apply": {
+        "model": "fluxnetworks:block/flux_connection",
+        "x": 90,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "teutonlib_rear_north": "true"
+      },
+      "apply": {
+        "model": "teutonlib:block/flux_connection_rear",
+        "x": 90,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "teutonlib_rear_east": "false"
+      },
+      "apply": {
+        "model": "fluxnetworks:block/flux_connection",
+        "x": 90,
+        "y": -90
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "teutonlib_rear_east": "true"
+      },
+      "apply": {
+        "model": "teutonlib:block/flux_connection_rear",
+        "x": 90,
+        "y": -90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "teutonlib_rear_south": "false"
+      },
+      "apply": {
+        "model": "fluxnetworks:block/flux_connection",
+        "x": 90,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "teutonlib_rear_south": "true"
+      },
+      "apply": {
+        "model": "teutonlib:block/flux_connection_rear",
+        "x": 90,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "teutonlib_rear_west": "false"
+      },
+      "apply": {
+        "model": "fluxnetworks:block/flux_connection",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "teutonlib_rear_west": "true"
+      },
+      "apply": {
+        "model": "teutonlib:block/flux_connection_rear",
+        "x": 90,
+        "y": 90
+      }
+    }
+  ]
+}

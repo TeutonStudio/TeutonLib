@@ -1,6 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import java.util.zip.ZipFile
 
 plugins {
     `java-library`
@@ -32,7 +31,8 @@ val fluidPropagationTest by sourceSets.creating
 val trainPortalTest by sourceSets.creating
 val mekanismModelTest by sourceSets.creating
 val hoseTest by sourceSets.creating
-listOf(computerUiExample, dockingTest, energyTest, peripheralTest, logisticsTest, fluidPropagationTest, trainPortalTest, mekanismModelTest, hoseTest).forEach {
+val tankFluidTest by sourceSets.creating
+listOf(computerUiExample, dockingTest, energyTest, peripheralTest, logisticsTest, fluidPropagationTest, trainPortalTest, mekanismModelTest, hoseTest, tankFluidTest).forEach {
     it.compileClasspath += mainSource.output + mainSource.compileClasspath
     it.runtimeClasspath += mainSource.runtimeClasspath
 }
@@ -129,6 +129,9 @@ neoForge {
         if (providers.gradleProperty("hoseTests").isPresent) {
             create("teutonlib_hose_test") { sourceSet(hoseTest) }
         }
+        if (providers.gradleProperty("tankFluidTests").isPresent) {
+            create("teutonlib_tank_fluid_test") { sourceSet(tankFluidTest) }
+        }
     }
 }
 
@@ -137,31 +140,15 @@ neoForge {
 val localCompileJars = fileTree("dependencies/compile") {
     include("*.jar")
     exclude("sable-neoforge-*.jar")
+    // Android/Zalith adapters and their fixtures now belong to TerrArchitecture.
+    exclude("Essential_*.jar", "essential-kdiscordipc-*.jar", "powergrid-*.jar",
+        "immersive_melodies-*.jar", "visual_recipe_editor-*.jar", "c2me-neoforge-*.jar")
 }
 val localRuntimeJars = fileTree("dependencies/runtime") { include("*.jar") }
 val sableVersion = providers.gradleProperty("sable_version").get()
 val sableJar = files("dependencies/verification/sable-neoforge-1.21.1-$sableVersion.jar")
 require(providers.gradleProperty("trainPortalSableVersion").getOrElse(sableVersion) == sableVersion) {
     "Train portal verification requires the supported Sable $sableVersion release"
-}
-val essentialOuterJars = fileTree("dependencies/compile") { include("Essential_*.jar") }
-val essentialApiJar = layout.buildDirectory.file("generated/compatibility/essential-kdiscordipc.jar")
-val extractEssentialApi by tasks.registering {
-    inputs.files(essentialOuterJars)
-    outputs.file(essentialApiJar)
-    doLast {
-        val outer = essentialOuterJars.files.singleOrNull()
-            ?: error("Expected exactly one Essential release JAR in dependencies/compile")
-        ZipFile(outer).use { zip ->
-            val nested = zip.entries().asSequence()
-                .filter { it.name.matches(Regex("essential-[0-9a-f]+\\.jar")) }
-                .singleOrNull()
-                ?: error("Expected exactly one embedded Essential implementation JAR in ${outer.name}")
-            val output = essentialApiJar.get().asFile
-            output.parentFile.mkdirs()
-            zip.getInputStream(nested).use { input -> output.outputStream().use(input::copyTo) }
-        }
-    }
 }
 dependencies {
     compileOnly("com.github.bawnorton.mixinsquared:mixinsquared-common:0.3.7")
@@ -171,7 +158,6 @@ dependencies {
     compileOnly(sableJar)
     compileOnly(files("dependencies/verification/createbigcannons-5.11.7+mc.1.21.1.jar",
         "dependencies/verification/ritchiesprojectilelib-2.1.2+mc.1.21.1-neoforge.jar"))
-    compileOnly(files(essentialApiJar).builtBy(extractEssentialApi))
     runtimeOnly(localRuntimeJars.matching { include("kotlinforforge-*.jar") })
     // The default development environment includes the hybrid train/editing integration.
     if (csoRuntime == "all" || providers.gradleProperty("trainPortalTests").isPresent || providers.gradleProperty("mekanismModelTests").isPresent) {
@@ -311,12 +297,6 @@ val verifyKotlinSources by tasks.registering {
     doLast {
         val allowedJavaSources = setOf(
             file("src/main/java/de/TeutonStudio/TeutonLib/mixin/computer/client/DbwClientMixin.java"),
-            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/PowerGridNativeMixin.java"),
-            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/ImmersiveMelodiesMidiMixin.java"),
-            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/VisualRecipeEditorBackupMixin.java"),
-            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/EssentialDiscordIpcMixin.java"),
-            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/PonderRenderTargetMixin.java"),
-            file("src/main/java/de/TeutonStudio/TeutonLib/mixin/mobile/CatnipStencilElementMixin.java"),
             file("src/main/java/de/TeutonStudio/TeutonLib/mixin/resource/ResourcePackLoaderMixin.java")
         )
         val javaSources = (fileTree("src") { include("**/*.java") } +

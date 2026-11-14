@@ -1,5 +1,7 @@
 # Computer-Kanäle
 
+**Deutsch** · [English](Computer-Kanaele-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 stellt CC:Tweaked-Blockcomputern bis zu **64 benannte Kanäle pro Computer** bereit. Die native Lua-API heißt `teutonlib.channels`; global ist sie auch als `teutonlib_channels` erreichbar. Die gemeinsame [Computer-UI](Computer-UI) zeigt und verwaltet diese Kanäle.
 
 ## Kanalarten und Namen
@@ -58,3 +60,14 @@ CraftOS bietet `channels`, `channels 5` und `channels 5 engine`. Auf CC Aerowork
 [Lua-API und Fernauflösung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/computer/ComputerRuntime.kt), [Kanalbestand und Namensregeln](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/computer/ChannelBank.kt), [CraftOS-Befehl](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/resources/data/computercraft/lua/rom/programs/channels.lua).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Echter CC-Blockcomputer mit zwei über die native Lua-API angelegten Kanälen.
+
+![Computer-Kanäle: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-channels.png)
+
+![Computer-Kanäle: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-channel-ui.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

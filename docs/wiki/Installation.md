@@ -1,6 +1,8 @@
 # Installation
 
-Diese Wiki beschreibt **TeutonLib 1.6.0** für Minecraft **1.21.1**.
+**Deutsch** · [English](Installation-en) · [Übersicht](Home)
+
+Diese Wiki beschreibt **TeutonLib 1.6.1** für Minecraft **1.21.1**.
 
 ## Grundvoraussetzungen
 
@@ -11,12 +13,18 @@ Diese Wiki beschreibt **TeutonLib 1.6.0** für Minecraft **1.21.1**.
 | Java | 21 |
 | KotlinForForge | mindestens 5.11.0 und kleiner als 6 |
 
-1. Lade `teutonlib-1.6.0.jar` aus dem [Release](https://github.com/TeutonStudio/TeutonLib/releases/tag/v1.6.0).
+1. Lade `teutonlib-1.6.1.jar` aus dem [Release](https://github.com/TeutonStudio/TeutonLib/releases).
 2. Installiere die JAR und KotlinForForge auf **Server und allen Clients** im jeweiligen `mods`-Ordner.
 3. Ergänze die optionalen Mods für die gewünschten Funktionen. Ihre eigenen Abhängigkeiten müssen ebenfalls installiert sein.
 4. Entferne die separaten Mods **Create Sable Optimization** (`cso`) und **Hose Pulley Sable Bridge / SableSchlauch** (`hosepulley_sable_bridge`): TeutonLib enthält ihre Integrationen und erklärt beide Mod-IDs als inkompatibel.
 
 Die `-sources.jar` dient Entwicklern; sie ersetzt die normale Mod-JAR nicht. Das `computer-ui-template.zip` enthält zusätzlich Quellen, Beispiele und Dokumentation. `SHA256SUMS` enthält die Prüfsummen dieser drei Downloads.
+
+## Version und Entwicklungsstand
+
+Die Basis 1.6.1 enthält [Peripheral-Link-Antennen und Ortung](Peripheral-Link#antenne-und-ortung). Release 1.6.2 ergänzt Schlauchführung, Bahnhofsbau-Korrekturen, Flux-Anschlussdarstellung und Tankoberflächen. Mobile Adapter sind nach TerrArchitecture ausgelagert; siehe [Migration](Android-und-Zalith-Kompatibilitaet).
+
+Im lokalen Stand vom 14.11.2026 wurden die Android-/Zalith-Adapter nach TerrArchitecture ausgelagert. Für diesen Stand TeutonLib und TerrArchitecture gemeinsam aktualisieren; neue JVM-Optionen und die historischen TeutonLib-Anleitungen stehen unter [Android und Zalith](Android-und-Zalith-Kompatibilitaet). Ressourcenreparaturen bleiben in TeutonLib.
 
 ## Optionale Integrationen
 
@@ -38,4 +46,12 @@ Ohne passende optionale Mods bleibt die betreffende Integration inaktiv. TeutonL
 
 [Konfiguration und Befehle](Konfiguration-und-Befehle) · [Alle Funktionen](Home) · [Entwicklung und Prüfungen](Entwicklung-und-Pruefungen)
 
-Quellen: [Mod-Metadaten](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/templates/META-INF/neoforge.mods.toml), [Versionen](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/gradle.properties).
+Quellen: [Mod-Metadaten](https://github.com/TeutonStudio/TeutonLib/blob/e6c27c6/src/main/templates/META-INF/neoforge.mods.toml), [Versionen](https://github.com/TeutonStudio/TeutonLib/blob/e6c27c6/gradle.properties).
+
+## Abbildung
+
+Der eingebaute NeoForge-Editor für TeutonLib; eine zusätzliche Config-Mod ist nicht erforderlich.
+
+![Installation: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-config.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

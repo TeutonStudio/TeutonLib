@@ -1,5 +1,7 @@
 # FluidLogistics und TFMG
 
+**Deutsch** · [English](FluidLogistics-und-TFMG-en) · [Übersicht](Home)
+
 TeutonLib ermöglicht das gemeinsame Rohrnetz von FluidLogistics und Create: The Factory Must Grow (TFMG), indem es einen Konflikt in Creates Flüssigkeits-Propagation behebt und FluidLogistics-Pumpen in TFMGs Suchlauf berücksichtigt.
 
 ## Voraussetzungen und Verwendung
@@ -29,3 +31,12 @@ Die Entwicklungsprüfung erzwingt die betroffene Klassentransformation und teste
 - [Technische Beschreibung und Testprofile](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/fluid-propagation-compatibility.md)
 
 [Wiki-Startseite](Home) · [FluidLogistics und Factory Logistics](FluidLogistics-und-Factory-Logistics)
+
+## Abbildung
+
+
+Ausgeführte Desktop-Prüfung der Pumpen- und Propagations-Zielklassen; die weiterführende Flüssigkeitsprüfung ist separat dokumentiert.
+
+![FluidLogistics und TFMG: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-FluidPropagationCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

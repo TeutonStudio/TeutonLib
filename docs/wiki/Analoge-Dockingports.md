@@ -1,5 +1,7 @@
 # Analoge Dockingports
 
+**Deutsch** · [English](Analoge-Dockingports-en) · [Übersicht](Home)
+
 TeutonLib steuert die vorhandenen Docking Connector von Create Simulated mit der tatsächlichen Redstone-Stärke. Es entstehen keine zusätzlichen Blöcke oder Transferpuffer. Diese Funktion ist von den [Zahnradbrücken](Zahnradbruecken) unabhängig.
 
 ## Voraussetzungen
@@ -42,3 +44,14 @@ Die getrennte Testmod prüft unter anderem Signalgrenzen, alle Längenkombinatio
 - [Ausführliche Geometrie- und Testdokumentation](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/analog-docking.md)
 
 [Wiki-Startseite](Home) · [Zahnradbrücken](Zahnradbruecken)
+
+## Abbildung
+
+
+Reale native Dockingverbindung und ausgeführte Prüfung der OFF/HALF/FULL-Längen. Das Spielbild allein belegt keine bestimmte Redstone-Stärke.
+
+![Analoge Dockingports: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/dock-locked.png)
+
+![Analoge Dockingports: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-DockingLengthTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

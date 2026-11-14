@@ -1,5 +1,7 @@
 # Schlauchkupplung am Item Drain
 
+**Deutsch** · [English](Schlauchkupplung-am-Item-Drain-en) · [Übersicht](Home)
+
 Creates vorhandener **Item Drain** (`create:item_drain`) nimmt oben einen [physischen Schlauchkopf](Physische-Schlauchrolle) auf und verbindet die Rohre an der Rolle mit den Rohren am Drain. Es gibt keinen zusätzlichen Kupplungsblock, kein zusätzliches Item und kein Kupplungsrezept.
 
 ## Verbinden und Lösen
@@ -19,6 +21,8 @@ Die Schlauchlänge verbraucht keine Pumpenreichweite. Angeschlossene Rohrabschni
 
 ## Schlauchzug und Konfiguration
 
+**Release 1.6.2:** Die neue Schlauchführung berücksichtigt Durchhang und Hindernisse. Umlenkpunkte bestimmen die verbrauchte Länge und die Zugrichtung an den Befestigungen. Das Bild unten zeigt die ursprüngliche Kupplung.
+
 Rolle und Drain können auf unterschiedlichen Sable-Konstruktionen sitzen. Ein gespannter Schlauch zieht bewegliche Konstruktionen an den Befestigungspunkten zusammen. Ein lockerer Schlauch überträgt keinen Druck; feste Weltblöcke wirken als unbewegliche Anker. Bei anhaltender Überlast löst sich die Kupplung und schließt die Flüssigkeitsverbindung sofort.
 
 ```toml
@@ -31,12 +35,34 @@ breakDelaySeconds = 0.25
 
 Die Werte stehen in der weltbezogenen `teutonlib-server.toml` und verwenden Sables Physikeinheiten. Die Ingenieursbrille zeigt Verbindung, Durchflussfaktor und Zugauslastung. Sables Kraftanzeige enthält eine eigene Kräftegruppe für den Schlauchzug.
 
-UUID-Verbindungen überstehen Montage und Neustarts. Entladene Chunks pausieren Zugkräfte und Transport, ohne weitere Chunks zu laden. Nach dem Laden arbeitet die Verbindung erst, wenn beide Identitäten wieder zueinander passen. Der Schlauch wickelt sich nicht um Hindernisse.
+UUID-Verbindungen überstehen Montage und Neustarts. Entladene Chunks pausieren Zugkräfte und Transport, ohne weitere Chunks zu laden. Nach dem Laden arbeitet die Verbindung erst, wenn beide Identitäten wieder zueinander passen. Die lokale Führung wird an Hindernissen umgelenkt; Selbstkollision und Verknoten werden nicht simuliert.
+
+## Entwicklerprüfung
+
+```sh
+python3 tools/verify_hose_connector.py
+python3 tools/verify_hose_cable.py
+python3 tools/verify_hose_cable_client.py
+```
+
+Die Kupplungsprüfung verwendet echte Create-Pumpen und Tanks für beide Richtungen, das gemeinsame Durchflussbudget, Mengenerhaltung und das Lösen. Die neue Schlauchführung hat eine separate Serverprüfung; ihre grafische Abnahme ist noch offen. [Prüfgrenzen](Physische-Schlauchrolle#entwicklerprüfung-und-prüfgrenzen).
 
 ## Quellen
+
+- [Aktueller Entwicklungsumfang](https://github.com/TeutonStudio/TeutonLib/blob/master/docs/sable-hose-pulley.md)
+
+Die folgenden Quellen beschreiben die ursprüngliche Kupplung in 1.6.0:
 
 - [Drain-Verbindung, Speicherung und Anzeige](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/hose/HoseDrainConnection.kt)
 - [Zugkraft und gemeinsames Durchflussbudget](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/hose/HoseTension.kt)
 - [Bedienung, Lebenszyklus und Testumfang](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/sable-hose-pulley.md)
 
 [Wiki-Startseite](Home) · [Physische Schlauchrolle](Physische-Schlauchrolle)
+
+## Abbildung
+
+Echter Entity-Kopf im Item Drain in der getrennten grafischen Schlauchprüfung.
+
+![Schlauchkupplung am Item Drain: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/hose-seated.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

@@ -1,0 +1,27 @@
+name: Documentation
+on:
+  push:
+    paths:
+      - 'README.md'
+      - 'docs/**'
+      - 'tools/verify_wiki.py'
+      - '.github/workflows/docs.yml'
+  pull_request:
+    paths:
+      - 'README.md'
+      - 'docs/**'
+      - 'tools/verify_wiki.py'
+      - '.github/workflows/docs.yml'
+permissions:
+  contents: read
+jobs:
+  wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: python3 tools/verify_wiki.py

@@ -74,12 +74,13 @@ object StationBuildVerification {
                         .resolve("station-build-checkpoint.properties")).use(it::load) }
                     val placed = level.getBlockEntity(BlockPos.of(values.getProperty("station").toLong())) as? StationBlockEntity
                     val body = placed?.let(StationBuildRuntime::bodies)?.firstOrNull { it.uniqueId.toString() == values.getProperty("body") }
-                    if (body == null) "RUNNING loading station construction"
+                    if (body == null || placed.station == null || placed.edgePoint.determineGraphLocation() == null)
+                        "RUNNING loading station construction and native graph"
                     else {
                         val chest = level.getBlockEntity(body.plot.centerBlock.above()) as ChestBlockEntity
-                        check(chest.getItem(0).`is`(Items.EMERALD) && chest.getItem(0).count == 23)
-                        check(!body.isRemoved && !StationBuildRuntime.dormant(body))
-                        check(placed.exitAssemblyMode())
+                        check(chest.getItem(0).`is`(Items.EMERALD) && chest.getItem(0).count == 23) { "Saved cargo changed" }
+                        check(!body.isRemoved && !StationBuildRuntime.dormant(body)) { "Occupied construction not awake after load" }
+                        check(placed.exitAssemblyMode()) { "Native cancellation rejected after graph load" }
                         val returned = level.getBlockEntity(checkpointStart.east().above(2)) as ChestBlockEntity
                         check(returned.getItem(0).count == 23 && StationBuildRuntime.bodies(placed).isEmpty())
                         "PASS station restart: same construction plot UUID; live cargo; cancellation returns all blocks and inventory"
@@ -117,12 +118,23 @@ object StationBuildVerification {
                     val bodies = StationBuildRuntime.bodies(station)
                     check(bodies.size == 2) { "Third bogey did not start the next wagon: ${bodies.size}" }
                     first = bodies.first().uniqueId
+                    for ((index, body) in bodies.withIndex()) {
+                        val chestPos = body.plot.centerBlock.offset(0, 1, 2)
+                        level.setBlockAndUpdate(chestPos, Blocks.CHEST.defaultBlockState())
+                        (level.getBlockEntity(chestPos) as ChestBlockEntity).setItem(0, ItemStack(Items.DIAMOND, 17 + index))
+                    }
+                    val cargoBefore = bodies.associateWith { body ->
+                        (level.getBlockEntity(body.plot.centerBlock.offset(0, 1, 2)) as ChestBlockEntity).saveWithFullMetadata(level.registryAccess())
+                    }
                     val trainIds = Create.RAILWAYS.trains.keys.toSet()
                     station.assemble(UUID.randomUUID())
                     check(Create.RAILWAYS.trains.keys == trainIds) { "Station accepted a train without controls" }
                     check(bodies.all { !it.isRemoved && StationBuildRuntime.blocks(it).isNotEmpty() }) {
                         "Native assembly failure destroyed a construction plot"
                     }
+                    for ((body, expected) in cargoBefore) check(
+                        (level.getBlockEntity(body.plot.centerBlock.offset(0, 1, 2)) as ChestBlockEntity)
+                            .saveWithFullMetadata(level.registryAccess()) == expected) { "Failed assembly changed cargo NBT" }
                     for ((index, body) in bodies.withIndex()) {
                         val at = body.plot.centerBlock
                         level.setBlockAndUpdate(at.above(), Blocks.STONE.defaultBlockState())
@@ -150,7 +162,27 @@ object StationBuildVerification {
                     station.assemble(UUID.randomUUID())
                     check(StationBuildRuntime.blocks(bodies.first()).isNotEmpty())
                     check(level.getBlockState(trackStart.east().above()).`is`(Blocks.BEDROCK))
+                    check(!station.exitAssemblyMode() && station.isAssembling) { "Blocked cancellation lost construction ownership" }
+                    for (body in bodies) check((level.getBlockEntity(body.plot.centerBlock.offset(bearingOffset)) as MechanicalBearingBlockEntity).isRunning) {
+                        "Obstructed assembly stopped running machinery"
+                    }
                     level.setBlockAndUpdate(trackStart.east().above(), Blocks.AIR.defaultBlockState())
+                    for (body in bodies) level.setBlockAndUpdate(body.plot.centerBlock.above(2), Blocks.AIR.defaultBlockState())
+                    val before = Create.RAILWAYS.trains.keys.toSet()
+                    station.assemble(UUID.randomUUID())
+                    check(Create.RAILWAYS.trains.keys == before) { "Running machinery bypassed native controls requirement" }
+                    phase = 11; ticks = 0; result = "RUNNING restoring cargo and active bearings after native assembly rejection"
+                }
+                11 -> if (ticks >= 20) {
+                    val bodies = StationBuildRuntime.bodies(station)
+                    for ((index, body) in bodies.withIndex()) {
+                        val bearing = level.getBlockEntity(body.plot.centerBlock.offset(bearingOffset)) as MechanicalBearingBlockEntity
+                        check(bearing.isRunning && bearing.movedContraption!!.contraption.blocks.values.any { it.state().`is`(Blocks.GLASS) }) {
+                            "Failed assembly lost active bearing payload"
+                        }
+                        check((level.getBlockEntity(body.plot.centerBlock.offset(0, 1, 2)) as ChestBlockEntity).getItem(0).count == 17 + index)
+                        level.setBlockAndUpdate(body.plot.centerBlock.above(2), AllBlocks.TRAIN_CONTROLS.defaultState.setValue(BlockStateProperties.HORIZONTAL_FACING, Direction.EAST))
+                    }
                     val before = Create.RAILWAYS.trains.keys.toSet()
                     station.assemble(UUID.randomUUID())
                     val train = Create.RAILWAYS.trains.values.singleOrNull { it.id !in before }

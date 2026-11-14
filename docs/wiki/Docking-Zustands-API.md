@@ -1,5 +1,7 @@
 # Docking-Zustands-API
 
+**Deutsch** · [English](Docking-Zustands-API-en) · [Übersicht](Home)
+
 Addon-Code kann mit `de.TeutonStudio.TeutonLib.api.simulated.SimulatedDockingConnector` Simulated-Dockingzustände lesen, ohne Simulated-Typen in seinen öffentlichen Signaturen zu verwenden.
 
 | Methode | Ergebnis |
@@ -28,3 +30,14 @@ Die API ist lesend. Ausfahren, Verriegelung und Ressourcentransfer bleiben bei S
 [Analoge Dockingports](Analoge-Dockingports) · [Zug-Docking](Zug-Docking) · [Alle Funktionen](Home)
 
 Quellen: [Öffentliche Fassade](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/simulated/SimulatedDockingConnector.kt), [Adapter](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/cso/bridge/SimulatedDockingAccess.kt).
+
+## Abbildung
+
+
+Reale verriegelte native Verbindung und ausgelesener Dockingzustand in einem zusätzlichen CC-Aeroworks-Nutzer.
+
+![Docking-Zustands-API: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/dock-locked.png)
+
+![Docking-Zustands-API: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/addon-wiki-dock-telemetry.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

@@ -1,13 +1,16 @@
 # Gyroskop-Steuerung
 
+**Deutsch** · [English](Gyroskop-Steuerung-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 macht Aeronautics' **Gyroscopic Propeller Bearing** als CC:Tweaked-Peripheral vom Typ `gyroscopic_propeller_bearing` erreichbar. Die generischen Zusatzmethoden gelten auch für Unterklassen, darunter `simulated_addition:directional_gyroscopic_propeller_bearing`; deren eigener Peripheral-Typ und vorhandene Methoden bleiben erhalten.
 
-Die Integration setzt CC:Tweaked, Aeronautics, Simulated und Sable voraus; Create gehört zum Geräteumfeld. Der Zugriff funktioniert direkt, über Kabel und über einen [Peripheral Link](Peripheral-Link). Es wird eine vorübergehende Schubrichtungs-Vorgabe gesetzt, keine komplette Flugregelung.
+Die Integration setzt CC:Tweaked, Aeronautics, Simulated und Sable voraus; Create gehört zum Geräteumfeld. Die Zusatzmethoden sind über einen [Peripheral Link](Peripheral-Link) erreichbar. **Prüfung vom 13.11.2026:** Am direkt angeschlossenen nativen Gyrolager fehlen diese Methoden im Release 1.6.0 (`setTargetDirection` ist `nil`). Direkter und kabelgebundener Zugriff sind deshalb nicht als funktionierend freigegeben; verwende den Linkpfad und prüfe die Methoden vor dem Aufruf. Es wird eine vorübergehende Schubrichtungs-Vorgabe gesetzt, keine komplette Flugregelung.
 
 ## Weltziel vorgeben
 
 ```lua
-local bearing = assert(peripheral.find("gyroscopic_propeller_bearing"), "Lager fehlt")
+local bearing = assert(peripheral.find("gyroscopic_propeller_bearing",
+  function(_, p) return type(p.setTargetDirection) == "function" end), "Link-Lager fehlt")
 
 while true do
   bearing.setTargetDirection({x = 0.08, y = 1, z = -0.03})
@@ -38,3 +41,12 @@ Ein Directional Bearing mit anderem Peripheral-Typ kann über seinen bekannten N
 [Peripheral-Registrierung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/heli/HeliPeripheralIntegration.kt), [generische Lua-Methoden](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/heli/BearingGenericMethods.kt), [Welt-/Lokaltransformation](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/heli/BearingControl.kt), [Neigungsgrenze und Timeout](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/heli/HeliMath.kt).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Die tatsächlichen Lua-Aufrufe setTargetDirection und adjustTilt werden am nativen Lager über Peripheral Link angenommen; keine vollständige Flugregelung.
+
+![Gyroskop-Steuerung: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-gyroscope.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

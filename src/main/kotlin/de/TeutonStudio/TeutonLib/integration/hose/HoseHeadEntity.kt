@@ -6,6 +6,10 @@ import de.TeutonStudio.TeutonLib.HoseHeadMode
 import de.TeutonStudio.TeutonLib.ServerConfig
 import java.util.UUID
 import kotlin.math.max
+import de.TeutonStudio.TeutonLib.integration.sable.HoseCablePhysics
+import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.DoubleTag
+import net.minecraft.nbt.Tag
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.nbt.CompoundTag
@@ -26,7 +30,7 @@ import net.minecraft.world.phys.Vec3
 
 /**
  * Persistent colliding hose end. Its owner stays in Sable storage coordinates while all motion
- * and the spherical length constraint use world coordinates, including rotated sublevels.
+ * and the routed cable constraint use world coordinates, including rotated sublevels.
  */
 class HoseHeadEntity(type: EntityType<out HoseHeadEntity>, level: Level) : Entity(type, level) {
     val dockPosition: BlockPos? get() = entityData.get(DOCK_POSITION).orElse(null)
@@ -66,6 +70,7 @@ class HoseHeadEntity(type: EntityType<out HoseHeadEntity>, level: Level) : Entit
         deltaMovement = Vec3.ZERO
     }
 
+    internal var savedCablePoints: List<Vec3>? = null
     private var configured = false
     // The client must also skip the carried head when picking the block behind it.
     private var carrier: UUID?
@@ -118,7 +123,7 @@ class HoseHeadEntity(type: EntityType<out HoseHeadEntity>, level: Level) : Entit
     fun belongsTo(position: BlockPos): Boolean = configured && ownerPosition == position
 
     fun setHoseLength(length: Float) {
-        entityData.set(LENGTH, if (length.isFinite()) max(0f, length) else 0f)
+        entityData.set(LENGTH, if (length.isFinite()) length.coerceIn(0f, HosePulleyBridge.MAX_LENGTH) else 0f)
     }
 
     fun worldAnchor(): Vec3 {
@@ -133,8 +138,24 @@ class HoseHeadEntity(type: EntityType<out HoseHeadEntity>, level: Level) : Entit
         return lastWorldAnchor ?: centerPosition().add(0.0, hoseLength + END_ALLOWANCE, 0.0)
     }
 
-    /** Retraction may stop here when a collision prevents the end from moving towards its owner. */
-    fun minimumHoseLength(): Float = max(0.0, centerPosition().distanceTo(worldAnchor()) - END_ALLOWANCE).toFloat()
+    /** Keep the first colliding node outside the pulley's own solid voxel. */
+    fun cableAnchor(): Vec3 = if (level().hasChunkAt(ownerPosition)) SubLevelGeometry.projectToWorld(level(),
+        Vec3(ownerPosition.x+.5, ownerPosition.y-HoseCableMath.EXIT, ownerPosition.z+.5))
+        else worldAnchor().add(0.0,-HoseCableMath.EXIT,0.0)
+
+    /** The top of the head is the native cable's endpoint, including a rotated dock. */
+    fun cableEnd(): Vec3 {
+        val socket = connector()
+        return if (socket != null) SubLevelGeometry.projectToWorld(level(), socket.socketLocal().add(0.0, 5.0/16.0 + HoseCableMath.DOCK_STUB, 0.0))
+        else centerPosition()
+    }
+
+    fun cableLength(): Double = (hoseLength + END_ALLOWANCE - HoseCableMath.EXIT -
+        if (dockId != null) HoseCableMath.DOCK_STUB else 0.0).coerceAtLeast(.001)
+
+    fun minimumHoseLength(): Float = max(0.0, HoseCableMath.length(
+        HoseCablePhysics.points(this).ifEmpty { listOf(cableAnchor(), cableEnd()) }) - END_ALLOWANCE +
+        HoseCableMath.EXIT + if (dockId != null) HoseCableMath.DOCK_STUB else 0.0).toFloat()
 
     override fun tick() {
         super.tick()
@@ -166,6 +187,7 @@ class HoseHeadEntity(type: EntityType<out HoseHeadEntity>, level: Level) : Entit
             return
         }
 
+        HoseCablePhysics.ensure(this)
         if (dockId != null) {
             val connector = connector()
             if (connector != null) {
@@ -184,11 +206,11 @@ class HoseHeadEntity(type: EntityType<out HoseHeadEntity>, level: Level) : Entit
             if (++missingDockTicks < 40) { deltaMovement = Vec3.ZERO; return }
             detach()
         }
-        val anchor = worldAnchor()
+        if (!HoseCablePhysics.ready(this)) { deltaMovement = Vec3.ZERO; return }
         val heldBy = carrier?.let(level()::getPlayerByUUID)
         if (heldBy != null && heldBy.isAlive && !heldBy.isSpectator && stillHoldingWrench(heldBy)) {
             val target = heldBy.eyePosition.add(heldBy.lookAngle.scale(1.15))
-            moveCenterTo(constrain(target, anchor))
+            moveCenterTo(HoseCablePhysics.constrain(this, target))
             deltaMovement = Vec3.ZERO
             // A player walking away from a taut hose drops it instead of remotely holding it.
             if (centerPosition().distanceToSqr(heldBy.eyePosition) > 16.0) stopCarrying()
@@ -200,12 +222,11 @@ class HoseHeadEntity(type: EntityType<out HoseHeadEntity>, level: Level) : Entit
         move(MoverType.SELF, deltaMovement)
         deltaMovement = deltaMovement.multiply(0.91, if (onGround()) 0.65 else 0.98, 0.91)
 
-        val radial = centerPosition().subtract(anchor)
-        val allowed = hoseLength + END_ALLOWANCE
-        if (radial.lengthSqr() > allowed * allowed) {
-            val outward = radial.normalize()
-            // move() preserves Minecraft/Sable collision handling even while the pulley retracts.
-            moveCenterTo(anchor.add(outward.scale(allowed)))
+        val target = HoseCablePhysics.constrain(this, centerPosition())
+        val correction = target.subtract(centerPosition())
+        if (correction.lengthSqr() > 1e-12) {
+            moveCenterTo(target)
+            val outward = correction.normalize().scale(-1.0)
             val radialSpeed = deltaMovement.dot(outward)
             if (radialSpeed > 0.0) deltaMovement = deltaMovement.subtract(outward.scale(radialSpeed))
         }
@@ -222,13 +243,6 @@ class HoseHeadEntity(type: EntityType<out HoseHeadEntity>, level: Level) : Entit
     }
 
     private fun centerPosition(): Vec3 = position().add(0.0, bbHeight * 0.5, 0.0)
-
-    private fun constrain(target: Vec3, anchor: Vec3): Vec3 {
-        val radial = target.subtract(anchor)
-        val allowed = hoseLength + END_ALLOWANCE
-        return if (radial.lengthSqr() <= allowed * allowed) target
-        else anchor.add(radial.normalize().scale(allowed))
-    }
 
     private fun moveCenterTo(target: Vec3) = move(MoverType.SELF, target.subtract(centerPosition()))
 
@@ -258,6 +272,7 @@ class HoseHeadEntity(type: EntityType<out HoseHeadEntity>, level: Level) : Entit
 
     override fun remove(reason: RemovalReason) {
         if (!level().isClientSide && reason.shouldDestroy()) connector()?.release()
+        if (!level().isClientSide) HoseCablePhysics.remove(this)
         super.remove(reason)
     }
 
@@ -266,6 +281,11 @@ class HoseHeadEntity(type: EntityType<out HoseHeadEntity>, level: Level) : Entit
     }
 
     override fun readAdditionalSaveData(tag: CompoundTag) {
+        val cable = tag.getList("CablePoints", Tag.TAG_LIST.toInt())
+        savedCablePoints = if (cable.size in 2..HoseCableMath.MAX_POINTS) (0 until cable.size).map { index ->
+            val point = cable.getList(index)
+            Vec3(point.getDouble(0), point.getDouble(1), point.getDouble(2))
+        }.takeIf(HoseCableMath::valid) else null
         if (tag.contains("Pulley")) configure(BlockPos.of(tag.getLong("Pulley")), tag.getFloat("HoseLength"))
         entityData.set(DOCK_ID, java.util.Optional.empty())
         entityData.set(DOCK_POSITION, java.util.Optional.empty())
@@ -281,6 +301,10 @@ class HoseHeadEntity(type: EntityType<out HoseHeadEntity>, level: Level) : Entit
 
     override fun addAdditionalSaveData(tag: CompoundTag) {
         if (!configured) return
+        val points = HoseCablePhysics.points(this).ifEmpty { savedCablePoints.orEmpty() }
+        if (HoseCableMath.valid(points)) tag.put("CablePoints", ListTag().also { saved -> points.forEach { point ->
+            saved.add(ListTag().also { row -> row.add(DoubleTag.valueOf(point.x)); row.add(DoubleTag.valueOf(point.y)); row.add(DoubleTag.valueOf(point.z)) })
+        } })
         tag.putLong("Pulley", ownerPosition.asLong())
         tag.putFloat("HoseLength", hoseLength)
         dockId?.let { tag.putUUID("DockId", it) }

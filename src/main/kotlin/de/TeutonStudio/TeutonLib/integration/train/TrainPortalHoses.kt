@@ -39,6 +39,9 @@ class TrainPortalHoses private constructor(private val source: ServerLevel, priv
             }
             val target = if (portal == null) entry.position else portal.transformPoint(entry.position)
             val velocity = if (portal == null) entry.velocity else portal.transformLocalVecNonScale(entry.velocity)
+            de.TeutonStudio.TeutonLib.integration.sable.HoseCablePhysics.transform(head) {
+                if (portal == null) it else portal.transformPoint(it)
+            }
             val moved = if (head.level() === sub.level) {
                 head.teleportTo(target.x, target.y, target.z); head.deltaMovement = velocity; head
             } else head.changeDimension(DimensionTransition(sub.level, target, velocity, head.yRot, head.xRot,

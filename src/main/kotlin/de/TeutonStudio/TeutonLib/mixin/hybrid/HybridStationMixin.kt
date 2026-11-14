@@ -38,7 +38,35 @@ abstract class HybridStationMixin {
         if (cir.returnValue) StationBuildRuntime.begin(this as Any as StationBlockEntity)
     }
 
-    @Redirect(method = ["refreshAssemblyInfo()V", "trackClicked"], at = At(value = "INVOKE",
+    // The first refreshAssemblyInfo read checks the track itself, never a plot.
+    @Redirect(method = ["refreshAssemblyInfo()V"], at = At(value = "INVOKE",
+        target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;", ordinal = 1), require = 1)
+    private fun `teutonlib$uprightBogeyState`(level: Level, pos: BlockPos): BlockState =
+        StationBuildRuntime.state(this as Any as StationBlockEntity, level, pos)
+
+    @Redirect(method = ["refreshAssemblyInfo()V"], at = At(value = "INVOKE",
+        target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;", ordinal = 2), require = 1)
+    private fun `teutonlib$invertedBogeyState`(level: Level, pos: BlockPos): BlockState =
+        StationBuildRuntime.state(this as Any as StationBlockEntity, level, pos)
+
+    @Inject(method = ["tick()V"], at = [At("RETURN")], require = 1)
+    private fun `teutonlib$syncBuildView`(ci: org.spongepowered.asm.mixin.injection.callback.CallbackInfo) {
+        StationBuildRuntime.sync(this as Any as StationBlockEntity)
+    }
+
+    @Inject(method = ["write"], at = [At("RETURN")], require = 1)
+    private fun `teutonlib$writeBuildView`(tag: net.minecraft.nbt.CompoundTag, registries: net.minecraft.core.HolderLookup.Provider,
+        clientPacket: Boolean, ci: CallbackInfo) {
+        if (clientPacket) StationBuildRuntime.writeView(this as Any as StationBlockEntity, tag)
+    }
+
+    @Inject(method = ["read"], at = [At("RETURN")], require = 1)
+    private fun `teutonlib$readBuildView`(tag: net.minecraft.nbt.CompoundTag, registries: net.minecraft.core.HolderLookup.Provider,
+        clientPacket: Boolean, ci: CallbackInfo) {
+        if (clientPacket) StationBuildRuntime.readView(this as Any as StationBlockEntity, tag, registries)
+    }
+
+    @Redirect(method = ["trackClicked"], at = At(value = "INVOKE",
         target = "Lnet/minecraft/world/level/Level;getBlockState(Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;"), require = 1)
     private fun `teutonlib$buildState`(level: Level, pos: BlockPos): BlockState =
         StationBuildRuntime.state(this as Any as StationBlockEntity, level, pos)
@@ -72,6 +100,10 @@ abstract class HybridStationMixin {
     @WrapMethod(method = ["exitAssemblyMode()Z"])
     private fun `teutonlib$leaveBuild`(original: Operation<Boolean>): Boolean {
         val station = this as Any as StationBlockEntity
+        // Create mutates its block state before discovering a missing graph.
+        // Do not commit our handoff while that native exit cannot succeed.
+        if (StationBuildRuntime.bodies(station).isNotEmpty() &&
+            (!station.isAssembling || station.station == null || station.edgePoint.determineGraphLocation() == null)) return false
         try { StationBuildRuntime.finish(station) }
         catch (failure: IllegalStateException) {
             lastException = AssemblyException(Component.literal(failure.message ?: "Train construction area is obstructed"))

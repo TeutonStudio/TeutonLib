@@ -185,6 +185,12 @@ class HoseConnectorVerification {
         val player = FakePlayerFactory.getMinecraft(world)
         player.setPos(connector.socketWorld().add(0.0, 0.0, 1.0))
         player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack(AllItems.WRENCH.get()))
+        // This fixture teleports its fake carrier between lanes. Seed the new cable at the
+        // carried endpoint; ordinary gameplay moves the strand continuously through physics.
+        de.TeutonStudio.TeutonLib.integration.sable.HoseCablePhysics.remove(head)
+        val pose = head.saveWithoutId(net.minecraft.nbt.CompoundTag()).also { it.remove("CablePoints") }
+        head.load(pose)
+        head.setPos(connector.socketWorld())
         head.carry(player)
         check(connector.dock(head, player)) { "dock rejected lane $lane" }
         check(connector.active()) { "mutual UUIDs not active lane $lane" }
@@ -356,8 +362,11 @@ class HoseConnectorVerification {
         }
         fun step() {
             for (body in bodies) body.prePhysicsTickBegin()
-            de.TeutonStudio.TeutonLib.integration.sable.HoseConnectorPhysics.physics(
+            de.TeutonStudio.TeutonLib.integration.sable.HoseCablePhysics.ensure(head)
+            de.TeutonStudio.TeutonLib.integration.sable.HoseCablePhysics.before(
                 dev.ryanhcode.sable.neoforge.event.ForgeSablePrePhysicsTickEvent(system, .01))
+            de.TeutonStudio.TeutonLib.integration.sable.HoseCablePhysics.after(
+                dev.ryanhcode.sable.neoforge.event.ForgeSablePostPhysicsTickEvent(system, .01))
         }
         fun impulse(body: dev.ryanhcode.sable.sublevel.ServerSubLevel): org.joml.Vector3d =
             body.logicalPose().orientation().transform(org.joml.Vector3d(body.getOrCreateQueuedForceGroup(HoseConnectors.TENSION.get()).forceTotal.localForce))
@@ -406,7 +415,7 @@ class HoseConnectorVerification {
             repeat(24) { step() }
             check(connector.headId == id && connector.overloadSeconds < .25) { "overload released too early" }
             step()
-            check(connector.headId == null && head.dockId == null) { "overload did not release at 0.25 seconds" }
+            check(connector.headId == null && head.dockId == null) { "overload did not release at 0.25 seconds: force=${connector.tension} seconds=${connector.overloadSeconds} ready=${de.TeutonStudio.TeutonLib.integration.sable.HoseCablePhysics.ready(head)} points=${de.TeutonStudio.TeutonLib.integration.sable.HoseCablePhysics.points(head).size} length=${head.cableLength()}" }
             check(HosePipeGraph.remote(world, owner.blockPos, Direction.DOWN) == null) { "overload left graph edge active" }
             return "world/ship and ship/ship pull, slack, assembly UUIDs, moved/rotated socket, overload release"
         } finally {

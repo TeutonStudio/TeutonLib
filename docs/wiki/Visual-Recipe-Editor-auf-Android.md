@@ -1,5 +1,11 @@
 # Visual Recipe Editor auf Android
 
+**Deutsch** · [English](Visual-Recipe-Editor-auf-Android-en) · [Übersicht](Home)
+
+> **Ab TeutonLib 1.6.2:** Diese Adapter liegen jetzt im TerrArchitecture-Modul [`mobilecompat`](https://github.com/TeutonStudio/TerrArchitecture/blob/master/src/main/kotlin/de/TeutonStudio/mobilecompat/SPECS.md). TeutonLib liefert sie nicht mehr aus. Beschreibung und Desktop-Prüfnachweise unten beziehen sich auf frühere TeutonLib-Versionen. Bestehende `teutonlib.mobile.*`-Optionen bleiben in TerrArchitecture als Aliase erhalten.
+
+## Historisches TeutonLib-Verhalten bis einschließlich 1.6.1
+
 TeutonLib deaktiviert auf Android das eingebaute **Entwickler-Workspace-Backup von Visual Recipe Editor 1.2.1**. Dieser eng begrenzte Eingriff verhindert die Ausführung der gebündelten Backup-Prozedur.
 
 ## Verwendung und Grenzen
@@ -16,3 +22,11 @@ Abweichende Visual-Recipe-Editor-Versionen aktivieren den Mixin nicht. Die JVM-A
 - [Umgebungs- und Versionsprüfung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/CsoMixinPlugin.kt)
 
 [Wiki-Startseite](Home) · [Android und Zalith](Android-und-Zalith-Kompatibilitaet)
+
+## Abbildung
+
+Ausgeführte Desktop-Prüfung der exakt unterstützten Einsprungmethoden. Kein Funktionsnachweis auf einem Android-Gerät.
+
+![Visual Recipe Editor auf Android: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-MobileDependencyCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

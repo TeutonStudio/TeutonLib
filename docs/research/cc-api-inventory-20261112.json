@@ -1,0 +1,1597 @@
+{
+  "schema_version": 1,
+  "date": "2026-11-12",
+  "status": "planning evidence; no API reference implementation",
+  "source_lock": "../../../TerrArchitecture/config/modpack-lock.json",
+  "source_lock_sha256": "c5f58811846558bf52971de543bf7967349a955ea75bea9c069ec0c9c5dfac6f",
+  "locked_artifacts": 453,
+  "scanned_artifacts": 447,
+  "unscanned_artifacts": [
+    "Essential_1-5-2_neoforge_1-21-1.jar",
+    "TerrArchitecture-0.1.0.jar",
+    "kotlinforforge-5.11.0-all.jar",
+    "reeses-sodium-options-neoforge-1.8.3+mc1.21.4.jar",
+    "sodium-neoforge-0.8.12-beta.2+mc1.21.1.jar",
+    "sodiumoptionsapi-neoforge-1.0.10-1.21.1.jar"
+  ],
+  "scan_scope": "Recursively inspect active client-profile JARs and nested JARs for CC API bytecode references and Lua ROM resources. Supplement indirect computer APIs in Mekanism Generators and Extreme Reactors, and inspect ccbr recipes. No peripheral methods were called. Not all referenced classes are public Lua APIs.",
+  "records": [
+    {
+      "file": "AdvancedPeripherals-1.21.1-0.7.61b.jar",
+      "mods": [
+        {
+          "mod_id": "advancedperipherals",
+          "display_name": "Advanced Peripherals",
+          "version": "0.7.61b"
+        }
+      ],
+      "classes": [
+        "de/srendi/advancedperipherals/AdvancedPeripherals.class",
+        "de/srendi/advancedperipherals/common/commands/APCommands.class",
+        "de/srendi/advancedperipherals/common/util/DataStorageUtil$RotationCharge.class",
+        "de/srendi/advancedperipherals/common/util/inventory/InventoryUtil.class",
+        "de/srendi/advancedperipherals/common/util/inventory/BasicCraftJob.class",
+        "de/srendi/advancedperipherals/common/util/inventory/FluidUtil.class",
+        "de/srendi/advancedperipherals/common/util/inventory/ChemicalUtil.class",
+        "de/srendi/advancedperipherals/common/util/DataStorageUtil.class",
+        "de/srendi/advancedperipherals/common/blocks/base/PeripheralBlockEntity.class",
+        "de/srendi/advancedperipherals/common/blocks/base/ICapabilityProvider.class",
+        "de/srendi/advancedperipherals/common/setup/CCRegistration.class",
+        "de/srendi/advancedperipherals/common/addons/powah/ReactorIntegration.class",
+        "de/srendi/advancedperipherals/common/addons/powah/FurnatorIntegration.class",
+        "de/srendi/advancedperipherals/common/addons/powah/EnderCellIntegration.class",
+        "de/srendi/advancedperipherals/common/addons/powah/SolarPanelIntegration.class",
+        "de/srendi/advancedperipherals/common/addons/powah/EnergyCellIntegration.class",
+        "de/srendi/advancedperipherals/common/addons/powah/Integration.class",
+        "de/srendi/advancedperipherals/common/addons/powah/ThermoIntegration.class",
+        "de/srendi/advancedperipherals/common/addons/powah/MagmatorIntegration.class",
+        "de/srendi/advancedperipherals/common/addons/refinedstorage/RSMekanismApi.class",
+        "de/srendi/advancedperipherals/common/addons/appliedenergistics/AECraftJob.class",
+        "de/srendi/advancedperipherals/common/addons/appliedenergistics/AEMekanismApi.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/luaapi/GlobalVersionsLuaAPI.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/integrations/BlockIntegration.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/integrations/BlockEntityIntegration.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/integrations/BeaconIntegration.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/integrations/NoteBlockIntegration.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/integrations/IntegrationPeripheralProvider.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/CompassPeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/NBTStoragePeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/GeoScannerPeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/RSBridgePeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/metaphysics/OverpoweredEndAutomataCorePeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/metaphysics/HusbandryAutomataCorePeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/metaphysics/OverpoweredWeakAutomataCorePeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/metaphysics/WeakAutomataCorePeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/metaphysics/OverpoweredHusbandryAutomataCorePeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/metaphysics/EndAutomataCorePeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/EnvironmentDetectorPeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/EnergyDetectorPeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/BlockReaderPeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/InventoryManagerPeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/ChunkyPeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/plugins/AutomataEntityTransferPlugin.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/plugins/AutomataEntityHandPlugin.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/plugins/AutomataSoulFeedingPlugin.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/plugins/AutomataChargingPlugin.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/plugins/AutomataItemSuckPlugin.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/plugins/AutomataBlockHandPlugin.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/plugins/AutomataLookPlugin.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/plugins/AutomataWarpingPlugin.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/PlayerDetectorPeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/ChatBoxPeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/MEBridgePeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/peripheral/ColonyPeripheral.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/turtles/TurtleChunkyUpgrade.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/turtles/TurtleChatBoxUpgrade.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/owner/TurtleFuelAbility.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/owner/OperationAbility.class",
+        "de/srendi/advancedperipherals/common/addons/computercraft/owner/FuelAbility.class",
+        "de/srendi/advancedperipherals/common/addons/mekanism/EnvironmentRadiationPlugin.class",
+        "de/srendi/advancedperipherals/lib/pocket/BasePocketUpgrade.class",
+        "de/srendi/advancedperipherals/lib/turtle/PeripheralTurtleUpgrade.class",
+        "de/srendi/advancedperipherals/lib/integrations/IPeripheralIntegration.class",
+        "de/srendi/advancedperipherals/lib/peripherals/IBasePeripheral.class",
+        "de/srendi/advancedperipherals/lib/peripherals/AutomataCorePeripheral.class",
+        "de/srendi/advancedperipherals/lib/peripherals/IPeripheralCheck$ChainedPeripheralCheck.class",
+        "de/srendi/advancedperipherals/lib/peripherals/BasePeripheral.class",
+        "de/srendi/advancedperipherals/lib/peripherals/IPeripheralFunction.class",
+        "de/srendi/advancedperipherals/lib/peripherals/IPeripheralPlugin.class",
+        "de/srendi/advancedperipherals/lib/peripherals/IPeripheralCheck.class",
+        "de/srendi/advancedperipherals/lib/peripherals/IntegrationPeripheral.class",
+        "de/srendi/advancedperipherals/lib/peripherals/DisabledPeripheral.class"
+      ],
+      "lua": [],
+      "expected_sha512": "256eada010294dc64b6a912b7fe0ea02e9fcc5c0aba73eba228953f38031ea4f9e718049c814c0a6dfeb00d46812cfc7123844513cd8ea58cfae1f6499ebd19e",
+      "observed_sha512": "256eada010294dc64b6a912b7fe0ea02e9fcc5c0aba73eba228953f38031ea4f9e718049c814c0a6dfeb00d46812cfc7123844513cd8ea58cfae1f6499ebd19e",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "create-aeronautics-bundled-1.21.1-1.3.2.jar",
+      "mods": [
+        {
+          "mod_id": "aeronautics_bundled",
+          "display_name": "Create Aeronautics",
+          "version": "1.3.2"
+        }
+      ],
+      "classes": [
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/ComputerCraftPeripherals.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/AltitudeSensorPeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/DirectionalLinkPeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/DockingConnectorPeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/GimbalSensorPeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/LinkedTypewriterPeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/ModulatingLinkPeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/NamePlatePeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/NavTablePeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/OpticalSensorPeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/SimPeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/SwivelBearingPeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/TorsionSpringPeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/peripherals/VelocitySensorPeripheral.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/compat/computercraft/wired/DockingConnectorWiredElementImpl.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/neoforge/service/compat/NeoForgeSimPeripheralService.class",
+        "META-INF/jarjar/dev.simulated_team.simulated.simulated-neoforge-1.21.1-1.3.2.jar!dev/simulated_team/simulated/service/compat/SimPeripheralService.class"
+      ],
+      "lua": [],
+      "expected_sha512": "dc7e8e1148fa442243889ba29412207137e1bb86206e6c92bc0a589f1374a466e93de22bdbf14f753984d86c29308fbbdc0f14a4b9618b14c0ac1666a36b46f5",
+      "observed_sha512": "dc7e8e1148fa442243889ba29412207137e1bb86206e6c92bc0a589f1374a466e93de22bdbf14f753984d86c29308fbbdc0f14a4b9618b14c0ac1666a36b46f5",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract",
+      "nested_owner_mods": [
+        {
+          "mod_id": "aeronautics",
+          "version": "1.3.2"
+        },
+        {
+          "mod_id": "offroad",
+          "version": "1.3.2"
+        },
+        {
+          "mod_id": "simulated",
+          "version": "1.3.2"
+        }
+      ]
+    },
+    {
+      "file": "ExtremeReactors2-1.21.1-2.4.9.jar",
+      "mods": [
+        {
+          "mod_id": "bigreactors",
+          "display_name": "Extreme Reactors",
+          "version": "1.21.1-2.4.9"
+        }
+      ],
+      "classes": [
+        "it/zerono/mods/extremereactors/gamecontent/multiblock/energizer/computer/EnergizerComputerPeripheral.class",
+        "it/zerono/mods/extremereactors/gamecontent/multiblock/energizer/computer/package-info.class",
+        "it/zerono/mods/extremereactors/gamecontent/multiblock/reactor/computer/package-info.class",
+        "it/zerono/mods/extremereactors/gamecontent/multiblock/reactor/computer/ReactorComputerPeripheral.class",
+        "it/zerono/mods/extremereactors/gamecontent/multiblock/turbine/computer/package-info.class",
+        "it/zerono/mods/extremereactors/gamecontent/multiblock/turbine/computer/TurbineComputerPeripheral.class"
+      ],
+      "lua": [],
+      "evidence_kind": "indirect computer API via ZeroCore",
+      "expected_sha512": "4b934d4479751796a8c26327517f6a31a9f8a299023950947768deb7b9d8c77ac106e07024e0b88109f65fbb13d38b28d7d6a9026ae426c0b8f13a7fd0b33dea",
+      "observed_sha512": "4b934d4479751796a8c26327517f6a31a9f8a299023950947768deb7b9d8c77ac106e07024e0b88109f65fbb13d38b28d7d6a9026ae426c0b8f13a7fd0b33dea",
+      "sides": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "file": "cc-aeroworks-1.5.4.jar",
+      "mods": [
+        {
+          "mod_id": "cc_aeroworks",
+          "display_name": "CC-Aeroworks",
+          "version": "1.5.4"
+        },
+        {
+          "mod_id": "cc_aeroworks_radarcompat",
+          "display_name": "CC-Aeroworks: Create Radars Compatibility",
+          "version": "1.5.4"
+        },
+        {
+          "mod_id": "cc_aeroworks_ctfcompat",
+          "display_name": "CC-Aeroworks: Create Train Functionality Compatibility",
+          "version": "1.5.4"
+        }
+      ],
+      "classes": [
+        "de/teutonstudio/ccaeroworks/api/mobile/MobilePeripheralInstance.class",
+        "de/teutonstudio/ccaeroworks/gametest/ConsoleComputerGameTests.class",
+        "de/teutonstudio/ccaeroworks/compat/ccterminals/CCTerminalDevice.class",
+        "de/teutonstudio/ccaeroworks/compat/computercraft/ContraptionControlPeripheral.class",
+        "de/teutonstudio/ccaeroworks/compat/computercraft/ControlDeskPeripheral.class",
+        "de/teutonstudio/ccaeroworks/compat/computercraft/ControlDeskPeripheralRegistry.class",
+        "de/teutonstudio/ccaeroworks/compat/teutonlib/DeskComputerWorkspace.class",
+        "de/teutonstudio/ccaeroworks/computer/AeroworksPeripheralTopologyProvider.class",
+        "de/teutonstudio/ccaeroworks/computer/CCLuaApis.class",
+        "de/teutonstudio/ccaeroworks/computer/ComputerChannelAdminLuaApi.class",
+        "de/teutonstudio/ccaeroworks/computer/ComputerChannelLuaApi.class",
+        "de/teutonstudio/ccaeroworks/computer/ComputerConsoleLuaApi.class",
+        "de/teutonstudio/ccaeroworks/computer/ComputerControlLuaApi.class",
+        "de/teutonstudio/ccaeroworks/computer/ComputerWireAdminLuaApi.class",
+        "de/teutonstudio/ccaeroworks/computer/ComputerWireLuaApi.class",
+        "de/teutonstudio/ccaeroworks/computer/ConsoleComputer.class",
+        "de/teutonstudio/ccaeroworks/computer/ConsoleTerminal.class",
+        "de/teutonstudio/ccaeroworks/computer/DeskLuaHandle.class",
+        "de/teutonstudio/ccaeroworks/computer/DisplayScriptDiagnosticsLuaApi.class",
+        "de/teutonstudio/ccaeroworks/computer/MobileBinding.class",
+        "de/teutonstudio/ccaeroworks/computer/MobileHandle.class",
+        "de/teutonstudio/ccaeroworks/computer/MobilePeripheralLuaApi.class",
+        "de/teutonstudio/ccaeroworks/computer/MobileTelemetryLuaApi.class",
+        "de/teutonstudio/ccaeroworks/computer/PeripheralLuaHandle.class",
+        "de/teutonstudio/ccaeroworks/computer/PeripheralNetworkBuilder.class",
+        "de/teutonstudio/ccaeroworks/computer/PeripheralNetworkNode.class",
+        "de/teutonstudio/ccaeroworks/computer/PeripheralNetworkRuntime$computerContext$1.class",
+        "de/teutonstudio/ccaeroworks/computer/PeripheralNetworkRuntime.class",
+        "de/teutonstudio/ccaeroworks/computer/source/GpsSourceTracker.class",
+        "de/teutonstudio/ccaeroworks/contraption/MobileConsoleComputer.class",
+        "de/teutonstudio/ccaeroworks/contraption/MobileContraptionControlPeripheral.class",
+        "de/teutonstudio/ccaeroworks/contraption/VirtualAeroworksDeskInstance.class",
+        "de/teutonstudio/ccaeroworks/contraption/VirtualCcPeripheralInstance$CarrierPeripheral.class",
+        "de/teutonstudio/ccaeroworks/contraption/VirtualCcPeripheralInstance$MobileRedstoneRelayPeripheral.class",
+        "de/teutonstudio/ccaeroworks/contraption/VirtualCcPeripheralInstance.class",
+        "de/teutonstudio/ccaeroworks/ctfcompat/computer/DashboardControllerPeripheral.class",
+        "de/teutonstudio/ccaeroworks/ctfcompat/computer/DashboardControllerPeripheralRegistry.class",
+        "de/teutonstudio/ccaeroworks/radarcompat/compat/computercraft/RadarControlDeskPeripheral.class",
+        "de/teutonstudio/ccaeroworks/telemetry/DockLuaHandle.class",
+        "de/teutonstudio/ccaeroworks/telemetry/TelemetryLuaApi.class"
+      ],
+      "lua": [
+        "data/computercraft/lua/rom/autorun/cc_aeroworks_channels.lua",
+        "data/computercraft/lua/rom/autorun/cc_aeroworks_control_handlers.lua",
+        "data/computercraft/lua/rom/autorun/cc_aeroworks_display_handlers.lua",
+        "data/computercraft/lua/rom/autorun/cc_aeroworks_peripherals.lua",
+        "data/computercraft/lua/rom/autorun/cc_aeroworks_wires.lua",
+        "data/computercraft/lua/rom/modules/main/display.lua",
+        "data/computercraft/lua/rom/modules/main/touchdisplay.lua",
+        "data/computercraft/lua/rom/programs/cc_aeroworks_channels.lua",
+        "data/computercraft/lua/rom/programs/cc_aeroworks_peripherals.lua",
+        "data/computercraft/lua/rom/programs/cc_aeroworks_wires.lua"
+      ],
+      "expected_sha512": "bde51e0a34f1aa571414e6e2e69be67c0c91f055f9a19c0efb6aa9229320d7676b37ae48d746325aa6c42f4cb1788ec14ae0d89d7fe03991c87b4385c817283c",
+      "observed_sha512": "bde51e0a34f1aa571414e6e2e69be67c0c91f055f9a19c0efb6aa9229320d7676b37ae48d746325aa6c42f4cb1788ec14ae0d89d7fe03991c87b4385c817283c",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "cc_androids-1.4.0-1.21.jar",
+      "mods": [
+        {
+          "mod_id": "cc_androids",
+          "display_name": "CC: Androids",
+          "version": "1.4.0-1.21"
+        }
+      ],
+      "classes": [
+        "com/thunderbear06/CCAndroids.class",
+        "com/thunderbear06/computer/AndroidComputerContainer.class",
+        "com/thunderbear06/computer/api/AndroidAPI.class"
+      ],
+      "lua": [
+        "data/computercraft/lua/rom/autorun/android_startup.lua",
+        "data/computercraft/lua/rom/programs/android/follow.lua",
+        "data/computercraft/lua/rom/programs/android/guard.lua"
+      ],
+      "expected_sha512": "ecc05471b28f510f7ba2e0b88aa1a21fdbb8eb3cf8d981b29dbc554414d05a8b9248a7990161357abec838b17f5aee28a2262508369f275b0dff58b5e588b5d0",
+      "observed_sha512": "ecc05471b28f510f7ba2e0b88aa1a21fdbb8eb3cf8d981b29dbc554414d05a8b9248a7990161357abec838b17f5aee28a2262508369f275b0dff58b5e588b5d0",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "cc_sable-neoforge-1.3.4.jar",
+      "mods": [
+        {
+          "mod_id": "cc_sable",
+          "display_name": "CC: Sable",
+          "version": "1.3.4"
+        }
+      ],
+      "classes": [
+        "io/github/techtastic/cc_sable/CCSable.class",
+        "io/github/techtastic/cc_sable/apis/AerodynamicsAPI.class",
+        "io/github/techtastic/cc_sable/apis/SubLevelAPI.class",
+        "io/github/techtastic/cc_sable/util/LuaBezierResourceFunction.class"
+      ],
+      "lua": [
+        "data/computercraft/lua/rom/apis/aero.lua",
+        "data/computercraft/lua/rom/apis/matrix.lua",
+        "data/computercraft/lua/rom/apis/quaternion.lua",
+        "data/computercraft/lua/rom/apis/sublevel.lua",
+        "data/computercraft/lua/rom/modules/main/advanced_math/mmath.lua",
+        "data/computercraft/lua/rom/modules/main/advanced_math/pid.lua",
+        "data/computercraft/lua/rom/modules/main/advanced_math/stats.lua"
+      ],
+      "expected_sha512": "70e7e09c8a4a566fe8bd67a8d53069083e8285a15cb680412b415f5104b5be3ad3b623c9ccd99f165996933ef5d81aa1966633796d7439f562b6e35ae59af717",
+      "observed_sha512": "70e7e09c8a4a566fe8bd67a8d53069083e8285a15cb680412b415f5104b5be3ad3b623c9ccd99f165996933ef5d81aa1966633796d7439f562b6e35ae59af717",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "ccbr-1.2.0-neoforge-1.21.1.jar",
+      "mods": [
+        {
+          "mod_id": "ccbr",
+          "display_name": "Create: CC Better Recipes",
+          "version": "1.2.0"
+        }
+      ],
+      "classes": [],
+      "lua": [],
+      "evidence_kind": "recipes and materials only; no public Lua surface detected",
+      "expected_sha512": "53af168c2635d716476c71747c4df7a968d01657cc55aeccadf04c95a8b9adf598c91d4254576bd6c963c05edbd917362b475ec37c31bdd6a8ba31bd9f3cc26a",
+      "observed_sha512": "53af168c2635d716476c71747c4df7a968d01657cc55aeccadf04c95a8b9adf598c91d4254576bd6c963c05edbd917362b475ec37c31bdd6a8ba31bd9f3cc26a",
+      "sides": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "file": "cccbridge-mc1.21.1-v1.7.2-neoforge.jar",
+      "mods": [
+        {
+          "mod_id": "cccbridge",
+          "display_name": "CC:C Bridge",
+          "version": "1.7.2"
+        }
+      ],
+      "classes": [
+        "dev/kleinbox/cccbridge/common/computercraft/peripherals/AnimatronicPeripheral.class",
+        "dev/kleinbox/cccbridge/common/computercraft/peripherals/RedRouterBlockPeripheral.class",
+        "dev/kleinbox/cccbridge/common/computercraft/peripherals/ScrollerBlockPeripheral.class",
+        "dev/kleinbox/cccbridge/common/computercraft/peripherals/SourceBlockPeripheral.class",
+        "dev/kleinbox/cccbridge/common/computercraft/peripherals/TargetBlockPeripheral.class",
+        "dev/kleinbox/cccbridge/common/computercraft/TweakedPeripheral.class",
+        "dev/kleinbox/cccbridge/common/create/display/SourceBlockDisplaySource.class",
+        "dev/kleinbox/cccbridge/common/minecraft/blockEntity/AnimatronicBlockEntity.class",
+        "dev/kleinbox/cccbridge/common/minecraft/blockEntity/PeripheralBlockEntity.class",
+        "dev/kleinbox/cccbridge/common/minecraft/blockEntity/RedRouterBlockEntity.class",
+        "dev/kleinbox/cccbridge/common/minecraft/blockEntity/ScrollerBlockEntity.class",
+        "dev/kleinbox/cccbridge/common/minecraft/blockEntity/SourceBlockEntity.class",
+        "dev/kleinbox/cccbridge/common/minecraft/blockEntity/TargetBlockEntity.class",
+        "dev/kleinbox/cccbridge/common/modloader/CCCBridge.class"
+      ],
+      "lua": [
+        "data/computercraft/lua/rom/autorun/cccbridge.lua"
+      ],
+      "expected_sha512": "b00cc2b77b8db073de77a82afb39e4f1d17addaa055382172d4fccff570d3c20b712a958de6f3f4a206f22513f56b1bd5267ee053a97f95e48e0e88b8780e58e",
+      "observed_sha512": "b00cc2b77b8db073de77a82afb39e4f1d17addaa055382172d4fccff570d3c20b712a958de6f3f4a206f22513f56b1bd5267ee053a97f95e48e0e88b8780e58e",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "cccredstonelink-0.0.2.jar",
+      "mods": [
+        {
+          "mod_id": "cccredstonelink",
+          "display_name": "CC: Create Redstone Link",
+          "version": "0.0.2"
+        }
+      ],
+      "classes": [
+        "me/ryleu/cccredstonelink/CCRedstoneLinkBridgeMod.class",
+        "me/ryleu/cccredstonelink/RedstoneLinkBridgePeripheral.class"
+      ],
+      "lua": [],
+      "expected_sha512": "e3c468cf844a281308764dea1376bc4986579ff89224af9b380a86495a19f70925c07ccff36b21f052d2338c81b32ce873a18498248be5e0f9f1cb7e8a26650b",
+      "observed_sha512": "e3c468cf844a281308764dea1376bc4986579ff89224af9b380a86495a19f70925c07ccff36b21f052d2338c81b32ce873a18498248be5e0f9f1cb7e8a26650b",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "ccgraphics-1.21.1-forge-0.2.1.jar",
+      "mods": [
+        {
+          "mod_id": "ccgraphics",
+          "display_name": "CC: Graphics",
+          "version": "0.2.1"
+        }
+      ],
+      "classes": [
+        "com/sashafiesta/ccgraphics/mixin/TermMethodsMixin.class"
+      ],
+      "lua": [
+        "data/ccgraphics/lua/rom/apis/paintutils.lua",
+        "data/ccgraphics/lua/rom/apis/term.lua",
+        "data/ccgraphics/lua/rom/apis/window.lua",
+        "data/ccgraphics/lua/rom/programs/clear.lua",
+        "data/ccgraphics/lua/rom/programs/shell.lua",
+        "data/ccgraphics/lua/rom/programs/fun/advanced/gfxpaint.lua",
+        "data/ccgraphics/lua/rom/programs/fun/advanced/pngview.lua",
+        "data/ccgraphics/lua/rom/programs/fun/advanced/raycast.lua"
+      ],
+      "expected_sha512": "97ad14e39e311b6e020e816c2f406c7c903c2c97bf5eebd4bef802607eda495dc8a892b6270eb56f84e400cad4d1ab70205c79249a7da7397f7ef1dc780b136f",
+      "observed_sha512": "97ad14e39e311b6e020e816c2f406c7c903c2c97bf5eebd4bef802607eda495dc8a892b6270eb56f84e400cad4d1ab70205c79249a7da7397f7ef1dc780b136f",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "ccoptical-1.0.3.jar",
+      "mods": [
+        {
+          "mod_id": "ccoptical",
+          "display_name": "CC:Optical",
+          "version": "1.0.3"
+        }
+      ],
+      "classes": [
+        "cybjel/ccoptical/CCOptical.class",
+        "cybjel/ccoptical/block/entity/AbstractEntitySensorBlockEntity.class",
+        "cybjel/ccoptical/block/entity/EntitySensorPeripheral.class",
+        "cybjel/ccoptical/compat/CbcCannonMountPeripheral.class"
+      ],
+      "lua": [],
+      "expected_sha512": "904977dc3768f9bb0f9fefa34c174078faf1ef3e01499be6ddd9863293fb3d3e38cf594ea53eedd1939b9d3162195945a335ebd9a09aa0f2873838ce8bce69c9",
+      "observed_sha512": "904977dc3768f9bb0f9fefa34c174078faf1ef3e01499be6ddd9863293fb3d3e38cf594ea53eedd1939b9d3162195945a335ebd9a09aa0f2873838ce8bce69c9",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "ccredstonelinkbridge-neoforge-1.0.3.jar",
+      "mods": [
+        {
+          "mod_id": "ccredstonelinkbridge",
+          "display_name": "CC Redstone Link Bridge",
+          "version": "1.0.0"
+        }
+      ],
+      "classes": [
+        "de/ccredstonelinkbridge/CCRedstoneLinkBridgeMod.class",
+        "de/ccredstonelinkbridge/RedstoneLinkBridgePeripheral.class"
+      ],
+      "lua": [],
+      "expected_sha512": "d7a1cb8d4b02a25bdbebd6893e94cfb1d0702a534f9168886dcf82bec9cc6c4190dbcd0dbc11701fe0cff9b5a38fb9331874249dc7ced4fbc2e9b4dd1645e984",
+      "observed_sha512": "d7a1cb8d4b02a25bdbebd6893e94cfb1d0702a534f9168886dcf82bec9cc6c4190dbcd0dbc11701fe0cff9b5a38fb9331874249dc7ced4fbc2e9b4dd1645e984",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "ccterminals-1.21.1-forge-0.1.1.jar",
+      "mods": [
+        {
+          "mod_id": "ccterminals",
+          "display_name": "CC: Terminals",
+          "version": "0.1.1"
+        }
+      ],
+      "classes": [
+        "com/sashafiesta/ccterminals/TerminalPeripheral.class",
+        "com/sashafiesta/ccterminals/forge/CCTerminalsForge.class"
+      ],
+      "lua": [
+        "data/computercraft/lua/rom/autorun/ccterminals.lua",
+        "data/computercraft/lua/rom/programs/terminal.lua"
+      ],
+      "expected_sha512": "1984d7dcd1fb9ef1ad9631c1a64511eb679c27cab43a33176f8a0d458f82c91ac8803a89976e59069bc4a8b0d5ca037dc04faa524c380b4afa53439d2361a7d9",
+      "observed_sha512": "1984d7dcd1fb9ef1ad9631c1a64511eb679c27cab43a33176f8a0d458f82c91ac8803a89976e59069bc4a8b0d5ca037dc04faa524c380b4afa53439d2361a7d9",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "ccvisual-0.1.0.jar",
+      "mods": [
+        {
+          "mod_id": "ccvisual",
+          "display_name": "CCVisual",
+          "version": "0.1.0"
+        }
+      ],
+      "classes": [
+        "dev/teutonstudio/ccvisual/graph/PeripheralNodeGenerator$discover$$inlined$sortedBy$1.class",
+        "dev/teutonstudio/ccvisual/graph/PeripheralNodeGenerator.class",
+        "dev/teutonstudio/ccvisual/runtime/CCVisualRuntime.class",
+        "dev/teutonstudio/ccvisual/runtime/PeripheralNicknameApi.class",
+        "dev/teutonstudio/ccvisual/runtime/ScriptComputerPeripheral.class"
+      ],
+      "lua": [
+        "assets/ccvisual/lua/math.lua"
+      ],
+      "expected_sha512": "cd682efd620e9167195db1f72ecedb4a603586ab0a1dd45be28971a807da88f0e921614c86d76bf6c7d62b24255dd618ebba41d4b712c725ba4f1396236832d9",
+      "observed_sha512": "cd682efd620e9167195db1f72ecedb4a603586ab0a1dd45be28971a807da88f0e921614c86d76bf6c7d62b24255dd618ebba41d4b712c725ba4f1396236832d9",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "Colony4ComputerCraft-1.21.1-2.8.3.jar",
+      "mods": [
+        {
+          "mod_id": "colony4cc",
+          "display_name": "MineColonies for ComputerCraft",
+          "version": "2.8.3"
+        }
+      ],
+      "classes": [
+        "nz/co/mirality/colony4cc/block/PeripheralTile.class",
+        "nz/co/mirality/colony4cc/Colony4CC.class",
+        "nz/co/mirality/colony4cc/data/LuaHelpProvider$MethodInfo.class",
+        "nz/co/mirality/colony4cc/data/LuaHelpProvider.class",
+        "nz/co/mirality/colony4cc/mixin/MixinPocketBrain.class",
+        "nz/co/mirality/colony4cc/peripheral/ColonyPeripheral.class",
+        "nz/co/mirality/colony4cc/peripheral/PocketColonyPeripheral.class",
+        "nz/co/mirality/colony4cc/peripheral/TileColonyPeripheral.class",
+        "nz/co/mirality/colony4cc/pocket/PocketColony.class",
+        "nz/co/mirality/colony4cc/pocket/PocketColonyWireless.class",
+        "nz/co/mirality/colony4cc/Registry.class"
+      ],
+      "lua": [
+        "data/computercraft/lua/rom/autorun/colony.lua"
+      ],
+      "expected_sha512": "3fd1ece59c756bebbd56408a9edf33da6829ce7a85330d992e59761bb7815373fe0ce680514a9d96158345b59434855a2e3e1a201fee7777b2c153e321764e7f",
+      "observed_sha512": "3fd1ece59c756bebbd56408a9edf33da6829ce7a85330d992e59761bb7815373fe0ce680514a9d96158345b59434855a2e3e1a201fee7777b2c153e321764e7f",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "cc-tweaked-1.21.1-forge-1.120.2.jar",
+      "mods": [
+        {
+          "mod_id": "computercraft",
+          "display_name": "CC: Tweaked",
+          "version": "1.120.2"
+        }
+      ],
+      "classes": [
+        "dan200/computercraft/ComputerCraft.class",
+        "dan200/computercraft/impl/AbstractComputerCraftAPI.class",
+        "dan200/computercraft/impl/ApiFactories.class",
+        "dan200/computercraft/impl/ComputerCraftAPIImpl$CapabilityLookup.class",
+        "dan200/computercraft/impl/ComputerCraftAPIImpl.class",
+        "dan200/computercraft/impl/GenericSources.class",
+        "dan200/computercraft/impl/Peripherals.class",
+        "dan200/computercraft/impl/UpgradeManager.class",
+        "dan200/computercraft/impl/network/wired/WiredNetworkChangeImpl.class",
+        "dan200/computercraft/impl/network/wired/WiredNetworkImpl.class",
+        "dan200/computercraft/impl/network/wired/WiredNodeImpl.class",
+        "dan200/computercraft/shared/CommonHooks.class",
+        "dan200/computercraft/shared/ModRegistry.class",
+        "dan200/computercraft/shared/command/CommandComputerCraft.class",
+        "dan200/computercraft/shared/computer/apis/CommandAPI.class",
+        "dan200/computercraft/shared/computer/blocks/AbstractComputerBlockEntity.class",
+        "dan200/computercraft/shared/computer/blocks/ComputerBlockEntity.class",
+        "dan200/computercraft/shared/computer/blocks/ComputerPeripheral.class",
+        "dan200/computercraft/shared/computer/core/ComputerSystem.class",
+        "dan200/computercraft/shared/computer/core/ServerComputer.class",
+        "dan200/computercraft/shared/computer/core/ServerContext$Environment.class",
+        "dan200/computercraft/shared/computer/core/ServerContext.class",
+        "dan200/computercraft/shared/config/ConfigSpec.class",
+        "dan200/computercraft/shared/integration/ForgePermissionRegistry.class",
+        "dan200/computercraft/shared/integration/MoreRedIntegration.class",
+        "dan200/computercraft/shared/integration/RecipeModHelpers.class",
+        "dan200/computercraft/shared/lectern/CustomLecternBlock.class",
+        "dan200/computercraft/shared/lectern/CustomLecternBlockEntity.class",
+        "dan200/computercraft/shared/media/MountMedia.class",
+        "dan200/computercraft/shared/media/items/TreasureDiskMedia.class",
+        "dan200/computercraft/shared/network/NetworkMessages.class",
+        "dan200/computercraft/shared/peripheral/commandblock/CommandBlockPeripheral.class",
+        "dan200/computercraft/shared/peripheral/diskdrive/DiskDriveBlockEntity.class",
+        "dan200/computercraft/shared/peripheral/diskdrive/DiskDrivePeripheral.class",
+        "dan200/computercraft/shared/peripheral/generic/GenericPeripheral.class",
+        "dan200/computercraft/shared/peripheral/generic/GenericPeripheralBuilder.class",
+        "dan200/computercraft/shared/peripheral/generic/GenericPeripheralProvider.class",
+        "dan200/computercraft/shared/peripheral/generic/methods/AbstractEnergyMethods.class",
+        "dan200/computercraft/shared/peripheral/generic/methods/AbstractFluidMethods.class",
+        "dan200/computercraft/shared/peripheral/generic/methods/AbstractInventoryMethods.class",
+        "dan200/computercraft/shared/peripheral/generic/methods/EnergyMethods.class",
+        "dan200/computercraft/shared/peripheral/generic/methods/FluidMethods.class",
+        "dan200/computercraft/shared/peripheral/generic/methods/InventoryMethods.class",
+        "dan200/computercraft/shared/peripheral/modem/ModemPeripheral.class",
+        "dan200/computercraft/shared/peripheral/modem/wired/CableBlockEntity$CableElement.class",
+        "dan200/computercraft/shared/peripheral/modem/wired/CableBlockEntity.class",
+        "dan200/computercraft/shared/peripheral/modem/wired/WiredModemElement.class",
+        "dan200/computercraft/shared/peripheral/modem/wired/WiredModemFullBlockEntity$FullElement.class",
+        "dan200/computercraft/shared/peripheral/modem/wired/WiredModemFullBlockEntity.class",
+        "dan200/computercraft/shared/peripheral/modem/wired/WiredModemLocalPeripheral.class",
+        "dan200/computercraft/shared/peripheral/modem/wired/WiredModemPeripheral$RemotePeripheralWrapper.class",
+        "dan200/computercraft/shared/peripheral/modem/wired/WiredModemPeripheral.class",
+        "dan200/computercraft/shared/peripheral/modem/wireless/WirelessModemBlockEntity$Peripheral.class",
+        "dan200/computercraft/shared/peripheral/modem/wireless/WirelessModemBlockEntity.class",
+        "dan200/computercraft/shared/peripheral/modem/wireless/WirelessModemPeripheral.class",
+        "dan200/computercraft/shared/peripheral/monitor/MonitorBlockEntity.class",
+        "dan200/computercraft/shared/peripheral/monitor/MonitorPeripheral.class",
+        "dan200/computercraft/shared/peripheral/printer/PrinterBlockEntity.class",
+        "dan200/computercraft/shared/peripheral/printer/PrinterPeripheral.class",
+        "dan200/computercraft/shared/peripheral/redstone/RedstoneRelayBlockEntity.class",
+        "dan200/computercraft/shared/peripheral/redstone/RedstoneRelayPeripheral.class",
+        "dan200/computercraft/shared/peripheral/speaker/SpeakerBlockEntity$Peripheral.class",
+        "dan200/computercraft/shared/peripheral/speaker/SpeakerBlockEntity.class",
+        "dan200/computercraft/shared/peripheral/speaker/SpeakerPeripheral.class",
+        "dan200/computercraft/shared/platform/PlatformHelper.class",
+        "dan200/computercraft/shared/platform/PlatformHelperImpl$PeripheralAccess.class",
+        "dan200/computercraft/shared/platform/PlatformHelperImpl.class",
+        "dan200/computercraft/shared/pocket/apis/PocketAPI.class",
+        "dan200/computercraft/shared/pocket/core/PocketBrain.class",
+        "dan200/computercraft/shared/pocket/items/PocketComputerItem.class",
+        "dan200/computercraft/shared/pocket/peripherals/PocketModem.class",
+        "dan200/computercraft/shared/pocket/peripherals/PocketModemPeripheral.class",
+        "dan200/computercraft/shared/pocket/peripherals/PocketSpeaker.class",
+        "dan200/computercraft/shared/pocket/peripherals/PocketSpeakerPeripheral.class",
+        "dan200/computercraft/shared/recipe/function/RecipeFunction.class",
+        "dan200/computercraft/shared/turtle/TurtleOverlay.class",
+        "dan200/computercraft/shared/turtle/apis/TurtleAPI.class",
+        "dan200/computercraft/shared/turtle/blocks/TurtleBlockEntity.class",
+        "dan200/computercraft/shared/turtle/core/TurtleBrain$UpgradeInstance.class",
+        "dan200/computercraft/shared/turtle/core/TurtleBrain.class",
+        "dan200/computercraft/shared/turtle/inventory/UpgradeSlot.class",
+        "dan200/computercraft/shared/turtle/items/TurtleItem.class",
+        "dan200/computercraft/shared/turtle/upgrades/CraftingTablePeripheral.class",
+        "dan200/computercraft/shared/turtle/upgrades/TurtleCraftingTable.class",
+        "dan200/computercraft/shared/turtle/upgrades/TurtleModem$Peripheral.class",
+        "dan200/computercraft/shared/turtle/upgrades/TurtleModem.class",
+        "dan200/computercraft/shared/turtle/upgrades/TurtleSpeaker$Peripheral.class",
+        "dan200/computercraft/shared/turtle/upgrades/TurtleSpeaker.class",
+        "dan200/computercraft/shared/util/NonNegativeId.class",
+        "dan200/computercraft/client/ClientRegistry.class",
+        "dan200/computercraft/client/ForgeClientRegistry.class",
+        "dan200/computercraft/client/gui/GuiSprites.class",
+        "dan200/computercraft/client/gui/TurtleScreen.class",
+        "dan200/computercraft/client/integration/jei/JEIComputerCraft.class",
+        "dan200/computercraft/client/integration/jei/RecipeResolver.class",
+        "dan200/computercraft/client/model/ExtraModels.class",
+        "dan200/computercraft/client/model/LecternPocketModel.class",
+        "dan200/computercraft/client/model/LecternPrintoutModel.class",
+        "dan200/computercraft/client/model/turtle/TurtleModelLoader.class",
+        "dan200/computercraft/client/render/RenderTypes.class",
+        "dan200/computercraft/client/render/TurtleBlockEntityRenderer.class",
+        "dan200/computercraft/client/sound/SpeakerInstance.class",
+        "dan200/computercraft/client/turtle/TurtleModemModeller$ModemModels.class",
+        "dan200/computercraft/api/lua/GenericSource.class",
+        "dan200/computercraft/api/lua/IDynamicLuaObject.class",
+        "dan200/computercraft/api/lua/ILuaAPI.class",
+        "dan200/computercraft/api/lua/ILuaFunction.class",
+        "dan200/computercraft/api/lua/LuaFunction.class",
+        "dan200/computercraft/api/peripheral/GenericPeripheral.class",
+        "dan200/computercraft/api/peripheral/IComputerAccess.class",
+        "dan200/computercraft/api/peripheral/IDynamicPeripheral.class",
+        "dan200/computercraft/api/peripheral/IPeripheral.class",
+        "dan200/computercraft/api/ComputerCraftAPI.class",
+        "dan200/computercraft/api/ComputerCraftTags$Blocks.class",
+        "dan200/computercraft/api/ComputerCraftTags$Items.class",
+        "dan200/computercraft/api/ForgeComputerCraftAPI.class",
+        "dan200/computercraft/api/component/ComputerComponents.class",
+        "dan200/computercraft/api/detail/ForgeDetailRegistries.class",
+        "dan200/computercraft/api/detail/VanillaDetailRegistries.class",
+        "dan200/computercraft/api/lua/ILuaAPIFactory.class",
+        "dan200/computercraft/api/media/MediaCapability.class",
+        "dan200/computercraft/api/media/PrintoutContents.class",
+        "dan200/computercraft/api/network/wired/WiredElementCapability.class",
+        "dan200/computercraft/api/network/wired/WiredNetworkChange.class",
+        "dan200/computercraft/api/network/wired/WiredNode.class",
+        "dan200/computercraft/api/peripheral/PeripheralCapability.class",
+        "dan200/computercraft/api/pocket/IPocketUpgrade.class",
+        "dan200/computercraft/api/turtle/ITurtleAccess.class",
+        "dan200/computercraft/api/turtle/ITurtleUpgrade.class",
+        "dan200/computercraft/api/turtle/TurtleToolBuilder.class",
+        "dan200/computercraft/impl/ComputerCraftAPIForgeService.class",
+        "dan200/computercraft/impl/ComputerCraftAPIService$Instance.class",
+        "dan200/computercraft/impl/ComputerCraftAPIService.class",
+        "dan200/computercraft/core/apis/FSAPI.class",
+        "dan200/computercraft/core/apis/HTTPAPI.class",
+        "dan200/computercraft/core/apis/IAPIEnvironment$IPeripheralChangeListener.class",
+        "dan200/computercraft/core/apis/IAPIEnvironment.class",
+        "dan200/computercraft/core/apis/OSAPI.class",
+        "dan200/computercraft/core/apis/PeripheralAPI$PeripheralWrapper.class",
+        "dan200/computercraft/core/apis/PeripheralAPI.class",
+        "dan200/computercraft/core/apis/RedstoneAPI.class",
+        "dan200/computercraft/core/apis/RedstoneMethods.class",
+        "dan200/computercraft/core/apis/TermAPI.class",
+        "dan200/computercraft/core/apis/TermMethods.class",
+        "dan200/computercraft/core/apis/handles/AbstractHandle.class",
+        "dan200/computercraft/core/apis/handles/ReadHandle.class",
+        "dan200/computercraft/core/apis/handles/ReadWriteHandle.class",
+        "dan200/computercraft/core/apis/handles/WriteHandle$Seekable.class",
+        "dan200/computercraft/core/apis/handles/WriteHandle.class",
+        "dan200/computercraft/core/apis/http/request/HttpResponseHandle.class",
+        "dan200/computercraft/core/apis/http/websocket/WebsocketHandle.class",
+        "dan200/computercraft/core/apis/transfer/TransferredFile.class",
+        "dan200/computercraft/core/apis/transfer/TransferredFiles.class",
+        "dan200/computercraft/core/asm/Generator.class",
+        "dan200/computercraft/core/asm/GenericMethod.class",
+        "dan200/computercraft/core/asm/LuaMethodSupplier.class",
+        "dan200/computercraft/core/asm/MethodSupplierImpl.class",
+        "dan200/computercraft/core/computer/ApiWrapper.class",
+        "dan200/computercraft/core/computer/Computer.class",
+        "dan200/computercraft/core/computer/ComputerExecutor.class",
+        "dan200/computercraft/core/computer/Environment.class",
+        "dan200/computercraft/core/lua/CobaltLuaMachine.class",
+        "dan200/computercraft/core/lua/MachineEnvironment.class",
+        "dan200/computercraft/core/lua/errorinfo/ErrorInfoLib.class",
+        "dan200/computercraft/core/util/PeripheralHelpers.class"
+      ],
+      "lua": [
+        "data/computercraft/lua/bios.lua",
+        "data/computercraft/lua/rom/apis/colors.lua",
+        "data/computercraft/lua/rom/apis/colours.lua",
+        "data/computercraft/lua/rom/apis/command/commands.lua",
+        "data/computercraft/lua/rom/apis/disk.lua",
+        "data/computercraft/lua/rom/apis/fs.lua",
+        "data/computercraft/lua/rom/apis/gps.lua",
+        "data/computercraft/lua/rom/apis/help.lua",
+        "data/computercraft/lua/rom/apis/http/http.lua",
+        "data/computercraft/lua/rom/apis/io.lua",
+        "data/computercraft/lua/rom/apis/keys.lua",
+        "data/computercraft/lua/rom/apis/paintutils.lua",
+        "data/computercraft/lua/rom/apis/parallel.lua",
+        "data/computercraft/lua/rom/apis/peripheral.lua",
+        "data/computercraft/lua/rom/apis/rednet.lua",
+        "data/computercraft/lua/rom/apis/settings.lua",
+        "data/computercraft/lua/rom/apis/term.lua",
+        "data/computercraft/lua/rom/apis/textutils.lua",
+        "data/computercraft/lua/rom/apis/turtle/turtle.lua",
+        "data/computercraft/lua/rom/apis/vector.lua",
+        "data/computercraft/lua/rom/apis/window.lua",
+        "data/computercraft/lua/rom/modules/main/cc/audio/dfpwm.lua",
+        "data/computercraft/lua/rom/modules/main/cc/base64.lua",
+        "data/computercraft/lua/rom/modules/main/cc/completion.lua",
+        "data/computercraft/lua/rom/modules/main/cc/expect.lua",
+        "data/computercraft/lua/rom/modules/main/cc/image/nft.lua",
+        "data/computercraft/lua/rom/modules/main/cc/internal/edit_runner.lua",
+        "data/computercraft/lua/rom/modules/main/cc/internal/error_hints.lua",
+        "data/computercraft/lua/rom/modules/main/cc/internal/error_printer.lua",
+        "data/computercraft/lua/rom/modules/main/cc/internal/event.lua",
+        "data/computercraft/lua/rom/modules/main/cc/internal/exception.lua",
+        "data/computercraft/lua/rom/modules/main/cc/internal/import.lua",
+        "data/computercraft/lua/rom/modules/main/cc/internal/menu.lua",
+        "data/computercraft/lua/rom/modules/main/cc/internal/syntax/errors.lua",
+        "data/computercraft/lua/rom/modules/main/cc/internal/syntax/init.lua",
+        "data/computercraft/lua/rom/modules/main/cc/internal/syntax/lexer.lua",
+        "data/computercraft/lua/rom/modules/main/cc/internal/syntax/parser.lua",
+        "data/computercraft/lua/rom/modules/main/cc/internal/tiny_require.lua",
+        "data/computercraft/lua/rom/modules/main/cc/pretty.lua",
+        "data/computercraft/lua/rom/modules/main/cc/require.lua",
+        "data/computercraft/lua/rom/modules/main/cc/shell/completion.lua",
+        "data/computercraft/lua/rom/modules/main/cc/strings.lua",
+        "data/computercraft/lua/rom/programs/about.lua",
+        "data/computercraft/lua/rom/programs/advanced/bg.lua",
+        "data/computercraft/lua/rom/programs/advanced/fg.lua",
+        "data/computercraft/lua/rom/programs/advanced/multishell.lua",
+        "data/computercraft/lua/rom/programs/alias.lua",
+        "data/computercraft/lua/rom/programs/apis.lua",
+        "data/computercraft/lua/rom/programs/cd.lua",
+        "data/computercraft/lua/rom/programs/clear.lua",
+        "data/computercraft/lua/rom/programs/command/commands.lua",
+        "data/computercraft/lua/rom/programs/command/exec.lua",
+        "data/computercraft/lua/rom/programs/copy.lua",
+        "data/computercraft/lua/rom/programs/delete.lua",
+        "data/computercraft/lua/rom/programs/drive.lua",
+        "data/computercraft/lua/rom/programs/edit.lua",
+        "data/computercraft/lua/rom/programs/eject.lua",
+        "data/computercraft/lua/rom/programs/exit.lua",
+        "data/computercraft/lua/rom/programs/fun/advanced/paint.lua",
+        "data/computercraft/lua/rom/programs/fun/advanced/redirection.lua",
+        "data/computercraft/lua/rom/programs/fun/adventure.lua",
+        "data/computercraft/lua/rom/programs/fun/dj.lua",
+        "data/computercraft/lua/rom/programs/fun/hello.lua",
+        "data/computercraft/lua/rom/programs/fun/speaker.lua",
+        "data/computercraft/lua/rom/programs/fun/worm.lua",
+        "data/computercraft/lua/rom/programs/gps.lua",
+        "data/computercraft/lua/rom/programs/help.lua",
+        "data/computercraft/lua/rom/programs/http/pastebin.lua",
+        "data/computercraft/lua/rom/programs/http/wget.lua",
+        "data/computercraft/lua/rom/programs/id.lua",
+        "data/computercraft/lua/rom/programs/import.lua",
+        "data/computercraft/lua/rom/programs/label.lua",
+        "data/computercraft/lua/rom/programs/list.lua",
+        "data/computercraft/lua/rom/programs/lua.lua",
+        "data/computercraft/lua/rom/programs/mkdir.lua",
+        "data/computercraft/lua/rom/programs/monitor.lua",
+        "data/computercraft/lua/rom/programs/motd.lua",
+        "data/computercraft/lua/rom/programs/move.lua",
+        "data/computercraft/lua/rom/programs/peripherals.lua",
+        "data/computercraft/lua/rom/programs/pocket/equip.lua",
+        "data/computercraft/lua/rom/programs/pocket/falling.lua",
+        "data/computercraft/lua/rom/programs/pocket/unequip.lua",
+        "data/computercraft/lua/rom/programs/programs.lua",
+        "data/computercraft/lua/rom/programs/reboot.lua",
+        "data/computercraft/lua/rom/programs/rednet/chat.lua",
+        "data/computercraft/lua/rom/programs/rednet/repeat.lua",
+        "data/computercraft/lua/rom/programs/redstone.lua",
+        "data/computercraft/lua/rom/programs/rename.lua",
+        "data/computercraft/lua/rom/programs/set.lua",
+        "data/computercraft/lua/rom/programs/shell.lua",
+        "data/computercraft/lua/rom/programs/shutdown.lua",
+        "data/computercraft/lua/rom/programs/time.lua",
+        "data/computercraft/lua/rom/programs/turtle/craft.lua",
+        "data/computercraft/lua/rom/programs/turtle/dance.lua",
+        "data/computercraft/lua/rom/programs/turtle/equip.lua",
+        "data/computercraft/lua/rom/programs/turtle/excavate.lua",
+        "data/computercraft/lua/rom/programs/turtle/go.lua",
+        "data/computercraft/lua/rom/programs/turtle/refuel.lua",
+        "data/computercraft/lua/rom/programs/turtle/tunnel.lua",
+        "data/computercraft/lua/rom/programs/turtle/turn.lua",
+        "data/computercraft/lua/rom/programs/turtle/unequip.lua",
+        "data/computercraft/lua/rom/programs/type.lua",
+        "data/computercraft/lua/rom/startup.lua"
+      ],
+      "expected_sha512": "009fcf48b7d123018a61b2c55f0fede7dd1f6a6325226bf9cc926342185ca8a7e059e13662816d24595aac243abf622b682583631cfe42c3757505b2e864ff73",
+      "observed_sha512": "009fcf48b7d123018a61b2c55f0fede7dd1f6a6325226bf9cc926342185ca8a7e059e13662816d24595aac243abf622b682583631cfe42c3757505b2e864ff73",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "copycat_architect-0.5.1.jar",
+      "mods": [
+        {
+          "mod_id": "copycat_architect",
+          "display_name": "Create: Copycat Architect",
+          "version": "0.5.1"
+        }
+      ],
+      "classes": [
+        "de/teutonstudio/copycatarchitect/integration/ArchitectPeripheral.class",
+        "de/teutonstudio/copycatarchitect/integration/ArchitectUpgrade.class"
+      ],
+      "lua": [
+        "data/computercraft/lua/rom/programs/turtle/architect.lua"
+      ],
+      "expected_sha512": "cc59436afd4e54fade47046e48fd44ec83a63ff25c829959df1aa53365098bdde8b1062ad6a556a25de830c7cd910c0a9d569369bb7055942961d2c4ac7ce22a",
+      "observed_sha512": "cc59436afd4e54fade47046e48fd44ec83a63ff25c829959df1aa53365098bdde8b1062ad6a556a25de830c7cd910c0a9d569369bb7055942961d2c4ac7ce22a",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "create-1.21.1-6.0.10.jar",
+      "mods": [
+        {
+          "mod_id": "create",
+          "display_name": "Create",
+          "version": "6.0.10"
+        }
+      ],
+      "classes": [
+        "com/simibubi/create/content/kinetics/gauge/SpeedGaugeBlockEntity.class",
+        "com/simibubi/create/content/kinetics/gauge/StressGaugeBlockEntity.class",
+        "com/simibubi/create/content/kinetics/motor/CreativeMotorBlockEntity.class",
+        "com/simibubi/create/content/kinetics/transmission/sequencer/SequencedGearshiftBlockEntity.class",
+        "com/simibubi/create/content/kinetics/speedController/SpeedControllerBlockEntity.class",
+        "com/simibubi/create/content/redstone/nixieTube/NixieTubeBlockEntity.class",
+        "com/simibubi/create/content/redstone/displayLink/DisplayLinkBlockEntity.class",
+        "com/simibubi/create/content/logistics/packager/repackager/RepackagerBlockEntity.class",
+        "com/simibubi/create/content/logistics/packager/PackagerBlockEntity.class",
+        "com/simibubi/create/content/logistics/packagePort/frogport/FrogportBlockEntity.class",
+        "com/simibubi/create/content/logistics/stockTicker/StockTickerBlockEntity.class",
+        "com/simibubi/create/content/logistics/tableCloth/TableClothBlockEntity.class",
+        "com/simibubi/create/content/logistics/redstoneRequester/RedstoneRequesterBlockEntity.class",
+        "com/simibubi/create/content/trains/observer/TrackObserverBlockEntity.class",
+        "com/simibubi/create/content/trains/station/StationBlockEntity.class",
+        "com/simibubi/create/content/trains/signal/SignalBlockEntity.class",
+        "com/simibubi/create/content/contraptions/chassis/StickerBlockEntity.class",
+        "com/simibubi/create/compat/computercraft/AbstractComputerBehaviour.class",
+        "com/simibubi/create/compat/computercraft/implementation/luaObjects/PackageLuaObject.class",
+        "com/simibubi/create/compat/computercraft/implementation/luaObjects/PackageOrderLuaObject.class",
+        "com/simibubi/create/compat/computercraft/implementation/ComputerBehaviour.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/TableClothShopPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/RepackagerPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/NixieTubePeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/SignalPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/CreativeMotorPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/StickerPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/SyncedPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/PostboxPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/DisplayLinkPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/StockTickerPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/StationPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/SequencedGearshiftPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/RedstoneRequesterPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/StressGaugePeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/SpeedGaugePeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/TrackObserverPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/SpeedControllerPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/FrogportPeripheral.class",
+        "com/simibubi/create/compat/computercraft/implementation/peripherals/PackagerPeripheral.class"
+      ],
+      "lua": [],
+      "expected_sha512": "11cc8fc049d2f67f6548c7abfada6b82a3adb5c7ca410a742de04bbca76e03862c518721b88d806f6e6d768a4d68531fdb903a85859b25d1484d550cc7bafd4b",
+      "observed_sha512": "11cc8fc049d2f67f6548c7abfada6b82a3adb5c7ca410a742de04bbca76e03862c518721b88d806f6e6d768a4d68531fdb903a85859b25d1484d550cc7bafd4b",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "create_avionics-neoforge-1.21.1-0.6.0.jar",
+      "mods": [
+        {
+          "mod_id": "create_avionics",
+          "display_name": "Create: Avionics",
+          "version": "0.6.0"
+        }
+      ],
+      "classes": [
+        "ink/astrius/create_avionics/compat/CCIntegration.class",
+        "ink/astrius/create_avionics/compat/aeronautics/AeroCCIntegration.class",
+        "ink/astrius/create_avionics/compat/aeronautics/peripherals/GasProviderPeripheral.class",
+        "ink/astrius/create_avionics/compat/aeronautics/peripherals/GyroscopicPropellerBearingPeripheral.class",
+        "ink/astrius/create_avionics/compat/aeronautics/peripherals/MountedPotatoCannonPeripheral.class",
+        "ink/astrius/create_avionics/compat/aeronautics/peripherals/PropellerBearingPeripheral.class",
+        "ink/astrius/create_avionics/compat/aeronautics/peripherals/PropellerPeripheral.class",
+        "ink/astrius/create_avionics/compat/cc/ComposingPeripheral.class",
+        "ink/astrius/create_avionics/compat/create/peripherals/ContraptionSurface.class",
+        "ink/astrius/create_avionics/compat/create/peripherals/CreativeMotorPeripheral.class",
+        "ink/astrius/create_avionics/compat/create/peripherals/ElevatorContactPeripheral.class",
+        "ink/astrius/create_avionics/compat/create/peripherals/ElevatorPulleyPeripheral.class",
+        "ink/astrius/create_avionics/compat/create/peripherals/GantryShaftPeripheral.class",
+        "ink/astrius/create_avionics/compat/create/peripherals/KineticScadaSurface.class",
+        "ink/astrius/create_avionics/compat/create/peripherals/MechanicalBearingPeripheral.class",
+        "ink/astrius/create_avionics/compat/create/peripherals/MechanicalPistonPeripheral.class",
+        "ink/astrius/create_avionics/compat/create/peripherals/RopePulleyPeripheral.class",
+        "ink/astrius/create_avionics/compat/create/peripherals/SequencedGearshiftPeripheral.class",
+        "ink/astrius/create_avionics/compat/create/peripherals/SpeedControllerPeripheral.class",
+        "ink/astrius/create_avionics/compat/create/peripherals/StressGaugePeripheral.class",
+        "ink/astrius/create_avionics/compat/offroad/OffroadCCIntegration.class",
+        "ink/astrius/create_avionics/compat/offroad/peripherals/WheelMountPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/SimulatedCCIntegration.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/AltitudeSensorPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/AnalogTransmissionPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/DirectionalGearshiftPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/GimbalSensorPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/LaserPointerPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/LaserSensorPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/NavTablePeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/PhysicsAssemblerPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/PortableEnginePeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/RopeWinchPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/SimPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/SteeringWheelPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/SwivelBearingPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/ThrottleLeverPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/TorsionSpringPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/VelocitySensorPeripheral.class",
+        "ink/astrius/create_avionics/compat/simulated/peripherals/generic/KineticSource.class",
+        "ink/astrius/create_avionics/mixin/cc/PeripheralAccessMixin.class",
+        "ink/astrius/create_avionics/mixin/create/KineticBlockEntityComputerHookMixin.class",
+        "ink/astrius/create_avionics/neoforge/CreateAvionicsNeoForge.class"
+      ],
+      "lua": [],
+      "expected_sha512": "da3a1cc9333db95781d466725939fd29a467cad21bea76df37e024b2bc0cd1a5c35c5d07ede17f101a2572cf96ba87555e506a8ad669ad8987a1e747fdad7ab6",
+      "observed_sha512": "da3a1cc9333db95781d466725939fd29a467cad21bea76df37e024b2bc0cd1a5c35c5d07ede17f101a2572cf96ba87555e506a8ad669ad8987a1e747fdad7ab6",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "create_radar-0.4.9.4-1.21.1.jar",
+      "mods": [
+        {
+          "mod_id": "create_radar",
+          "display_name": "Create: Radars",
+          "version": "0.4.9.4-1.21.1"
+        }
+      ],
+      "classes": [
+        "com/happysg/radar/compat/computercraft/CCCompatRegister.class",
+        "com/happysg/radar/compat/computercraft/FireControllerPeripheral.class",
+        "com/happysg/radar/compat/computercraft/MonitorPeripheral.class",
+        "com/happysg/radar/compat/computercraft/PitchControllerPeripheral.class",
+        "com/happysg/radar/compat/computercraft/PlaneRadarPeripheral.class",
+        "com/happysg/radar/compat/computercraft/RadarBearingPeripheral.class",
+        "com/happysg/radar/compat/computercraft/YawControllerPeripheral.class"
+      ],
+      "lua": [],
+      "expected_sha512": "9ce111ea7e39fe979a6d423766820bbdd8c7e61ecf72db35b94539330aadc0cd45b5eed469ef4bbfeb36b1c558209e048019f5a4a253b43f3b6b3bd4fbc8ac63",
+      "observed_sha512": "9ce111ea7e39fe979a6d423766820bbdd8c7e61ecf72db35b94539330aadc0cd45b5eed469ef4bbfeb36b1c558209e048019f5a4a253b43f3b6b3bd4fbc8ac63",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "create_tweaked_controllers-1.21.1-1.2.7.jar",
+      "mods": [
+        {
+          "mod_id": "create_tweaked_controllers",
+          "display_name": "Create Tweaked Controllers",
+          "version": "1.21.1-1.2.7"
+        }
+      ],
+      "classes": [
+        "com/getitemfromblock/create_tweaked_controllers/compat/ComputerCraft/ModComputerBehavior.class",
+        "com/getitemfromblock/create_tweaked_controllers/compat/ComputerCraft/ModComputerCraftProxy.class",
+        "com/getitemfromblock/create_tweaked_controllers/compat/ComputerCraft/ModSyncedPeripheral.class",
+        "com/getitemfromblock/create_tweaked_controllers/compat/ComputerCraft/TweakedLecternPeripheral.class"
+      ],
+      "lua": [],
+      "expected_sha512": "9b2aa5fcf70afd97e2473bb3cd230119d95aeb4f7e7318cb44fd8959add97d0f22cbe660c6d43c9bdb25825b68f9a7a2c11e9c24d55a706bded72bc011ede270",
+      "observed_sha512": "9b2aa5fcf70afd97e2473bb3cd230119d95aeb4f7e7318cb44fd8959add97d0f22cbe660c6d43c9bdb25825b68f9a7a2c11e9c24d55a706bded72bc011ede270",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "createdieselgenerators-1.21.1-1.3.12.jar",
+      "mods": [
+        {
+          "mod_id": "createdieselgenerators",
+          "display_name": "Create Diesel Generators",
+          "version": "1.21.1-1.3.12"
+        }
+      ],
+      "classes": [
+        "com/jesz/createdieselgenerators/compat/computercraft/peripherals/ChemicalTurretPeripheral.class",
+        "com/jesz/createdieselgenerators/compat/computercraft/CDGComputerBehaviour.class",
+        "com/jesz/createdieselgenerators/content/turret/ChemicalTurretBlockEntity.class"
+      ],
+      "lua": [],
+      "expected_sha512": "3e15e80ed69d3367fedc4b3a572d383ad3cf67909f0ce578fefaa6d1fe19d1f049a6be4e9645dfd6a8008b62fe41d295a3051b8876310d433d0cb66141d73bd6",
+      "observed_sha512": "3e15e80ed69d3367fedc4b3a572d383ad3cf67909f0ce578fefaa6d1fe19d1f049a6be4e9645dfd6a8008b62fe41d295a3051b8876310d433d0cb66141d73bd6",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "createpropulsion-1.1.4.jar",
+      "mods": [
+        {
+          "mod_id": "createpropulsion",
+          "display_name": "Create Propulsion: Simulated",
+          "version": "1.1.4"
+        }
+      ],
+      "classes": [
+        "dev/propulsionteam/propulsionsimulated/compat/computercraft/ComputerBehaviour.class",
+        "dev/propulsionteam/propulsionsimulated/compat/computercraft/CoralGeneratorPeripheral.class",
+        "dev/propulsionteam/propulsionsimulated/compat/computercraft/CreativeThrusterPeripheral.class",
+        "dev/propulsionteam/propulsionsimulated/compat/computercraft/CreativeVectorThrusterPeripheral.class",
+        "dev/propulsionteam/propulsionsimulated/compat/computercraft/IonThrusterPeripheral.class",
+        "dev/propulsionteam/propulsionsimulated/compat/computercraft/LiquidVectorThrusterPeripheral.class",
+        "dev/propulsionteam/propulsionsimulated/compat/computercraft/RedstoneTransmissionPeripheral.class",
+        "dev/propulsionteam/propulsionsimulated/compat/computercraft/StirlingEnginePeripheral.class",
+        "dev/propulsionteam/propulsionsimulated/compat/computercraft/ThrusterPeripheral.class",
+        "dev/propulsionteam/propulsionsimulated/compat/computercraft/TiltAdapterPeripheral.class",
+        "dev/propulsionteam/propulsionsimulated/compat/computercraft/VectorThrusterPeripheral.class",
+        "dev/propulsionteam/propulsionsimulated/events/ModCapabilityEvents.class"
+      ],
+      "lua": [],
+      "expected_sha512": "25e9655b6e44ee5539f2b3b620d8657f3b9f0cb840a0917d4bb5e349b5fb301bb15a05e420122cdc2f9236fc9b78019d98816e3f3d939dabf6c5c1b05e6b6862",
+      "observed_sha512": "25e9655b6e44ee5539f2b3b620d8657f3b9f0cb840a0917d4bb5e349b5fb301bb15a05e420122cdc2f9236fc9b78019d98816e3f3d939dabf6c5c1b05e6b6862",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "createthrusters-bundled-V1.0.6.jar",
+      "mods": [
+        {
+          "mod_id": "createthrusters",
+          "display_name": "Create Gadgets & Gizmos",
+          "version": "1.0.6"
+        }
+      ],
+      "classes": [
+        "com/rieno/gadgetsandgizmos/compat/computercraft/AdvancedContraptionControllerPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/AileronBearingPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/AnalogueContraptionControllerPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/AnalogueJoystickPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/BiDirectionalGearboxPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/ClawPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/ComputerCraftCompatRegistrar.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/CreateConnectedPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/DirectionalGearshiftPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/ExternalMachinePeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/GyroscopeLinkPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/NavigationTablePeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/RopeWinchCablePeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/SimulatedThrottleLeverPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/ThrusterBearingPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/ThrusterPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/VectorBearingPeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/VirtualOrientationSourcePeripheral.class",
+        "com/rieno/gadgetsandgizmos/compat/computercraft/WheelMountPeripheral.class"
+      ],
+      "lua": [
+        "data/computercraft/lua/rom/thrusters/docs.lua",
+        "data/computercraft/lua/rom/thrusters/examples/advanced_data_link.lua",
+        "data/computercraft/lua/rom/thrusters/examples/bearing_control.lua",
+        "data/computercraft/lua/rom/thrusters/examples/claw_control.lua",
+        "data/computercraft/lua/rom/thrusters/examples/controller_inputs.lua",
+        "data/computercraft/lua/rom/thrusters/examples/joystick_monitor.lua",
+        "data/computercraft/lua/rom/thrusters/examples/navigation.lua",
+        "data/computercraft/lua/rom/thrusters/examples/orientation_source.lua",
+        "data/computercraft/lua/rom/thrusters/examples/peripheral_probe.lua",
+        "data/computercraft/lua/rom/thrusters/examples/thruster_control.lua",
+        "data/computercraft/lua/rom/thrusters/examples/wheel_mount.lua"
+      ],
+      "expected_sha512": "02922c60adfc84c2aa86e1e1a879009ac8b2538438ed1d396e21240d4e44892a89712ffb89348009097eca4c899da57d797f3abf103f6fcaf2e8af3f2b5e5fd0",
+      "observed_sha512": "02922c60adfc84c2aa86e1e1a879009ac8b2538438ed1d396e21240d4e44892a89712ffb89348009097eca4c899da57d797f3abf103f6fcaf2e8af3f2b5e5fd0",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "Draconic-Evolution-1.21.1-3.1.4.632.jar",
+      "mods": [
+        {
+          "mod_id": "draconicevolution",
+          "display_name": "Draconic Evolution",
+          "version": "3.1.4.632"
+        }
+      ],
+      "classes": [
+        "com/brandon3055/draconicevolution/integration/computers/ComputerCraftCompatEventHandler.class",
+        "com/brandon3055/draconicevolution/integration/computers/PeripheralFlowGate.class",
+        "com/brandon3055/draconicevolution/integration/computers/PeripheralReactorComponent.class",
+        "com/brandon3055/draconicevolution/integration/computers/PeripheralEnergyPylon.class"
+      ],
+      "lua": [],
+      "expected_sha512": "b216235d3aea6a95fe821529e09e65f32b32fca6bf7e922b7417dec47c540d5cb5c85e91fff211b143ac6ace1a5e95c665d4d987d7154e040e5b7e513cda6c2e",
+      "observed_sha512": "b216235d3aea6a95fe821529e09e65f32b32fca6bf7e922b7417dec47c540d5cb5c85e91fff211b143ac6ace1a5e95c665d4d987d7154e040e5b7e513cda6c2e",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "enderio-8.2.10-beta.jar",
+      "mods": [
+        {
+          "mod_id": "enderio",
+          "display_name": "Ender IO",
+          "version": "8.2.10-beta"
+        }
+      ],
+      "classes": [
+        "com/enderio/enderio/compat/cctweaked/ComputerCraftCompat.class"
+      ],
+      "lua": [],
+      "expected_sha512": "0897bf835b8f2282ffb98df59bfcc261ab97bc522ecbb20bfc3186af556ba02652f130538aa1d17e39eb4cd89b3f7c822e95f227d7d256a1db6f91f24b657d7e",
+      "observed_sha512": "0897bf835b8f2282ffb98df59bfcc261ab97bc522ecbb20bfc3186af556ba02652f130538aa1d17e39eb4cd89b3f7c822e95f227d7d256a1db6f91f24b657d7e",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "fluidlogistics-1.3.1-mc1.21.1.jar",
+      "mods": [
+        {
+          "mod_id": "fluidlogistics",
+          "display_name": "Create FluidLogistics ",
+          "version": "1.3.1"
+        }
+      ],
+      "classes": [
+        "com/yision/fluidlogistics/content/logistics/copperFrogport/CopperFrogportBlockEntity.class",
+        "com/yision/fluidlogistics/content/logistics/fluidPackager/FluidPackagerBlockEntity.class",
+        "com/yision/fluidlogistics/content/logistics/fluidPackager/repackager/FluidRepackagerBlockEntity.class"
+      ],
+      "lua": [],
+      "expected_sha512": "e0be1e1df5001c052e21def264228b16d594093271bda7ea9daa293887b2e28ec9667cb1245ffae8a128ee9644c80c3bd4c3506ee77c57eccb97409c9e5fbe81",
+      "observed_sha512": "e0be1e1df5001c052e21def264228b16d594093271bda7ea9daa293887b2e28ec9667cb1245ffae8a128ee9644c80c3bd4c3506ee77c57eccb97409c9e5fbe81",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "ImmersiveEngineering-1.21.1-12.4.2-194.jar",
+      "mods": [
+        {
+          "mod_id": "immersiveengineering",
+          "display_name": "Immersive Engineering",
+          "version": "12.4.2-194"
+        }
+      ],
+      "classes": [
+        "blusunrize/immersiveengineering/common/util/compat/computers/cctweaked/ComputerCraftCompatModule.class",
+        "blusunrize/immersiveengineering/common/util/compat/computers/cctweaked/GenericPeripheral.class",
+        "blusunrize/immersiveengineering/common/util/compat/IECompatModules.class"
+      ],
+      "lua": [],
+      "expected_sha512": "862523e84747a8b7eaa65f9b3c337fa832ef9efd0545c27f68e350e01f482c7a1242d0e4bdc2caff3d7eb033508b43a353fcd7150c9b544d0c05765ca2a551b3",
+      "observed_sha512": "862523e84747a8b7eaa65f9b3c337fa832ef9efd0545c27f68e350e01f482c7a1242d0e4bdc2caff3d7eb033508b43a353fcd7150c9b544d0c05765ca2a551b3",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "Mekanism-1.21.1-10.7.19.85.jar",
+      "mods": [
+        {
+          "mod_id": "mekanism",
+          "display_name": "Mekanism",
+          "version": "10.7.19"
+        }
+      ],
+      "classes": [
+        "mekanism/common/integration/computer/computercraft/CCApiObject$Factory.class",
+        "mekanism/common/integration/computer/computercraft/CCApiObject.class",
+        "mekanism/common/integration/computer/computercraft/CCCapabilityHelper.class",
+        "mekanism/common/integration/computer/computercraft/CCFilterWrapper.class",
+        "mekanism/common/integration/computer/computercraft/MekanismPeripheral.class"
+      ],
+      "lua": [],
+      "expected_sha512": "66745825330a98f3e4a5ea3a44aff8b00870f715c144edc38dd2f61b4240589600b58ae89efac3b54dbb5aa430b1059dac1a28fd71cac5cc9002bbeb5ba3f22b",
+      "observed_sha512": "66745825330a98f3e4a5ea3a44aff8b00870f715c144edc38dd2f61b4240589600b58ae89efac3b54dbb5aa430b1059dac1a28fd71cac5cc9002bbeb5ba3f22b",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "MekanismGenerators-1.21.1-10.7.19.85.jar",
+      "mods": [
+        {
+          "mod_id": "mekanismgenerators",
+          "display_name": "Mekanism: Generators",
+          "version": "10.7.19"
+        }
+      ],
+      "classes": [
+        "mekanism/generated/mekanismgenerators/ComputerMethodRegistry_mekanismgenerators.class",
+        "mekanism/generators/common/content/fission/FissionReactorMultiblockData$ComputerHandler.class",
+        "mekanism/generators/common/content/fusion/FusionReactorMultiblockData$ComputerHandler.class",
+        "mekanism/generators/common/content/turbine/TurbineMultiblockData$ComputerHandler.class",
+        "mekanism/generators/common/tile/TileEntityBioGenerator$ComputerHandler.class",
+        "mekanism/generators/common/tile/TileEntityGasGenerator$ComputerHandler.class",
+        "mekanism/generators/common/tile/TileEntityGenerator$ComputerHandler.class",
+        "mekanism/generators/common/tile/TileEntityHeatGenerator$ComputerHandler.class",
+        "mekanism/generators/common/tile/TileEntitySolarGenerator$ComputerHandler.class",
+        "mekanism/generators/common/tile/TileEntityWindGenerator$ComputerHandler.class",
+        "mekanism/generators/common/tile/fission/TileEntityFissionReactorLogicAdapter$ComputerHandler.class",
+        "mekanism/generators/common/tile/fission/TileEntityFissionReactorPort$ComputerHandler.class",
+        "mekanism/generators/common/tile/fusion/TileEntityFusionReactorLogicAdapter$ComputerHandler.class",
+        "mekanism/generators/common/tile/fusion/TileEntityFusionReactorPort$ComputerHandler.class"
+      ],
+      "lua": [],
+      "evidence_kind": "indirect computer API via Mekanism",
+      "expected_sha512": "6c3d5b7ea2f67f43c3d169c97de2855a7085f38019cf426e015ccc8ca9bc4f66e96b1cdf4a9afdc92bef7b2e236f16c81415ed5e48736805d5961d29525316d6",
+      "observed_sha512": "6c3d5b7ea2f67f43c3d169c97de2855a7085f38019cf426e015ccc8ca9bc4f66e96b1cdf4a9afdc92bef7b2e236f16c81415ed5e48736805d5961d29525316d6",
+      "sides": [
+        "client",
+        "server"
+      ]
+    },
+    {
+      "file": "neoperipheral-1.4.1ve.jar",
+      "mods": [
+        {
+          "mod_id": "neoperipheral",
+          "display_name": "NeoPeripheral",
+          "version": "1.4ve"
+        }
+      ],
+      "classes": [
+        "io/p2vman/neoperipheral/mixin/addon/synaxis/CompactFlapBlockEntityMixin.class",
+        "io/p2vman/neoperipheral/mixin/addon/synaxis/CameraBlockEntityMixin.class",
+        "io/p2vman/neoperipheral/mixin/addon/synaxis/AbstractDynamicMotorBlockEntityMixin.class",
+        "io/p2vman/neoperipheral/mixin/addon/synaxis/AnchorBlockEntityMixin.class",
+        "io/p2vman/neoperipheral/mixin/addon/synaxis/JetBlockEntityMixin.class",
+        "io/p2vman/neoperipheral/mixin/addon/synaxis/KineticResistorBlockEntityMixin.class",
+        "io/p2vman/neoperipheral/mixin/addon/cbccm/CompactCannonMountBlockEntityMixin.class",
+        "io/p2vman/neoperipheral/mixin/addon/cbc/CannonMountBlockEntityMixin.class",
+        "io/p2vman/neoperipheral/client/render/PeripheralEntityRenderer.class",
+        "io/p2vman/neoperipheral/peripheral/socket/modules/RadarModule.class",
+        "io/p2vman/neoperipheral/peripheral/EntityRadarPeripheral.class",
+        "io/p2vman/neoperipheral/peripheral/NfcMasterPeripheral.class",
+        "io/p2vman/neoperipheral/peripheral/IPeripheralAttacher.class",
+        "io/p2vman/neoperipheral/peripheral/CryptoPeripheral.class",
+        "io/p2vman/neoperipheral/peripheral/CryptoPeripheral$AlgorithmWrapper.class",
+        "io/p2vman/neoperipheral/peripheral/SocketPeripheral.class",
+        "io/p2vman/neoperipheral/peripheral/SableEnginePeripheral.class",
+        "io/p2vman/neoperipheral/peripheral/NfcReaderPeripheral.class",
+        "io/p2vman/neoperipheral/peripheral/TriangleRadarPeripheral.class",
+        "io/p2vman/neoperipheral/peripheral/ModemPeripheral.class",
+        "io/p2vman/neoperipheral/peripheral/RadarPeripheral.class",
+        "io/p2vman/neoperipheral/peripheral/BasePeripheral.class",
+        "io/p2vman/neoperipheral/ModRegistry.class",
+        "io/p2vman/neoperipheral/IPrefSource$IPrefHolder.class",
+        "io/p2vman/neoperipheral/integration/ctc/peripheral/TweakedLinkedControllerHubPeripheral.class",
+        "io/p2vman/neoperipheral/integration/ctc/block/entity/TweakedLinkedControllerHubBlockEntity.class",
+        "io/p2vman/neoperipheral/integration/synaxis/peripheral/DynamicMotorPeripheral.class",
+        "io/p2vman/neoperipheral/integration/synaxis/peripheral/CompactFlapPeripheral.class",
+        "io/p2vman/neoperipheral/integration/synaxis/peripheral/CameraPeripheral.class",
+        "io/p2vman/neoperipheral/integration/synaxis/peripheral/JetPeripheral.class",
+        "io/p2vman/neoperipheral/integration/synaxis/peripheral/AnchorPeripheral.class",
+        "io/p2vman/neoperipheral/integration/synaxis/peripheral/KineticResistorPeripheral.class",
+        "io/p2vman/neoperipheral/integration/synaxis/SynaxisIntegration.class",
+        "io/p2vman/neoperipheral/integration/IExternalPeripheralHolder.class",
+        "io/p2vman/neoperipheral/integration/cbccm/peripheral/CompactCannonMountPeripheral.class",
+        "io/p2vman/neoperipheral/integration/cbccm/CBCCMIntegration.class",
+        "io/p2vman/neoperipheral/integration/cbc/peripheral/CannonMountPeripheral.class",
+        "io/p2vman/neoperipheral/integration/cbc/peripheral/FixedCannonMountPeripheral.class",
+        "io/p2vman/neoperipheral/integration/cbc/CannonMountBlockEntityProxy.class",
+        "io/p2vman/neoperipheral/integration/cbc/CreateBigCannonsIntegration.class",
+        "io/p2vman/neoperipheral/integration/create/peripheral/LinkedControllerHubPeripheral.class",
+        "io/p2vman/neoperipheral/integration/create/CreateIntegration.class",
+        "io/p2vman/neoperipheral/integration/create/block/entity/LinkedControllerHubBlockEntity.class",
+        "io/p2vman/neoperipheral/block/entity/ModemBlockEntity.class",
+        "io/p2vman/neoperipheral/block/entity/TriangleRadarBlockEntity.class",
+        "io/p2vman/neoperipheral/block/entity/EntityRadarBlockEntity.class",
+        "io/p2vman/neoperipheral/block/entity/CreativeRadarBlockEntity.class",
+        "io/p2vman/neoperipheral/block/entity/SocketBlockEntity.class",
+        "io/p2vman/neoperipheral/block/entity/NfcReaderBlockEntity.class",
+        "io/p2vman/neoperipheral/block/entity/BasePeripheralBlockEntity.class",
+        "io/p2vman/neoperipheral/block/entity/RadarBlockEntity.class",
+        "io/p2vman/neoperipheral/block/entity/NfcMasterBlockEntity.class",
+        "io/p2vman/neoperipheral/block/entity/CryptoBlockEntity.class",
+        "io/p2vman/neoperipheral/block/entity/SableEngineBlockEntity.class",
+        "io/p2vman/neoperipheral/util/PeripheralLazy.class",
+        "io/p2vman/neoperipheral/util/PeripheralLazy$PeripheralFactory.class"
+      ],
+      "lua": [],
+      "expected_sha512": "1414a97284e1528b4291c0d27b98090fefe952ecdbf392a5c9ecc4583b46acf197c4679a825801246c8a14df4cf8cf7997948e8feace144346a715f656772fde",
+      "observed_sha512": "1414a97284e1528b4291c0d27b98090fefe952ecdbf392a5c9ecc4583b46acf197c4679a825801246c8a14df4cf8cf7997948e8feace144346a715f656772fde",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "pneumaticcraft-repressurized-8.2.20+mc1.21.1.jar",
+      "mods": [
+        {
+          "mod_id": "pneumaticcraft",
+          "display_name": "PneumaticCraft: Repressurized",
+          "version": "8.2.20"
+        }
+      ],
+      "classes": [
+        "me/desht/pneumaticcraft/common/thirdparty/computercraft/PneumaticTilePeripheral.class",
+        "me/desht/pneumaticcraft/common/thirdparty/computercraft/ComputerCraft.class"
+      ],
+      "lua": [],
+      "expected_sha512": "7ad486e1b70a20f012d34356c65b02ea9972eabbf366675fbb4fb5c524040efd585c9e772bb8b94bf02244a34d55b41045ff426458bc91f734fbf58df5e8f570",
+      "observed_sha512": "7ad486e1b70a20f012d34356c65b02ea9972eabbf366675fbb4fb5c524040efd585c9e772bb8b94bf02244a34d55b41045ff426458bc91f734fbf58df5e8f570",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "powergrid-mc1.21.1-0.6.2.jar",
+      "mods": [
+        {
+          "mod_id": "powergrid",
+          "display_name": "Create: Power Grid",
+          "version": "0.6.2"
+        }
+      ],
+      "classes": [
+        "org/patryk3211/powergrid/compat/cc/CCBridge.class",
+        "org/patryk3211/powergrid/compat/cc/battery/BatteryPeripheral.class",
+        "org/patryk3211/powergrid/compat/cc/clutch/GeneratorClutchPeripheral.class",
+        "org/patryk3211/powergrid/compat/cc/gauges/BaseGaugePeripheral.class",
+        "org/patryk3211/powergrid/compat/cc/gauges/CurrentGaugePeripheral.class",
+        "org/patryk3211/powergrid/compat/cc/gauges/EnergyMeterPeripheral.class",
+        "org/patryk3211/powergrid/compat/cc/gauges/PowerGaugePeripheral.class",
+        "org/patryk3211/powergrid/compat/cc/gauges/VoltageGaugePeripheral.class",
+        "org/patryk3211/powergrid/compat/cc/redstone/RedstoneConverterPeripheral.class"
+      ],
+      "lua": [],
+      "expected_sha512": "60307e23a27526d22bf753d387edef5a2f2a063a04a47b69e98b7f71bbad32fdf17e05f9838008e47a5999a60e5e77a91f0695215d0ab57694f0034fde9873ca",
+      "observed_sha512": "60307e23a27526d22bf753d387edef5a2f2a063a04a47b69e98b7f71bbad32fdf17e05f9838008e47a5999a60e5e77a91f0695215d0ab57694f0034fde9873ca",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "simulated_cc_compat-1.1.2.jar",
+      "mods": [
+        {
+          "mod_id": "simulated_cc_compat",
+          "display_name": "Simulated: ComputerCraft Compat",
+          "version": "1.1.2"
+        }
+      ],
+      "classes": [
+        "com/winexp/simulated_cc_compat/content/peripherals/ComputerCraftPeripherals.class",
+        "com/winexp/simulated_cc_compat/content/peripherals/HotAirBurnerPeripheral.class",
+        "com/winexp/simulated_cc_compat/content/peripherals/PhysicsDataAccessorPeripheral.class",
+        "com/winexp/simulated_cc_compat/content/peripherals/RopeWinchPeripheral.class",
+        "com/winexp/simulated_cc_compat/content/peripherals/SteamVentPeripheral.class",
+        "com/winexp/simulated_cc_compat/content/peripherals/WheelMountPeripheral.class"
+      ],
+      "lua": [],
+      "expected_sha512": "fd0053726ab21c136a364f2baac6293c35fe3998a9fcc7b63eacaa8ff608b2e348e1ed3b2c63897551a6d54c22b1891f82a3d430d2c1222f822ac6b409d7b80c",
+      "observed_sha512": "fd0053726ab21c136a364f2baac6293c35fe3998a9fcc7b63eacaa8ff608b2e348e1ed3b2c63897551a6d54c22b1891f82a3d430d2c1222f822ac6b409d7b80c",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "teutonlib-1.6.0.jar",
+      "mods": [
+        {
+          "mod_id": "teutonlib",
+          "display_name": "TeutonLib",
+          "version": "1.6.0"
+        }
+      ],
+      "classes": [
+        "de/TeutonStudio/TeutonLib/api/computer/ComputerContext.class",
+        "de/TeutonStudio/TeutonLib/api/computer/ComputerExtensions.class",
+        "de/TeutonStudio/TeutonLib/api/computer/PeripheralSource.class",
+        "de/TeutonStudio/TeutonLib/api/computer/hosted/HostedComputer.class",
+        "de/TeutonStudio/TeutonLib/api/computer/peripheral/PeripheralAttachmentRuntime$refresh$3$binding$1.class",
+        "de/TeutonStudio/TeutonLib/api/computer/peripheral/PeripheralAttachmentRuntime.class",
+        "de/TeutonStudio/TeutonLib/api/computer/peripheral/PeripheralDeviceBinding.class",
+        "de/TeutonStudio/TeutonLib/api/computer/peripheral/PeripheralEndpoint.class",
+        "de/TeutonStudio/TeutonLib/integration/computer/ComputerIntegration.class",
+        "de/TeutonStudio/TeutonLib/integration/computer/ComputerRuntime.class",
+        "de/TeutonStudio/TeutonLib/integration/computer/SourceIntrospection$signatures$1.class",
+        "de/TeutonStudio/TeutonLib/integration/computer/SourceIntrospection.class",
+        "de/TeutonStudio/TeutonLib/integration/computer/StandardComputerWorkspace.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/ExtendedLinkDevice$handle$1.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/ExtendedLinkDevice.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/LinkBinding$Companion.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/LinkBinding$handle$1.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/LinkBinding.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/LinkDevice.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/LinkLuaApi$Companion.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/LinkLuaApi.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/LinkRegistry$Connection.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/LinkRegistry.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/ManagedLinkDevice$handle$1.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/ManagedLinkDevice.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/PeripheralExtensions.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/PeripheralLinkBlockEntity.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/PeripheralLinkPayloads.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/PeripheralLinks.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/heli/BearingGenericMethods.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/heli/BearingPeripheralExtensions.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/heli/GyroscopicBearingPeripheral.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/heli/HeliPeripheralIntegration.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/heli/OpticalSensorPeripheralExtensions.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/simulated/DirectionalGearshiftIntegration.class",
+        "de/TeutonStudio/TeutonLib/integration/peripheral/simulated/DirectionalGearshiftPeripheral.class",
+        "de/TeutonStudio/TeutonLib/mixin/peripheral/LinkAvailableMixin.class",
+        "de/TeutonStudio/TeutonLib/mixin/peripheral/LinkSystemAccessMixin.class",
+        "de/TeutonStudio/TeutonLib/mixin/peripheral/simulated/GimbalSensorPeripheralMixin.class"
+      ],
+      "lua": [
+        "data/computercraft/lua/rom/autorun/teutonlib_peripheral_links.lua",
+        "data/computercraft/lua/rom/modules/main/teutonlib/font.lua",
+        "data/computercraft/lua/rom/modules/main/teutonlib/peripheral_links.lua",
+        "data/computercraft/lua/rom/modules/main/teutonlib/render_target.lua",
+        "data/computercraft/lua/rom/modules/main/teutonlib/svg.lua",
+        "data/computercraft/lua/rom/programs/channels.lua"
+      ],
+      "expected_sha512": "83b839df3d7fb67540c7aa0fe7b8ba9203ed29719d9bdbef7eaddb29e66978a7ad92ebebcab855fb21f29a5a23c11f15f3cfe7697fa6c6f71be73258d90007cb",
+      "observed_sha512": "83b839df3d7fb67540c7aa0fe7b8ba9203ed29719d9bdbef7eaddb29e66978a7ad92ebebcab855fb21f29a5a23c11f15f3cfe7697fa6c6f71be73258d90007cb",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "turtlechargingstation-1.7.0-1.21.1-neoforge.jar",
+      "mods": [
+        {
+          "mod_id": "turtlechargingstation",
+          "display_name": "Turtle Charging Station",
+          "version": "1.7.0"
+        }
+      ],
+      "classes": [
+        "com/mikitellurium/turtlechargingstation/common/blockentity/ThunderchargeDynamoBlockEntity.class",
+        "com/mikitellurium/turtlechargingstation/common/integration/computercraft/ThunderchargeDynamoPeripheral.class",
+        "com/mikitellurium/turtlechargingstation/common/integration/computercraft/TurtleChargingStationPeripheral.class",
+        "com/mikitellurium/turtlechargingstation/CommonSetup.class"
+      ],
+      "lua": [],
+      "expected_sha512": "e44ffeee03f24016c62049a27c3462f2b2ddf9ac8cc0b8ebea731f8567aace63eb8ba0ee89daac4f9beccafb77063a36515d4779414853ccbe623ea32f1b8bfb",
+      "observed_sha512": "e44ffeee03f24016c62049a27c3462f2b2ddf9ac8cc0b8ebea731f8567aace63eb8ba0ee89daac4f9beccafb77063a36515d4779414853ccbe623ea32f1b8bfb",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "VS-Sable-HoseConnectors-0.2.2-1.21.1.jar",
+      "mods": [
+        {
+          "mod_id": "vsfluidlink",
+          "display_name": "VS Sable Hose Connectors",
+          "version": "0.2.2"
+        }
+      ],
+      "classes": [
+        "com/mk2525/vsfluidlink/compat/computercraft/CCWiredConnection.class"
+      ],
+      "lua": [],
+      "expected_sha512": "601e1ba5f4d25cba01bf1cfce3e55cf5ecae0f14f7b1a072742a30f59af769636edf83c49ec0eb1a4ea67a5478687df69400bfe96f48ad136c92f09923b8f9ea",
+      "observed_sha512": "601e1ba5f4d25cba01bf1cfce3e55cf5ecae0f14f7b1a072742a30f59af769636edf83c49ec0eb1a4ea67a5478687df69400bfe96f48ad136c92f09923b8f9ea",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    },
+    {
+      "file": "ZeroCore2-1.21.1-2.4.21.jar",
+      "mods": [
+        {
+          "mod_id": "zerocore",
+          "display_name": "Zero CORE 2",
+          "version": "1.21.1-2.4.21"
+        }
+      ],
+      "classes": [
+        "it/zerono/mods/zerocore/internal/compat/computer/ComputerCraftService.class",
+        "it/zerono/mods/zerocore/lib/compat/computer/ConnectorComputerCraft.class"
+      ],
+      "lua": [],
+      "expected_sha512": "c7cc17ed56eca1c0746b3391506ff207747540466efe7285f9217f08d01f30e140fe1c2b4575b45033c6a3c49267db8cb099f9f04124b5d7004bf2352019eb00",
+      "observed_sha512": "c7cc17ed56eca1c0746b3391506ff207747540466efe7285f9217f08d01f30e140fe1c2b4575b45033c6a3c49267db8cb099f9f04124b5d7004bf2352019eb00",
+      "sides": [
+        "client",
+        "server"
+      ],
+      "evidence_kind": "CC bytecode references or ROM Lua resources; candidate surface inventory, not a method contract"
+    }
+  ]
+}

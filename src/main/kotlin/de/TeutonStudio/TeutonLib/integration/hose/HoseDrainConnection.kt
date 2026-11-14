@@ -38,7 +38,6 @@ class HoseDrainConnection(val drain: ItemDrainBlockEntity) : FluidTransportBehav
     override fun initialize() {
         super.initialize()
         HoseConnectorRegistry.register(this)
-        de.TeutonStudio.TeutonLib.integration.sable.HoseConnectorPhysics.register(this)
     }
 
     override fun canHaveFlowToward(state: BlockState, direction: Direction): Boolean {
@@ -74,12 +73,13 @@ class HoseDrainConnection(val drain: ItemDrainBlockEntity) : FluidTransportBehav
     fun active(): Boolean {
         val head = head() ?: return false
         return HoseConnectorRegistry.find(level!!, identity, head.uuid) === this && !isRemoved && HosePipeGraph.loaded(level, blockPos) === drain && head.isAlive && head.dockId == identity &&
-            head.dockPosition == blockPos && head.validOwner() != null
+            head.dockPosition == blockPos && head.validOwner() != null && de.TeutonStudio.TeutonLib.integration.sable.HoseCablePhysics.ready(head)
     }
 
     fun dock(head: HoseHeadEntity, player: Player): Boolean {
         if (headId != null || head.dockId != null || !head.isCarriedBy(player) || head.validOwner() == null) return false
-        if (head.worldAnchor().distanceTo(socketWorld()) > head.hoseLength + HoseHeadEntity.END_ALLOWANCE) return false
+        val target = SubLevelGeometry.projectToWorld(level!!, socketLocal().add(0.0, 5.0/16.0 + HoseCableMath.DOCK_STUB, 0.0))
+        if (de.TeutonStudio.TeutonLib.integration.sable.HoseCablePhysics.constrain(head,target).distanceToSqr(target) > 1e-6) return false
         headId = head.uuid
         head.attach(this)
         connected = true

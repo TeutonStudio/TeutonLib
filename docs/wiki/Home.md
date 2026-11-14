@@ -1,10 +1,16 @@
 # TeutonLib Wiki
 
-Willkommen in der deutschen Dokumentation für **TeutonLib 1.6.0**. Jede Funktion hat eine eigene Seite mit Voraussetzungen, Bedienung, Konfiguration oder API-Vertrag.
+**Deutsch** · [English](English)
 
-TeutonLib erweitert Minecraft **1.21.1** mit NeoForge **ab 21.1.234**, Java **21** und KotlinForForge **ab 5.11.0 bis kleiner 6**. Die Mod gehört auf Server und Clients. Weitere Mods sind je Funktion optional; ihre genauen Versionsgrenzen stehen auf den Einzelseiten.
+TeutonLib ist die gemeinsame Minecraft-Bibliothek von TeutonStudio. Sie verbindet Computeroberflächen und APIs mit Create-/Sable-, Zug-, Energie-, Flüssigkeits- und Kompatibilitätsfunktionen. **SableSchlauch und CreateSableOptimization sind darin aufgegangen**; die separaten JARs dürfen nicht zusätzlich installiert werden.
 
-[Release 1.6.0 und Downloads](https://github.com/TeutonStudio/TeutonLib/releases/tag/v1.6.0) · [Release-Notizen](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/release-1.6.0.md) · [Quellcode](https://github.com/TeutonStudio/TeutonLib/tree/v1.6.0) · [Fehler melden](https://github.com/TeutonStudio/TeutonLib/issues)
+Minecraft **1.21.1** · NeoForge **ab 21.1.234** · Java **21** · KotlinForForge **5.11.0 bis kleiner 6**. Auf Server und allen Clients installieren; weitere Mods sind je Funktion optional und versionsgebunden.
+
+[Downloads](https://github.com/TeutonStudio/TeutonLib/releases) · [Kurze englische README](https://github.com/TeutonStudio/TeutonLib#readme) · [Fehler melden](https://github.com/TeutonStudio/TeutonLib/issues)
+
+**Stand: 14.11.2026.** Aktuelles Release ist **1.6.2**. Neu gegenüber 1.6.0 sind [Peripheral-Link-Antennen und Ortung](Peripheral-Link#antenne-und-ortung): gespeicherte Antennenseiten, bekannte Links und private Zielmarkierungen für 15 Sekunden. Weitere Änderungen in 1.6.2 stehen unten und auf den jeweiligen Funktionsseiten.
+
+Deutsch ist die Hauptsprache. Jede unten verlinkte Anleitung hat eine englische Fassung und eine direkt eingebundene Abbildung. Spielaufnahmen zeigen die Bedienung; reine Bibliotheks-/Kompatibilitätsfunktionen zeigen ihre tatsächliche Prüfung oder den Diagnosepfad. [Bildherkunft und Grenzen](Bildnachweise).
 
 ## Einstieg
 
@@ -31,6 +37,7 @@ TeutonLib erweitert Minecraft **1.21.1** mit NeoForge **ab 21.1.234**, Java **21
 - [New-Age-Motordrehzahl auf Sable](New-Age-Motordrehzahl-auf-Sable)
 - [Physische Schlauchrolle](Physische-Schlauchrolle)
 - [Schlauchkupplung am Item Drain](Schlauchkupplung-am-Item-Drain)
+- [Sable-Tankoberfläche — Entwicklung](Sable-Tankoberflaeche)
 - [FluidLogistics und Factory Logistics](FluidLogistics-und-Factory-Logistics)
 - [FluidLogistics und TFMG](FluidLogistics-und-TFMG)
 - [Mekanism-Anschlussmodelle auf Sable](Mekanism-Anschlussmodelle)
@@ -39,7 +46,7 @@ TeutonLib erweitert Minecraft **1.21.1** mit NeoForge **ab 21.1.234**, Java **21
 
 - [Computer-UI: Quellen und Lua-API](Computer-UI)
 - [Computer-Kanäle](Computer-Kanaele)
-- [Peripheral Link](Peripheral-Link)
+- [Peripheral Link: Antennen und Ortung](Peripheral-Link)
 - [Directional Gearshift](Directional-Gearshift)
 - [Helikopter-Peripherie: Gimbalsensor](Helikopter-Peripherie)
 - [Gyroskop-Steuerung](Gyroskop-Steuerung)
@@ -60,7 +67,9 @@ TeutonLib erweitert Minecraft **1.21.1** mit NeoForge **ab 21.1.234**, Java **21
 - [Docking-Zustands-API](Docking-Zustands-API)
 - [Netzwerk-Sitzungen und Budgets](Netzwerk-Sitzungen-und-Budgets)
 
-## Android und Zalith
+## Android und Zalith — frühere TeutonLib-Versionen
+
+Unveröffentlichter Quellstand: Die Adapter wurden in TerrArchitectures [Modul mobilecompat](https://github.com/TeutonStudio/TerrArchitecture/blob/master/src/main/kotlin/de/TeutonStudio/mobilecompat/SPECS.md) ausgelagert; die folgenden Seiten dokumentieren frühere TeutonLib-Versionen.
 
 - [Android- und Zalith-Kompatibilität](Android-und-Zalith-Kompatibilitaet)
 - [Ponder und Catnip auf Android](Ponder-und-Catnip-auf-Android)
@@ -78,10 +87,16 @@ TeutonLib erweitert Minecraft **1.21.1** mit NeoForge **ab 21.1.234**, Java **21
 - [Design 'n' Decor: Soundressource](Design-n-Decor-Soundreparatur)
 - [Paketmetadaten-Diagnose](Paketmetadaten-Diagnose)
 
-## Bekannte Grenzen
+## Entwicklung und Dokumentationsstand
 
-Bei stehenden Mitfahrern wurde in der Aether-Prüfung eine Positionsabweichung bei der Wagenkörperübergabe festgestellt. Angedockte Lasten können unter Gewicht und Hebelwirkung durchhängen. Einzelheiten und Prüfgrenzen stehen unter [Zug-Portaltransfer](Zug-Portaltransfer) und [Zug-Docking](Zug-Docking). Das ContraptionLevel verwendet weiterhin einen echten Sable-Simulationsplot.
+Die Anleitungen berücksichtigen **Release 1.6.2**. Historische Bilder und Prüfberichte behalten ihren ursprünglichen Versionsstand; die 160 Tests vom 13.11.2026 gehören zu 1.6.0 und sind kein Prüfergebnis des heutigen Quellstands. Folgende Änderungen sind zusätzlich zur Basis 1.6.1 in **1.6.2 enthalten**:
 
-## Dokumentationsstand
+- [Sable-Tankoberfläche](Sable-Tankoberflaeche)
+- [Bahnhofsbau](Bahnhofsbau): native Vorschaupositionen, Leerplot-Speicherung und Wiederanlauf von Lagern beim Abbrechen.
+- [Physische Schlauchrolle](Physische-Schlauchrolle) und [Item-Drain-Kupplung](Schlauchkupplung-am-Item-Drain): Schraubenschlüsselwechsel und Schlauchführung mit Durchhang, Hindernissen und Zugkräften.
+- [New-Age-FE-Eingang](New-Age-FE-Eingang): rückseitiges Flux-Point-Anschlussmodell mit passender Auswahlform.
+- [Android-Adapter](Android-und-Zalith-Kompatibilitaet): Auslagerung nach TerrArchitecture; die TeutonLib-Seiten bleiben als historische Referenz erhalten.
 
-Die Wiki gehört zum Release **v1.6.0 vom 02.11.2026**. Ihre Markdown-Quellen sind im Hauptrepository unter [docs/wiki](https://github.com/TeutonStudio/TeutonLib/tree/v1.6.0/docs/wiki) und im Vorlagen-ZIP enthalten. Historische Abnahmen sind als solche gekennzeichnet; Build, Spieltests und bekannte Einschränkungen werden auf den jeweiligen Seiten getrennt beschrieben.
+Die [Gyroskop-Anleitung](Gyroskop-Steuerung) nennt die beim Prüfen gefundene Einschränkung des direkten Lua-Zugriffs. Die bekannte Aether-Abweichung stehender Mitfahrer und mögliches Durchhängen angedockter Lasten sind weiterhin dokumentiert. Screenshots ändern diese Prüfgrenzen nicht.
+
+[Versionierte Wiki-Quellen](https://github.com/TeutonStudio/TeutonLib/tree/master/docs/wiki) · [Bildnachweise und Prüfgrenzen](Bildnachweise)

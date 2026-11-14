@@ -1,5 +1,7 @@
 # Paketmetadaten-Diagnose
 
+**Deutsch** · [English](Paketmetadaten-Diagnose-en) · [Übersicht](Home)
+
 TeutonLib ordnet Fehler beim Lesen der `pack.mcmeta` eines Mod-Ressourcenpakets einem konkreten Mod-Artefakt zu. Das erleichtert die Fehlersuche, wenn eine Paketmetadatenmeldung ohne eindeutigen Besitzer erscheint.
 
 ## Diagnose lesen
@@ -25,3 +27,14 @@ Die separat dokumentierten [Ressourcenreparaturen](Ressourcenreparaturen) haben 
 - [Einmalige Diagnosemeldungen](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/compat/CompatibilityDiagnostics.kt)
 
 [Wiki-Startseite](Home) · [Ressourcenreparaturen](Ressourcenreparaturen)
+
+## Abbildung
+
+
+Screenshot des tatsächlichen Diagnosepfads: Dateiname, Modversion, Fingerabdruck und erneutes Auslösen des ursprünglichen Fehlers. Codeansicht, kein nachgestellter Spielerabsturz.
+
+![Paketmetadaten-Diagnose: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/metadata-diagnostic.png)
+
+![Paketmetadaten-Diagnose: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/metadata-fingerprint.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

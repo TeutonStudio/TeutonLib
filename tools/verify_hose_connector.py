@@ -2,6 +2,7 @@
 """Real Create networks in a disposable server: native rate, shared hose limit and reverse flow."""
 from pathlib import Path
 import json
+import sys
 import secrets
 import subprocess
 import time
@@ -43,6 +44,13 @@ def main():
             command('prepare')
             time.sleep(1)
             command('dock-all')
+            if '--physics-only' in sys.argv:
+                checks.append(command('physics'))
+                command('motion-prepare'); time.sleep(1)
+                checks.append(command('motion-sample'))
+                (report/'report.json').write_text(json.dumps({'passed':True,'checks':checks,'instance':str(instance)},indent=2)+'\n')
+                print('PASS connector physics',flush=True)
+                return
             time.sleep(6)
             command('status')
             command('validate')

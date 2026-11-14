@@ -15,9 +15,7 @@ jar = ROOT / f'build/libs/{name}-{version}.jar'
 sources = ROOT / f'build/libs/{name}-{version}-sources.jar'
 bundle = ROOT / f'build/distributions/{name}-{version}-computer-ui-template.zip'
 allowed_java = {'src/main/java/de/TeutonStudio/TeutonLib/mixin/' + name + '.java' for name in (
-    'computer/client/DbwClientMixin', 'mobile/PowerGridNativeMixin', 'mobile/ImmersiveMelodiesMidiMixin',
-    'mobile/VisualRecipeEditorBackupMixin', 'mobile/EssentialDiscordIpcMixin', 'mobile/PonderRenderTargetMixin',
-    'mobile/CatnipStencilElementMixin', 'resource/ResourcePackLoaderMixin')}
+    'computer/client/DbwClientMixin', 'resource/ResourcePackLoaderMixin')}
 java = {str(p.relative_to(ROOT)) for parent in ('src', 'examples') for p in (ROOT / parent).rglob('*.java')}
 assert java == allowed_java, f'Unexpected Java sources: {java - allowed_java}; missing required Java mixins: {allowed_java - java}'
 with zipfile.ZipFile(jar) as archive:
@@ -48,7 +46,7 @@ with zipfile.ZipFile(jar) as archive:
     assert nested[0]['identifier'] == {'group': 'com.github.bawnorton.mixinsquared', 'artifact': 'mixinsquared-neoforge'}
     assert nested[0]['version']['artifactVersion'] == '0.3.7'
     fixture_packages = ('peripheraltest', 'energytest', 'dockingtest', 'traintest', 'hosetest',
-                        'logisticstest', 'fluidtest', 'mekatest')
+                        'logisticstest', 'fluidtest', 'mekatest', 'tanktest')
     assert not any(any('/' + package + '/' in n for package in fixture_packages) or n.startswith('example/') for n in names), 'Verification code shipped'
     for license_name in ('LICENSE', 'TEMPLATE_LICENSE.txt'):
         assert archive.read('META-INF/' + license_name) == (ROOT / license_name).read_bytes()

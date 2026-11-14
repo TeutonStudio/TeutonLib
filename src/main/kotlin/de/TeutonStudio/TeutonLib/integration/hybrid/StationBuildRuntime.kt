@@ -13,6 +13,9 @@ import dev.ryanhcode.sable.companion.math.BoundingBox3i
 import dev.ryanhcode.sable.sublevel.ServerSubLevel
 import net.minecraft.core.BlockPos
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.ListTag
+import net.minecraft.nbt.NbtUtils
+import net.minecraft.core.registries.Registries
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.block.Rotation
@@ -30,6 +33,8 @@ object StationBuildRuntime {
     private const val ORIGIN = "Origin"
     private val pins = WeakHashMap<ServerSubLevel, FixedConstraintHandle>()
     private val dormant = java.util.Collections.newSetFromMap(WeakHashMap<ServerSubLevel, Boolean>())
+    private const val VIEW = "teutonlib:station_build_view"
+    private val views = java.util.Collections.synchronizedMap(WeakHashMap<StationBlockEntity, Map<BlockPos, BlockState>>())
     private val assembling = ThreadLocal<Map<BlockPos, Set<BlockPos>>>()
 
     fun construction(sub: ServerSubLevel) = sub.userDataTag?.contains(KEY) == true
@@ -49,7 +54,11 @@ object StationBuildRuntime {
     fun begin(station: StationBlockEntity) {
         if (!ServerConfig.hybridTrains() || station.level !is ServerLevel || bodies(station).isNotEmpty()) return
         val direction = station.assemblyDirection ?: return
-        create(station, station.edgePoint.globalPosition.relative(direction).above())
+        val track = station.edgePoint.track ?: return
+        val pos = station.edgePoint.globalPosition
+        val up = BlockPos.containing(track.getUpNormal(station.level, pos, station.edgePoint.trackBlockState))
+        create(station, pos.relative(direction).offset(up))
+        sync(station)
     }
 
     private fun create(station: StationBlockEntity, worldOrigin: BlockPos): ServerSubLevel {
@@ -81,7 +90,44 @@ object StationBuildRuntime {
     }
 
     fun state(station: StationBlockEntity, level: Level, pos: BlockPos): BlockState =
-        containing(station, pos)?.let { level.getBlockState(toPlot(it, pos)) } ?: level.getBlockState(pos)
+        if (level.isClientSide) views[station]?.get(pos) ?: level.getBlockState(pos)
+        else containing(station, pos)?.let { level.getBlockState(toPlot(it, pos)) } ?: level.getBlockState(pos)
+
+    /** Create recomputes its preview from block states on the client. Only the
+     * projected bogey states travel in the station's normal BE update packet;
+     * tracks and native offset/spacing validation stay in the real world. */
+    private fun projectedBogeys(station: StationBlockEntity): Map<BlockPos, BlockState> = buildMap {
+        for (body in bodies(station)) for (pos in bogeys(body))
+            put(toWorld(body, pos), body.level.getBlockState(pos))
+    }
+
+    fun sync(station: StationBlockEntity) {
+        if (station.level !is ServerLevel) return
+        val current = projectedBogeys(station)
+        if (views[station] == current) return
+        views[station] = current
+        station.refreshAssemblyInfo()
+        station.notifyUpdate()
+    }
+
+    fun writeView(station: StationBlockEntity, tag: CompoundTag) {
+        val view = projectedBogeys(station)
+        if (bodies(station).isEmpty()) return
+        tag.put(VIEW, ListTag().also { list -> view.forEach { (pos, state) ->
+            list.add(CompoundTag().also {
+                it.putLong("Pos", pos.asLong()); it.put("State", NbtUtils.writeBlockState(state))
+            })
+        } })
+    }
+
+    fun readView(station: StationBlockEntity, tag: CompoundTag, registries: net.minecraft.core.HolderLookup.Provider) {
+        views[station] = buildMap {
+            for (entry in tag.getList(VIEW, 10)) {
+                val item = entry as CompoundTag
+                put(BlockPos.of(item.getLong("Pos")), NbtUtils.readBlockState(registries.lookupOrThrow(Registries.BLOCK), item.getCompound("State")))
+            }
+        }
+    }
 
     fun blockEntity(station: StationBlockEntity, level: Level, pos: BlockPos) =
         level.getBlockEntity(containing(station, pos)?.let { toPlot(it, pos) } ?: pos)
@@ -90,8 +136,19 @@ object StationBuildRuntime {
         if (level !is ServerLevel || !station.isAssembling ||
             (!ServerConfig.hybridTrains() && bodies(station).isEmpty())) return level.setBlock(pos, state, flags)
         val existing = containing(station, pos)
-        val body = existing ?: bodies(station).filter { bogeys(it).size < 2 }
-            .minByOrNull { origin(it).distSqr(pos) } ?: create(station, pos)
+        // Extend only a neighbouring one-bogey wagon in native rail order.
+        // Never join across an intervening wagon merely because its origin is nearer.
+        val direction = station.assemblyDirection
+        fun offset(at: BlockPos): Int = at.subtract(station.edgePoint.globalPosition).let {
+            it.x * direction.stepX + it.z * direction.stepZ
+        }
+        val ordered = bodies(station).flatMap { body -> bogeys(body).map { toWorld(body, it) to body } }
+            .sortedBy { offset(it.first) }
+        val neighbours = listOfNotNull(ordered.lastOrNull { offset(it.first) < offset(pos) },
+            ordered.firstOrNull { offset(it.first) > offset(pos) })
+        val body = existing ?: neighbours.filter { bogeys(it.second).size == 1 }
+            .minByOrNull { kotlin.math.abs(offset(it.first) - offset(pos)) }?.second
+            ?: bodies(station).firstOrNull { blocks(it).isEmpty() } ?: create(station, pos)
         val target = toPlot(body, pos)
         val chunkPos = net.minecraft.world.level.ChunkPos(target)
         if (body.plot.getChunkHolder(body.plot.toLocal(chunkPos)) == null) body.plot.newEmptyChunk(chunkPos)
@@ -212,20 +269,28 @@ object StationBuildRuntime {
         }
     }
 
+    private fun checkDestinations(bodies: List<ServerSubLevel>) {
+        val destinations = bodies.flatMap { sub -> blocks(sub).map { toWorld(sub, it) } }
+        check(destinations.size == destinations.toSet().size) { "Station build plots overlap" }
+        check(bodies.all { sub -> blocks(sub).all { pos ->
+            val target = toWorld(sub, pos)
+            sub.level.hasChunkAt(target) && sub.level.getBlockState(target).isAir
+        } }) { "Clear the blocks occupying the train construction area first" }
+    }
+
     /** Preflight every destination before moving any wagon or inventory. */
     fun <T> assemble(station: StationBlockEntity, action: () -> T): T {
         val bodies = bodies(station)
         if (bodies.isEmpty()) return action()
+        // Reject an occupied destination before stopping any running machinery.
+        checkDestinations(bodies)
         for (sub in bodies) check(de.TeutonStudio.TeutonLib.integration.train.TrainPortalMachines.prepare(sub)) {
             "Stop the train's moving machinery before assembly"
         }
+        checkDestinations(bodies) // disassembly may have restored child blocks
         val positions = bodies.associateWith(::blocks)
         val worldPositions = positions.mapValues { (sub, blocks) -> blocks.map { toWorld(sub, it) }.toSet() }
         val level = station.level as ServerLevel
-        check(worldPositions.values.flatten().let { it.size == it.toSet().size }) { "Station build plots overlap" }
-        check(worldPositions.values.flatten().all { level.hasChunkAt(it) && level.getBlockState(it).isAir }) {
-            "Clear the blocks occupying the train construction area first"
-        }
         val previous = assembling.get()
         val staged = mutableListOf<ServerSubLevel>()
         try {
@@ -253,30 +318,46 @@ object StationBuildRuntime {
     /** Leaving construction keeps every placed block in the world. */
     fun finish(station: StationBlockEntity) {
         val bodies = bodies(station)
-        val positions = bodies.associateWith(::blocks)
-        val level = station.level as? ServerLevel ?: return
-        val destinations = positions.flatMap { (sub, blocks) -> blocks.map { toWorld(sub, it) } }
-        check(destinations.size == destinations.toSet().size) { "Separate overlapping train construction plots first" }
-        check(positions.all { (sub, blocks) -> blocks.all { level.hasChunkAt(toWorld(sub, it)) && level.getBlockState(toWorld(sub, it)).isAir } }) {
-            "Clear the train construction area before leaving assembly mode"
+        if (bodies.isEmpty()) return
+        checkDestinations(bodies)
+        for (sub in bodies) check(de.TeutonStudio.TeutonLib.integration.train.TrainPortalMachines.prepare(sub)) {
+            "Stop the train's moving machinery before leaving assembly mode"
         }
-        for ((sub, blocks) in positions) {
-            pins.remove(sub)?.remove()
-            move(sub, blocks, true)
-            sub.userDataTag = sub.userDataTag?.copy()?.also { it.remove(KEY) }
+        checkDestinations(bodies)
+        val positions = bodies.associateWith(::blocks)
+        val staged = mutableListOf<ServerSubLevel>()
+        try {
+            for ((sub, blocks) in positions) {
+                pins.remove(sub)?.let { if (it.isValid) it.remove() }
+                move(sub, blocks, true)
+                staged += sub
+            }
+        } catch (failure: RuntimeException) {
+            for (sub in staged.asReversed()) {
+                move(sub, positions.getValue(sub).map { toWorld(sub, it) }.toSet(), false)
+                hold(sub)
+            }
+            throw failure
+        }
+        val level = station.level as ServerLevel
+        de.TeutonStudio.TeutonLib.integration.train.TrainPortalMachines.returnedToWorld(level,
+            positions.flatMap { (sub, blocks) -> blocks.map { toWorld(sub, it) } })
+        // Commit removal only after every wagon has reached its destination.
+        for (sub in bodies) {
+            // Removal is deferred by Sable. Keep the marker until disposal so
+            // an immediate save cannot serialize an unmarked zero-mass body.
             sub.markRemoved()
         }
+        sync(station)
     }
 
     fun removed(station: StationBlockEntity) {
         try { finish(station) }
         catch (_: IllegalStateException) {
-            // If someone occupied the world space while building, retain the
-            // actual construction as ordinary Sable bodies instead of deleting it.
-            for (sub in bodies(station)) {
-                pins.remove(sub)?.remove()
-                sub.userDataTag = sub.userDataTag?.copy()?.also { it.remove(KEY) }
-            }
+            // Keep ownership and the empty-plot persistence invariant when a
+            // blocked handoff cannot complete. Never reclassify a dormant plot
+            // as an ordinary body whose serializer requires real mass.
+            for (sub in bodies(station)) hold(sub)
         }
     }
 }

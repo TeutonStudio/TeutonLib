@@ -38,6 +38,10 @@ abstract class HybridBuildLoadStatsMixin {
     @WrapOperation(method = ["load(Lnet/minecraft/nbt/CompoundTag;)V"], at = [At(value = "INVOKE",
         target = "Ldev/ryanhcode/sable/api/physics/PhysicsPipeline;onStatsChanged(Ldev/ryanhcode/sable/sublevel/ServerSubLevel;)V")], require = 1)
     private fun `teutonlib$noDormantLoadStats`(pipeline: PhysicsPipeline, sub: ServerSubLevel, original: Operation<Void>) {
+        // The first notification precedes collider uploads in plot.load.
+        // Occupied construction needs its real body back before those uploads;
+        // genuinely empty construction remains parked throughout loading.
+        StationBuildRuntime.hold(sub)
         StationBuildRuntime.statsChanged(pipeline, sub) { original.call(pipeline, sub) }
     }
 }

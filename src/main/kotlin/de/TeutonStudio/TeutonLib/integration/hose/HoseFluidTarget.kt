@@ -17,7 +17,7 @@ object HoseFluidTarget {
         if (pulley.isRemoved || level.getBlockEntity(pulley.blockPos) !== pulley) return null
         val head = host.physicalHeadId?.let(level::getEntity) as? HoseHeadEntity ?: return null
         if (!head.isAlive || !head.belongsTo(pulley.blockPos)) return null
-        if (head.dockId != null) return null
+        if (head.dockId != null || !de.TeutonStudio.TeutonLib.integration.sable.HoseCablePhysics.ready(head)) return null
         val target = head.blockPosition()
         return if (level.hasChunkAt(target)) target.immutable() else null
     }

@@ -54,6 +54,8 @@ class TrainPortalVerification {
     init {
         NeoForge.EVENT_BUS.register(this)
         NeoForge.EVENT_BUS.register(StationBuildVerification)
+        NeoForge.EVENT_BUS.register(StationPersistenceVerification)
+        NeoForge.EVENT_BUS.register(StationPreviewVerification)
         if (net.neoforged.fml.ModList.get().isLoaded("create_radar")) {
             NeoForge.EVENT_BUS.register(HybridTrainVerification)
             NeoForge.EVENT_BUS.register(TrainDemo)

@@ -1,5 +1,17 @@
 # Android- und Zalith-Kompatibilität
 
+**Deutsch** · [English](Android-und-Zalith-Kompatibilitaet-en) · [Übersicht](Home)
+
+> **Ab TeutonLib 1.6.2:** Diese Adapter liegen jetzt im TerrArchitecture-Modul [`mobilecompat`](https://github.com/TeutonStudio/TerrArchitecture/blob/master/src/main/kotlin/de/TeutonStudio/mobilecompat/SPECS.md). TeutonLib liefert sie nicht mehr aus. Beschreibung und Desktop-Prüfnachweise unten beziehen sich auf frühere TeutonLib-Versionen. Bestehende `teutonlib.mobile.*`-Optionen bleiben in TerrArchitecture als Aliase erhalten.
+
+## Migration ab 1.6.2
+
+Für den ausgelagerten Stand TeutonLib und TerrArchitecture gemeinsam aus dem passenden Quellstand bauen und im Modpack ersetzen. Die neuen Launcher-Argumente heißen `-Dterrarchitecture.mobile.mode=auto`, `on` oder `off` und `-Dterrarchitecture.mobile.render.colorMask=true` für den optionalen Farbmasken-Fallback. Die bisherigen Namen bleiben im TerrArchitecture-Modul Aliase; ein Neustart ist erforderlich.
+
+Diese Auslagerung ist in 1.6.2 enthalten. Die Android-Erkennung, mobilen Mixins und Essential-Socket-API-Extraktion sind aus dem aktuellen TeutonLib-Build entfernt. [Ressourcenreparaturen](Ressourcenreparaturen) bleiben unabhängig davon in TeutonLib.
+
+## Historisches TeutonLib-Verhalten bis einschließlich 1.6.1
+
 TeutonLib aktiviert auf Android eng begrenzte Kompatibilitätspfade für bestimmte Modversionen. Die Erkennung erfolgt früh genug für die Mixin-Auswahl und benötigt keine zusätzlichen Spielblöcke.
 
 ## Erkennung und Launcher-Einstellungen
@@ -39,3 +51,11 @@ Meldungen unter `TeutonLib/Compatibility` nennen aktivierte Fallbacks und ungepr
 - [Releasebeschreibung der mobilen Integration](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/release-1.5.3.md)
 
 [Wiki-Startseite](Home) · [Ressourcenreparaturen](Ressourcenreparaturen)
+
+## Abbildung
+
+Ausgeführte Desktop-Prüfung der Android-Erkennung. Keine Aufnahme eines Android-/Zalith-Geräts.
+
+![Android- und Zalith-Kompatibilität: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-MobileEnvironmentTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

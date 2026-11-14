@@ -1,6 +1,8 @@
 # Peripheral Link
 
-Der **Peripheral Link** (`teutonlib:peripheral_link`) verbindet ein entferntes Peripheral mit einem CC:Tweaked-Blockcomputer. TeutonLib v1.6.0 registriert ihn bei installiertem **CC:Tweaked und Create**. Es gibt keinen separaten Empfängerblock. Addons können über die öffentliche Ziel-/Topologie-API eigene Computer, etwa Pultreihen, anbinden.
+**Deutsch** · [English](Peripheral-Link-en) · [Übersicht](Home)
+
+Der **Peripheral Link** (`teutonlib:peripheral_link`) verbindet ein entferntes Peripheral mit einem CC:Tweaked-Blockcomputer. TeutonLib 1.6.1 registriert ihn bei installiertem **CC:Tweaked und Create**. Es gibt keinen separaten Empfängerblock. Addons können über die öffentliche Ziel-/Topologie-API eigene Computer, etwa Pultreihen, anbinden.
 
 ## Herstellen und koppeln
 
@@ -20,6 +22,8 @@ Schleichen und Benutzen löscht die Auswahl im gehaltenen Item. Nach erfolgreich
 Kopplung und Platzierung prüfen serverseitig Interaktionsreichweite, geladene Blöcke und Spielerrechte. Die Platzierung prüft zusätzlich Ziel und Funkreichweite.
 
 ## Antenne und Ortung
+
+**Seit 1.6.1.** Die Antenne gehört zur Kopplung; die bekannten Lua-Adressen bleiben unverändert.
 
 Am ausgewählten Computer oder Pult erscheint automatisch eine kleine Antenne auf der beim Koppeln angeklickten Seite. Sie benötigt weder ein Item noch einen Nachbarblock. Bestehende Kopplungen verwenden die Oberseite. Alle Antennenseiten zeigen dieselbe Linkliste dieses Ankers; sie bleiben auch sichtbar, wenn deren Chunks entladen sind.
 
@@ -76,8 +80,52 @@ UUIDs bleiben in Blockdaten gespeichert. Erkennt das Register zwei geladene Ziel
 
 Zusätzliche Gerätefunktionen: [optischer Sensor](Optischer-Sensor), [Directional Gearshift](Directional-Gearshift), [Helikopter-Peripherie](Helikopter-Peripherie), [Gyroskop-Steuerung](Gyroskop-Steuerung).
 
+## Häufige Fragen
+
+| Beobachtung | Erklärung oder nächster Schritt |
+| --- | --- |
+| Der Rechtsklick öffnet den Computer. | Direkt auf die kleine Antenne zielen. Mit gehaltenem Link-Item wird stattdessen gekoppelt. |
+| Ein Eintrag bleibt nach Chunkentladung sichtbar. | Die Übersicht speichert bekannte Links. Das bedeutet nicht, dass das Gerät gerade verbunden ist. |
+| Ein Ziel zeigt die letzte bekannte Position. | Der Zielchunk ist nicht geladen; die Übersicht lädt ihn nicht nach. |
+| Es gibt keine Entfernung oder Markierung. | Die angezeigte Dimension mit der eigenen vergleichen. Weltmarkierungen funktionieren nur innerhalb derselben Dimension. |
+| Die letzte Antennenseite lässt sich nicht abschalten. | Mindestens eine Seite muss aktiv bleiben. |
+
+## Entwicklerprüfung
+
+```sh
+python3 tools/verify_peripheral_links.py cc
+python3 tools/verify_peripheral_links.py console
+python3 tools/verify_peripheral_antenna_client.py --sable --visual
+```
+
+Serverprofile prüfen unter anderem Entladung, Neustart und Pultreihen; die getrennte grafische Prüfung deckt Seitenwahl, beide Ortungsrichtungen und den Ablauf der Markierung ab. Der dokumentierte erfolgreiche Lauf mit CC:Tweaked, Create und Sable ist kein erfolgreicher Test des vollständigen zusätzlichen Addon-Stacks; dessen Clientlauf hatte ein Verbindungszeitlimit. [Prüfumfang 1.6.1](https://github.com/TeutonStudio/TeutonLib/blob/e6c27c6/docs/release-1.6.1.md).
+
 ## Implementierung
 
-[Rezepte](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/resources/data/teutonlib/recipe/peripheral_link_from_components.json), [Item und Kopplung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/PeripheralLinkItem.kt), [Register und Gültigkeit](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/LinkRegistry.kt), [CraftOS-Erweiterung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/resources/data/computercraft/lua/rom/modules/main/teutonlib/peripheral_links.lua).
+[Rezepte](https://github.com/TeutonStudio/TeutonLib/blob/e6c27c6/src/main/resources/data/teutonlib/recipe/peripheral_link_from_components.json), [Item und Kopplung](https://github.com/TeutonStudio/TeutonLib/blob/e6c27c6/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/PeripheralLinkItem.kt), [Register und Gültigkeit](https://github.com/TeutonStudio/TeutonLib/blob/e6c27c6/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/LinkRegistry.kt), [CraftOS-Erweiterung](https://github.com/TeutonStudio/TeutonLib/blob/e6c27c6/src/main/resources/data/computercraft/lua/rom/modules/main/teutonlib/peripheral_links.lua).
 
 [Zur Startseite](Home)
+
+## Antennenbilder aus der Clientprüfung
+
+Mehrere Antennenseiten gleichzeitig aktiv; mindestens eine bleibt eingeschaltet. Die Aufnahme enthält die normale Minecraft-Einblendung der Bewegungssteuerung.
+
+![Antennenseiten auswählen](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/peripheral-antenna-sides.png)
+
+Antennen auf einem gedrehten Sable-Computer, von unten gesehen. Die Montage folgt den lokalen Blockseiten.
+
+![Antennen auf Sable](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/peripheral-antenna-sable.png)
+
+Private Zielmarkierung durch eine Wand in der getrennten Testwelt. Sie läuft nach 15 Sekunden ab.
+
+![Peripheral Link markieren](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/peripheral-link-marker.png)
+
+Die unbearbeiteten Aufnahmen stammen aus dem erfolgreichen Lauf `2372da0bb22a` mit CC:Tweaked, Create und Sable; sie wurden für diese Wiki-Überarbeitung nicht neu aufgenommen.
+
+## Historische Link-UI
+
+Echter Peripheral-Link-Bildschirm mit Testdaten aus der UI-Prüfung; Methoden und Status sind hier Prüfdaten, kein Live-Inventar.
+
+![Peripheral Link: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/peripheral-link-ui.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

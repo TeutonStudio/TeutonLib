@@ -1,5 +1,7 @@
 # Portal-Darstellung und Beleuchtung
 
+**Deutsch** · [English](Portal-Darstellung-und-Beleuchtung-en) · [Übersicht](Home)
+
 Baubare Züge bleiben während einer Portalpassage auf beiden Seiten der Portalfläche sichtbar. TeutonLib verwendet dafür den vorhandenen Sable-Aufbau und Immersive Portals' natives Straddling-System: Jede Ansicht zeichnet den räumlich passenden Teil des Wagens und schneidet ihn an der Portalfläche ab.
 
 ## Voraussetzungen
@@ -53,3 +55,16 @@ Berichte und Bilder stehen unter `build/reports/train-portal-client/` und in der
 Weiter: [Hybridzüge](Hybridzuege) · [Zug-Portaltransfer](Zug-Portaltransfer) · [Zug-Docking](Zug-Docking)
 
 Quelle für 1.6.0: [ContraptionLevel-Darstellung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/client/train/ContraptionLevel.kt).
+
+## Abbildung
+
+
+Portal-Clipping, Beleuchtung der Zielwelt und ContraptionLevel-Rahmen in der echten Testszene.
+
+![Portal-Darstellung und Beleuchtung: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/train-portal-source.png)
+
+![Portal-Darstellung und Beleuchtung: 2](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/train-portal-destination.png)
+
+![Portal-Darstellung und Beleuchtung: 3](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/train-bounds.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

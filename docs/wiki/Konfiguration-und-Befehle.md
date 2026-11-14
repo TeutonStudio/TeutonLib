@@ -1,6 +1,8 @@
 # Konfiguration und Befehle
 
-TeutonLib 1.6.0 verwendet NeoForges eingebauten Konfigurationseditor unter **Mods → TeutonLib → Config**. Die Beschriftungen sind auf Deutsch und Englisch verfügbar. Die zusätzliche Mod Configured wird dafür nicht benötigt.
+**Deutsch** · [English](Konfiguration-und-Befehle-en) · [Übersicht](Home)
+
+TeutonLib 1.6.1 verwendet NeoForges eingebauten Konfigurationseditor unter **Mods → TeutonLib → Config**. Die Beschriftungen sind auf Deutsch und Englisch verfügbar. Die zusätzliche Mod Configured wird dafür nicht benötigt.
 
 ## Dateien und Editor
 
@@ -66,6 +68,16 @@ enabled = true
 
 Die Zugbefehle benötigen die aktive [Hybridintegration](Hybridzuege) und wählen einen Zug über den nächsten geladenen Wagen im Umkreis von 32 Blöcken. Alle Wagen müssen geladen sein; während Portalübertragungen sind Moduswechsel gesperrt. Im Einzelspieler benötigen OP-Befehle aktivierte Cheats.
 
-Mobile JVM-Startparameter stehen unter [Android und Zalith](Android-und-Zalith-Kompatibilitaet).
+Antennenseiten werden direkt in der [Peripheral-Link-Antennen-UI](Peripheral-Link#antenne-und-ortung) gewählt und je Anker gespeichert. Dafür gibt es keinen globalen TOML-Schalter.
 
-Quellen: [ServerConfig](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/ServerConfig.kt), [ClientConfig](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/ClientConfig.kt), [Zugbefehle](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/hybrid/HybridTrainCommands.kt).
+Ab TeutonLib 1.6.2 liegen mobile JVM-Startparameter bei TerrArchitecture: `-Dterrarchitecture.mobile.mode=auto|on|off` und `-Dterrarchitecture.mobile.render.colorMask=true`. Die bisherigen `teutonlib.mobile.*`-Namen bleiben dort Aliase. [Migration und historische Einstellungen](Android-und-Zalith-Kompatibilitaet).
+
+Quellen: [ServerConfig](https://github.com/TeutonStudio/TeutonLib/blob/e6c27c6/src/main/kotlin/de/TeutonStudio/TeutonLib/ServerConfig.kt), [ClientConfig](https://github.com/TeutonStudio/TeutonLib/blob/e6c27c6/src/main/kotlin/de/TeutonStudio/TeutonLib/ClientConfig.kt), [Zugbefehle](https://github.com/TeutonStudio/TeutonLib/blob/e6c27c6/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/hybrid/HybridTrainCommands.kt).
+
+## Abbildung
+
+TeutonLib im nativen Konfigurationseditor. Servereinstellungen sind nur bei einer passenden geladenen Welt bearbeitbar.
+
+![Konfiguration und Befehle: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-config.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

@@ -1,5 +1,7 @@
 # Embedded-Computer-Kernel
 
+**Deutsch** · [English](Embedded-Computer-Kernel-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 stellt mit `de.TeutonStudio.TeutonLib.api.computer.hosted.HostedComputer` eine wiederverwendbare CC:Tweaked-Laufzeit für eigene Addon-Blockentities bereit. Das Addon definiert Blockregistrierung, Einbau-/Ausbauverhalten und Zugriffsregeln. Der Kernel übernimmt die laufende CC-Instanz und Standard-Computerdaten; er registriert allein keinen neuen Block.
 
 ## Einbinden
@@ -35,3 +37,12 @@ Ein Addon kann den eingebetteten Computer über einen identitätsgeprüften Host
 [HostedComputer und Persistenzschlüssel](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/computer/hosted/HostedComputer.kt), [Host-/Workspace-Erweiterungen](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/api/computer/ComputerExtensions.kt).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Echter eingebetteter CC-Computer im zusätzlichen Addon CC-Aeroworks als Nutzer des HostedComputer-Kernels. TeutonLib registriert keinen solchen Pultblock.
+
+![Embedded-Computer-Kernel: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/addon-wiki-operator-terminal.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

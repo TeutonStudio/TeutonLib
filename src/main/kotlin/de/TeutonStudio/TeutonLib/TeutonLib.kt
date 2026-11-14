@@ -1,8 +1,6 @@
 package de.TeutonStudio.TeutonLib
 
 import com.mojang.logging.LogUtils
-import de.TeutonStudio.TeutonLib.compat.CompatibilityDiagnostics
-import de.TeutonStudio.TeutonLib.compat.MobileEnvironment
 import de.TeutonStudio.TeutonLib.integration.CsoAvailability
 import de.TeutonStudio.TeutonLib.integration.CsoRuntime
 import de.TeutonStudio.TeutonLib.integration.HosePulleyCompatibility
@@ -32,21 +30,6 @@ import org.slf4j.Logger
 @Mod(TeutonLib.Companion.MOD_ID)
 class TeutonLib(modBus: IEventBus, container: ModContainer) {
     init {
-        if (MobileEnvironment.isMobileEnabled()) {
-            CompatibilityDiagnostics.infoOnce(
-                "mobile-runtime",
-                "TeutonLib: mobile compatibility enabled ({}, mode={}, maxHeap={} MiB)",
-                MobileEnvironment.runtimeDescription(),
-                MobileEnvironment.mode().name.lowercase(),
-                Runtime.getRuntime().maxMemory() / (1024L * 1024L)
-            )
-            if (ModList.get().isLoaded("c2me")) {
-                CompatibilityDiagnostics.infoOnce(
-                    "c2me-native-math",
-                    "TeutonLib: leaving C2ME Native Math disabled when its own Java/ABI compatibility check rejects this runtime"
-                )
-            }
-        }
         val heliIntegration = ModList.get().isLoaded("computercraft") && ModList.get().isLoaded("aeronautics") &&
             ModList.get().isLoaded("simulated") && ModList.get().isLoaded("sable")
         val directionalGearshiftIntegration = ModList.get().isLoaded("computercraft") &&
@@ -111,6 +94,7 @@ class TeutonLib(modBus: IEventBus, container: ModContainer) {
     }
 
     private fun payloads(event: RegisterPayloadHandlersEvent) {
+        if (HosePulleyCompatibility.active()) de.TeutonStudio.TeutonLib.network.HoseCablePayload.register(event)
         CsoStatePayload.Companion.register(event)
         de.TeutonStudio.TeutonLib.network.HybridTrainStatePayload.register(event)
     }

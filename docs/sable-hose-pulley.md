@@ -31,7 +31,7 @@ Verhalten. Bereits im internen Tank gespeicherte Flüssigkeit bleibt erhalten.
 - Create-Schlauchrollen erzeugen eine persistente physische Schlauchspitze.
 - Die physische Spitze ist feuerfest und entzündet sich auch in Lava nicht.
 - Die Spitze fällt durch Gravitation, kollidiert mit Blöcken und bleibt über eine
-  kugelförmige Längenbegrenzung mit der Rolle verbunden. Bewegte und gedrehte
+  serverseitig simulierte Schlauchführung mit der Rolle verbunden. Bewegte und gedrehte
   Sable-Konstruktionen verwenden ihren projizierten Weltanker.
 - Mit dem Create-Schraubenschlüssel rechtsklicken, um eine ausgefahrene Spitze zu
   tragen. Ein Rechtsklick in die Luft wirft sie in Blickrichtung; ein Rechtsklick
@@ -41,16 +41,24 @@ Verhalten. Bereits im internen Tank gespeicherte Flüssigkeit bleibt erhalten.
   Spitze fällt herunter. Tragen hebt die Längenbegrenzung nicht auf.
 - Bei vollständig eingezogenem Schlauch erlaubt ein normaler Rechtsklick mit dem
   Schraubenschlüssel das Mitfahren; Schleichen wählt stattdessen das Tragen.
-- Beim Ausfahren begrenzen feste Hindernisse in der senkrechten Weltspalte und
-  die untere Baugrenze die Länge. Einziehen bleibt möglich.
+- Die Schlauchlänge ist auf feste **256 Blöcke (Meter)** begrenzt, unabhängig vom
+  Abstand zum Boden und zur unteren Baugrenze. Auch Blöcke direkt unter der Rolle
+  begrenzen das Ausfahren nicht; die Spitze kollidiert weiterhin mit der Welt.
+  Einziehen bleibt möglich.
 
 Der Flüssigkeitstransfer verwendet den tatsächlichen Weltblock am unteren Ende
 der lebenden, über ihre UUID zugeordneten Schlauchspitze. So funktionieren Ansaugen
 und Ausgeben auch bei seitlich ausgelenkten Köpfen und gedrehten Sable-Konstruktionen.
 Creates Quellblocksuche, Flüssigkeitsmengen und Simulationsregeln bleiben erhalten.
-Die Leine ist eine
-Längenbeschränkung und wickelt sich nicht um Hindernisse. Bei einer blockierten
-Einziehbewegung behält die Kollision Vorrang vor der idealen Leinenlänge.
+Der Schlauch hängt durch, schwingt nach und kollidiert entlang seines Verlaufs mit
+Blöcken und Sable-Konstruktionen. Hindernisse verbrauchen Schlauchlänge. Blockiertes
+Einziehen baut Zug auf; feste Hindernisse werden dabei nicht durchdrungen.
+Selbstkollision und Verknoten sind nicht vorgesehen.
+
+Die Umlenkung verwendet Kontaktpunkte entlang der Blockkanten und bevorzugt bei
+nahezu gleich langen Wegen den bisherigen Verlauf. Kollisionskorrekturen erhalten
+den vorhandenen Durchhang; die zusätzliche Kontaktlänge wird zeitabhängig geglättet.
+Eine kleine Hysterese verhindert ständige Segmentwechsel an Metergrenzen.
 
 ## Lebenszyklus
 
@@ -62,9 +70,16 @@ geladen ist, pausiert die Aufnahme und Abgabe von Weltflüssigkeit. Beim Abbau d
 entfernt sich die Spitze. Tragen wird nach einem Neustart aufgehoben.
 
 Die Physik läuft ausschließlich auf dem Server; die Clients erhalten die
-Position und die Schlauchlänge über Minecrafts Entity-Synchronisierung. Die
+Position und Schlauchlänge sowie den gemeinsamen Segmentverlauf vom Server.
+Verlaufsänderungen werden höchstens zehnmal pro Sekunde übertragen und auf dem
+Client auch bei wechselnder Segmentzahl entlang der Bogenlänge interpoliert.
+Neue Pakete setzen am gerade dargestellten Verlauf an. Der gesamte Schlauch bleibt unabhängig von der Tracking-Reichweite
+der Kopf-Entity sichtbar. Die
 Darstellung verwendet Creates vorhandene Modelle, sodass Ressourcenpakete weiter
 greifen. Es werden keine fremden Modell- oder Texturdateien kopiert.
+Texturwiederholung und Querschnittsausrichtung werden vom Schlauchkopf zur Rolle
+aufgebaut. Das Muster bleibt dadurch am Kopf verankert; zusätzlicher Schlauch
+erscheint beim Ausfahren an der Rolle, ohne die Textur am Kopf zu verschieben.
 
 ## Prüfung
 
@@ -72,6 +87,8 @@ greifen. Es werden keine fremden Modell- oder Texturdateien kopiert.
 ./gradlew build --offline
 python3 tools/verify_hose_pulley.py
 python3 tools/verify_hose_pulley_client.py
+python3 tools/verify_hose_cable.py
+python3 tools/verify_hose_cable_client.py
 ```
 
 Der Entwicklungs-Testmod wird nur mit `-PhoseTests` geladen und nicht in die
@@ -80,6 +97,12 @@ Release-JAR gepackt. Die Serverprüfung verwendet eine eigene Wegwerfwelt unter
 Die separate Clientprüfung benötigt eine OpenGL-Anzeige und verwendet ebenfalls
 eine eigene Testinstanz; sie prüft die angewendeten Render-Mixins und erstellt
 eine Bildschirmaufnahme der tatsächlich gerenderten Spitze.
+
+`verify_hose_cable.py` misst zusätzlich nach dem Einschwingen jeweils 40 Verläufe
+am festen und am versetzten/gedrehten Sable-Hindernis. Für den Vergleich werden
+die Verläufe gleichmäßig entlang ihrer Bogenlänge abgetastet. Eine Bewegung von
+mehr als 5 cm zwischen zwei Stichproben (mindestens 100 ms Abstand) lässt die
+Stabilitätsprüfung fehlschlagen; Maximalwert, RMS und Segmentwechsel stehen im Bericht.
 
 Die Serverprüfung umfasst außerdem echte Lava, gespeichertes Feuer-NBT und die
 native Fluid-Schnittstelle am versetzten Kopf vor und nach einer Sable-Drehung:
@@ -126,8 +149,8 @@ breakDelaySeconds = 0.25
 
 Die Werte verwenden Sables Physikeinheiten. Nur Zug wird übertragen; ein lockerer
 Schlauch schiebt die Konstruktionen nicht auseinander. Zwei Befestigungen am
-selben starren Körper erzeugen keine Gegenimpulse. Die Schlauchführung wickelt
-sich weiterhin nicht um Hindernisse.
+selben starren Körper erzeugen keine Gegenimpulse. Die Schlauchführung berücksichtigt Hindernisse und verwendet deren Umlenkpunkte
+für verfügbare Länge und Zugrichtung.
 
 Kupplung und Kopf speichern ihre UUID-Verbindung. Chunkentladung pausiert Kräfte
 und Durchfluss, ohne weitere Chunks zu laden. Montage erhält die Identitäten und
@@ -149,6 +172,8 @@ Sable-Konstruktionen.
 python3 tools/verify_hose_connector.py
 python3 tools/verify_hose_pulley.py
 python3 tools/verify_hose_pulley_client.py
+python3 tools/verify_hose_cable.py
+python3 tools/verify_hose_cable_client.py
 python3 tools/verify_logistics.py pipes
 ```
 

@@ -5,7 +5,6 @@ import de.TeutonStudio.TeutonLib.api.sable.SubLevelInteractionGeometry
 import de.TeutonStudio.TeutonLib.integration.hose.HoseConnectorRegistry
 import de.TeutonStudio.TeutonLib.integration.hose.HoseDrainConnection
 import de.TeutonStudio.TeutonLib.integration.hose.HoseHeadEntity
-import de.TeutonStudio.TeutonLib.integration.sable.HoseConnectorPhysics
 import dev.ryanhcode.sable.api.block.BlockSubLevelAssemblyListener
 import net.minecraft.core.BlockPos
 import net.minecraft.core.registries.BuiltInRegistries
@@ -68,7 +67,6 @@ abstract class ItemDrainBlockMixin : BlockSubLevelAssemblyListener {
     override fun afterMove(from: ServerLevel, to: ServerLevel, state: BlockState, source: BlockPos, target: BlockPos) {
         val connection = HoseDrainConnection.get(to.getBlockEntity(target)) ?: return
         HoseConnectorRegistry.register(connection)
-        HoseConnectorPhysics.register(connection)
         connection.head()?.connector()
     }
 }

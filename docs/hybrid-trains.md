@@ -34,7 +34,13 @@ Weltblöcke, die inzwischen in den Baubereich gesetzt wurden, verhindern die
 Übergabe, bevor ein Wagen verschoben wird. Überlappende Wagenplots werden ebenfalls
 abgewiesen. Beim Verlassen des Baubetriebs bleiben die gebauten Blöcke in der Welt.
 Wird der Bahnhof entfernt und ist diese Rückgabe versperrt, bleiben die Bauwerke
-als normale Sable-Konstruktionen erhalten.
+als zugeordnete Bauplots erhalten, ohne ihre Speichermetadaten zu verlieren.
+
+Auch vollständig leere Bauplots lassen sich speichern und nach einem Neustart
+weiterverwenden. Ihr Massenschwerpunkt bleibt dabei null; der gespeicherte
+Transformationsanker ist unabhängig von der physikalischen Masse. Der Client
+bekommt die projizierten Bogeyzustände über die normalen Bahnhofsdaten, sodass
+Creates Vorschau und Platzierungsregeln dieselben Positionen verwenden.
 
 ## ContraptionLevel und Darstellung
 

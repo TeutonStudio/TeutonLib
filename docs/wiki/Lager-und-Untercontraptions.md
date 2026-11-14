@@ -1,5 +1,7 @@
 # Lager und Untercontraptions
 
+**Deutsch** · [English](Lager-und-Untercontraptions-en) · [Übersicht](Home)
+
 Mechanische Create-Lager und unterstützte Unter-Contraptions bleiben auf Hybridzügen betriebsfähig. Ihre erfassten Blöcke dürfen sich zusammensetzen und wieder absetzen, während der übrige Wagen im Fahrmodus gegen strukturelle Änderungen gesperrt bleibt.
 
 ## Voraussetzungen
@@ -35,3 +37,12 @@ Die separate Testwelt prüft laufende mechanische Lager mit Nutzlast, Swivel-Nut
 [Hybridzüge](Hybridzuege) · [Radar-Typ und Speicherung](Radar-Typ-und-Speicherung) · [Create Big Cannons auf Hybridzügen](Create-Big-Cannons-auf-Hybridzuegen)
 
 Quellen für 1.6.0: [Begrenzte Blockfreigabe](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/hybrid/HybridTrainRuntime.kt), [Swivel-Anbindung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/mixin/hybrid/swivel/HybridSwivelMixin.kt), [Maschinenübergabe](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/train/TrainPortalMachines.kt).
+
+## Abbildung
+
+
+Laufende native Lager-Nutzlast auf dem Hybrid-Testzug. Persistenz und Wiederanlauf sind zusätzlich im historischen Spieltest geprüft.
+
+![Lager und Untercontraptions: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/train-bearings.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

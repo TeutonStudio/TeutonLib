@@ -1,5 +1,7 @@
 # Helikopter-Peripherie: Gimbalsensor
 
+**Deutsch** · [English](Helikopter-Peripherie-en) · [Übersicht](Home)
+
 TeutonLib v1.6.0 ergänzt den **Gimbalsensor von Create Simulated** um einzeln lesbare Winkel und eine dreiachsige Rotation. Die Methoden stehen direkt am CC:Tweaked-Computer, im Kabelnetz und über einen [Peripheral Link](Peripheral-Link) zur Verfügung. Die Integration setzt CC:Tweaked, Create und Simulated voraus; die bewegte Orientierung stammt bei vorhandenen Sable-Sublevels aus deren tatsächlicher Rotation.
 
 ## Winkel lesen
@@ -49,3 +51,12 @@ Die allgemeine TeutonLib-Erweiterung führt keine vollständige Flugregelung aus
 [Gimbal-Methoden](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/mixin/peripheral/simulated/GimbalSensorPeripheralMixin.kt), [Weltorientierung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/heli/GimbalHeading.kt), [Ingenieursbrillen-Anzeige](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/mixin/simulated/GimbalSensorTooltipMixin.kt), [Winkelmathematik](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/peripheral/heli/HeliMath.kt).
 
 [Zur Startseite](Home)
+
+## Abbildung
+
+
+Tatsächliche Pitch-/Yaw-/Roll-Abfrage und weiterhin zweiachsiges Legacy-Format am nativen Gimbalsensor.
+
+![Helikopter-Peripherie: Gimbalsensor: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/wiki-gimbal.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

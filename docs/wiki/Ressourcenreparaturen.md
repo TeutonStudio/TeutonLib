@@ -1,5 +1,7 @@
 # Ressourcenreparaturen
 
+**Deutsch** · [English](Ressourcenreparaturen-en) · [Übersicht](Home)
+
 TeutonLib behandelt bekannte fehlerhafte Clientressourcen bestimmter Mod-Releases. Die Regeln sind unabhängig von Android und werden nur angewendet, wenn **Mod-ID, Version, Ressourcenpfad und SHA-256** der Originaldatei passen.
 
 ## Einzelne Reparaturen
@@ -26,3 +28,12 @@ Für jedes passende Mod-Paket wird zusätzlich die [Paketmetadaten-Diagnose](Pak
 - [Releasebeschreibung](https://github.com/TeutonStudio/TeutonLib/blob/v1.6.0/docs/release-1.5.3.md)
 
 [Wiki-Startseite](Home) · [Android und Zalith](Android-und-Zalith-Kompatibilitaet)
+
+## Abbildung
+
+
+Tatsächlich ausgeführte Desktop-Prüfung der Originaldatei-Hashes und konkreten Ressourcenregeln. Die Tests nennen die jeweils behandelte Ressource.
+
+![Ressourcenreparaturen: 1](https://raw.githubusercontent.com/wiki/TeutonStudio/TeutonLib/assets/screenshots/test-ResourceCompatibilityTest.png)
+
+[Bildherkunft und Prüfgrenzen](Bildnachweise)

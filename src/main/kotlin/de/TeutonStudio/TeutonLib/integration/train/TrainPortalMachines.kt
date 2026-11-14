@@ -19,6 +19,7 @@ object TrainPortalMachines {
     private const val KEY = "teutonlib:portal_machine"
     private const val PENDING = "teutonlib:portal_machines_pending"
     private val firstSeen = WeakHashMap<BlockEntity, Long>()
+    private val worldPending = WeakHashMap<ServerLevel, MutableSet<net.minecraft.core.BlockPos>>()
     private val log = LoggerFactory.getLogger("TeutonLib/TrainMachines")
     private val adapters by lazy {
         buildList {
@@ -64,6 +65,48 @@ object TrainPortalMachines {
         }
         visiting.remove(sub.uniqueId)
         return true
+    }
+
+    /** Cancellation returns prepared controllers to ordinary world chunks. Keep
+     * the resume record in their NBT until the world has rebuilt its networks. */
+    fun returnedToWorld(level: ServerLevel, positions: Iterable<net.minecraft.core.BlockPos>) {
+        for (pos in positions) if (level.getBlockEntity(pos)?.persistentData?.contains(KEY) == true)
+            worldPending.getOrPut(level) { mutableSetOf() }.add(pos.immutable())
+    }
+
+    fun tickWorld(level: ServerLevel) {
+        val pending = worldPending[level] ?: return
+        pending.removeIf { pos ->
+            if (!level.hasChunkAt(pos)) false
+            else {
+                val be = level.getBlockEntity(pos)
+                if (be == null || !be.persistentData.contains(KEY)) true
+                else {
+                    val record = be.persistentData.getCompound(KEY)
+                    val adapter = adapters.firstOrNull { it.kind == record.getString("Kind") && it.matches(be) }
+                    if (adapter == null) false
+                    else {
+                        val age = level.gameTime - firstSeen.getOrPut(be) { level.gameTime }
+                        if (age < 5 || age % 5L != 0L) false
+                        else try {
+                            if (!adapter.running(be)) adapter.resume(be)
+                            if (adapter.running(be) && !record.getBoolean("Restored")) {
+                                adapter.restoreState(be, record.getCompound("State"))
+                                record.putBoolean("Restored", true); be.setChanged()
+                            }
+                            if (adapter.running(be) && age >= 10) {
+                                be.persistentData.remove(KEY); be.setChanged(); firstSeen.remove(be)
+                                true
+                            } else false
+                        } catch (failure: RuntimeException) {
+                            if (age == 5L || age == 100L) log.warn("Cannot resume returned station controller {}: {}", pos, failure.toString())
+                            false
+                        }
+                    }
+                }
+            }
+        }
+        if (pending.isEmpty()) worldPending.remove(level)
     }
 
     fun tick(level: ServerLevel) {
@@ -120,4 +163,26 @@ private object BearingPortalAdapter : PortalMachineAdapter {
         is MechanicalBearingBlockEntity -> be.assemble()
         is ClockworkBearingBlockEntity -> be.assemble()
     } }
+}
+
+/** A returned controller's NBT also survives saving before its delayed resume. */
+@net.neoforged.fml.common.EventBusSubscriber(modid = "teutonlib")
+object StationWorldMachineResume {
+    @net.neoforged.bus.api.SubscribeEvent
+    fun loaded(event: net.neoforged.neoforge.event.level.ChunkEvent.Load) {
+        val level = event.level as? ServerLevel ?: return
+        val chunk = event.chunk as? net.minecraft.world.level.chunk.LevelChunk ?: return
+        if (!HybridTrainCompatibility.active() && !TrainPortalCompatibility.active()) return
+        // Never inspect Sable's plots as ordinary world chunks.
+        level.server.execute {
+            if (SubLevelContainer.getContainer(level)?.inBounds(chunk.pos.x, chunk.pos.z) != true)
+                TrainPortalMachines.returnedToWorld(level, chunk.blockEntities.keys.toList())
+        }
+    }
+
+    @net.neoforged.bus.api.SubscribeEvent
+    fun tick(event: net.neoforged.neoforge.event.tick.ServerTickEvent.Post) {
+        if (!HybridTrainCompatibility.active() && !TrainPortalCompatibility.active()) return
+        for (level in event.server.allLevels) TrainPortalMachines.tickWorld(level)
+    }
 }
