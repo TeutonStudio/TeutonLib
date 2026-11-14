@@ -52,6 +52,7 @@ class PeripheralLinkBlockEntity(pos: BlockPos, state: BlockState) :
         if (this.target != target) clearKnownTarget()
         this.target = target
         setChanged()
+        rememberLocation()
     }
 
     fun rememberTarget(anchor: BlockEntity) {
@@ -88,6 +89,7 @@ class PeripheralLinkBlockEntity(pos: BlockPos, state: BlockState) :
         nickname = next
         nicknameInitialized = true
         setChanged()
+        rememberLocation()
     }
 
     /** Imports the old computer-local nickname once, before this link owns its name. */
@@ -134,10 +136,18 @@ class PeripheralLinkBlockEntity(pos: BlockPos, state: BlockState) :
 
     override fun onLoad() {
         super.onLoad()
-        if (level != null && !level!!.isClientSide) LinkRegistry.register(this)
+        if (level != null && !level!!.isClientSide) {
+            LinkRegistry.register(this)
+            rememberLocation()
+        }
+    }
+
+    private fun rememberLocation() {
+        (level as? net.minecraft.server.level.ServerLevel)?.let { LinkLocations.get(it.server).observe(this) }
     }
 
     override fun setRemoved() {
+        rememberLocation()
         LinkRegistry.remove(this)
         super.setRemoved()
     }

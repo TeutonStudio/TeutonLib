@@ -13,6 +13,13 @@ object SubLevelInteractionGeometry {
         return SubLevelGeometry.distanceSquared(level, player.position(), position.center) <= maximumDistance * maximumDistance
     }
 
+    /** Null for ordinary chunks; Sable streams plot chunks outside vanilla chunk-watch events. */
+    @JvmStatic
+    fun trackedBy(player: net.minecraft.server.level.ServerPlayer, block: net.minecraft.world.level.block.entity.BlockEntity): Boolean? =
+        if (net.neoforged.fml.ModList.get().isLoaded("sable"))
+            de.TeutonStudio.TeutonLib.integration.sable.SableSubLevelGeometry.trackedBy(player, block)
+        else null
+
     @JvmStatic
     fun mayInteract(player: Player, level: Level, position: BlockPos): Boolean =
         level.mayInteract(player, BlockPos.containing(SubLevelGeometry.projectToWorld(level, position.center)))

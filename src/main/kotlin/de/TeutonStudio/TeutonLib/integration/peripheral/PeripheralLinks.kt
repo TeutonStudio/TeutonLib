@@ -82,6 +82,11 @@ object PeripheralLinks {
         }
     )
 
+    @JvmField
+    val ANTENNA_MENU = MENUS.register<MenuType<LinkAntennaMenu>>("link_antenna", Supplier {
+        IMenuTypeExtension.create { id, _, data -> LinkAntennaMenu(data.readBlockPos(), data.readUUID(), null, id) }
+    })
+
     @JvmStatic
     fun available(): Boolean {
         return ModList.get().isLoaded("computercraft")
@@ -132,6 +137,7 @@ object PeripheralLinks {
             } else event.accept(entry)
         })
         NeoForge.EVENT_BUS.register(LinkRegistry::class.java)
+        NeoForge.EVENT_BUS.register(LinkAntennaRuntime)
     }
 
 }

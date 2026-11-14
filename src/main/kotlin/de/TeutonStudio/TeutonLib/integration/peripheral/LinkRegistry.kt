@@ -59,6 +59,8 @@ object LinkRegistry {
     @Synchronized
     @JvmStatic
     fun removeAnchor(block: BlockEntity?) {
+        if ((block as? LinkIdentity)?.`teutonlib$linkTarget`() != null)
+            (block.level as? ServerLevel)?.let { LinkLocations.get(it.server).observeAnchor(block) }
         LINKS.forEach(Consumer { link: PeripheralLinkBlockEntity? ->
             val connection = link!!.connection
             if (connection != null && (connection.anchor === block || connection.owner === block)) link.connection =
@@ -239,6 +241,15 @@ object LinkRegistry {
             .filter { connection: Connection? -> connection!!.name() == name }.findFirst().orElse(null)
     }
 
+    /** Includes inactive links; UI/catalog access does not create peripheral bindings. */
+    @Synchronized
+    @JvmStatic
+    fun links(): List<PeripheralLinkBlockEntity> = LINKS.filter { loaded(it) }
+
+    @Synchronized
+    @JvmStatic
+    fun links(target: UUID): List<PeripheralLinkBlockEntity> = links().filter { it.target() == target }
+
     @SubscribeEvent
     @JvmStatic
     fun tick(event: ServerTickEvent.Post?) {
@@ -248,6 +259,7 @@ object LinkRegistry {
             apis = java.util.List.copyOf<LinkLuaApi>(APIS)
         }
         apis.forEach(Consumer { obj: LinkLuaApi? -> obj!!.refresh() })
+        LinkAntennaRuntime.tick()
     }
 
     /** Like Create's Display Link: using the item must precede chest/computer GUIs.  */
@@ -278,7 +290,10 @@ object LinkRegistry {
             for (block in chunk.blockEntities.values) {
                 (block as? LuaTiltTarget)?.`teutonlib$clearLuaTiltTarget`()
                 removeAnchor(block)
-                if (block is PeripheralLinkBlockEntity) remove(block)
+                if (block is PeripheralLinkBlockEntity) {
+                    LinkLocations.get((block.level as ServerLevel).server).observe(block)
+                    remove(block)
+                }
             }
         }
     }

@@ -3,6 +3,7 @@
 
 Usage: python3 tools/verify_peripheral_links.py [cc|console]
 Pass --dbw to additionally exercise Drive By Wire 0.3.0.
+Pass --console-addon /absolute/path/addon.jar to use a current console addon binary.
 Needs the same local dependencies as ./gradlew runServer. Profiles run sequentially.
 The generated worlds live under run/peripheral/<profile>, separate from development worlds.
 """
@@ -13,6 +14,12 @@ profile=sys.argv[1] if len(sys.argv)>1 else 'cc'
 dbw='--dbw' in sys.argv
 channels_only='--channels-only' in sys.argv
 simulated='--simulated' in sys.argv
+addon=None
+if '--console-addon' in sys.argv:
+ index=sys.argv.index('--console-addon')+1
+ if index>=len(sys.argv): raise SystemExit('--console-addon requires a JAR path')
+ addon=Path(sys.argv[index]).resolve()
+ if profile!='console' or not addon.is_file(): raise SystemExit('--console-addon requires console and an existing JAR')
 report_name=f'peripheral-{profile}'+('-channels' if channels_only else '')+('-simulated' if simulated else '')
 report=root/'build/reports/smoke';report.mkdir(parents=True,exist_ok=True)
 (report/f'{report_name}.json').unlink(missing_ok=True)
@@ -38,6 +45,22 @@ properties.write_text('\n'.join(lines)+'\n')
 logpath=report/f'{report_name}.log'
 log=logpath.open('w')
 extra_args = ['-PperipheralTests', '-PperipheralRuntime='+profile] + (['-PdbwTests'] if dbw else [])
+# Optional current addon binary for workspaces whose bundled console fixture predates TeutonLib.
+if addon is not None:
+ override=report/'peripheral-console-addon.gradle'
+ override.write_text("""allprojects { afterEvaluate {
+    def old = configurations.runtimeOnly.dependencies.findAll { dep ->
+        dep instanceof org.gradle.api.artifacts.FileCollectionDependency && dep.files.files.any { it.name.startsWith('cc-aeroworks-') }
+    }
+    old.each { dep ->
+        def remaining = dep.files.filter { !it.name.startsWith('cc-aeroworks-') }
+        configurations.runtimeOnly.dependencies.remove(dep)
+        dependencies.add('runtimeOnly', remaining)
+    }
+    dependencies.add('runtimeOnly', files(%s))
+} }
+""" % json.dumps(str(addon)))
+ extra_args += ['-I',str(override)]
 launch_args=['./gradlew','runSmokeServer','-PcsoRuntime='+('all' if profile=='console' or dbw or simulated else 'create'), '-PperipheralTestDir='+str(instance),*extra_args,'--offline','--no-daemon','--console=plain']
 proc=subprocess.Popen(launch_args,cwd=root,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
 connection=None
@@ -112,6 +135,7 @@ try:
   for family in ('normal','advanced'):
    assert 'STARTED' in command('teutonlib_link_test '+family)
    wait_for('READY')
+   assert 'PASS antenna' in command('teutonlib_link_test antenna')
    command('teutonlib_link_test detach'); wait_for('DETACHED')
    command('teutonlib_link_test reconnect'); wait_for('PASS')
    assert 'PASS conflict' in command('teutonlib_link_test conflict')

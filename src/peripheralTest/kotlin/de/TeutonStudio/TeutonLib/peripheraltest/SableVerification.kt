@@ -314,6 +314,50 @@ object SableVerification {
         throw IllegalArgumentException("Unknown Sable GPS action $action")
     }
 
+    private var antennaClientShip: dev.ryanhcode.sable.sublevel.ServerSubLevel? = null
+    private var antennaClientPose: Pose3d? = null
+
+    fun antennaClientVisual(level: ServerLevel, variant: Int) {
+        val ship = antennaClientShip ?: error("Antenna client fixture not assembled")
+        val pose = Pose3d(antennaClientPose!!)
+        when (variant) {
+            0, 1 -> pose.position().add(0.0, 2.0, 0.0)
+            2 -> { pose.position().add(2.0, 3.0, -1.0); pose.orientation().rotationXYZ(.4, 1.0, .5) }
+            3 -> { pose.position().add(-2.0, 3.5, 1.0); pose.orientation().rotationXYZ(-.6, -.8, -.45) }
+            -1 -> Unit
+            else -> error("Invalid antenna visual pose")
+        }
+        ship.logicalPose().set(pose)
+        RigidBodyHandle.of(ship)?.let { handle ->
+            if (handle.isValid) handle.teleport(pose.position(), pose.orientation())
+        }
+        SubLevelPhysicsSystem.require(level).pipeline.resetVelocity(ship)
+        ship.updateLastPose()
+        val anchor = level.getBlockEntity(ship.plot.centerBlock)!!
+        (anchor as LinkIdentity).`teutonlib$linkAntennaSides`(if (variant == -1) LinkAntennaSides.bit(Direction.UP) else LinkAntennaSides.ALL)
+        if (variant == -1) return
+        val center = SubLevelGeometry.projectToWorld(level, ship.plot.centerBlock.center)
+        val offset = if (variant == 1) Vec3(-2.0, -1.5, -2.4) else Vec3(2.0, 1.5, 2.4)
+        val eye = center.add(offset)
+        val yaw = Math.toDegrees(kotlin.math.atan2(offset.x, -offset.z)).toFloat()
+        val pitch = Math.toDegrees(kotlin.math.atan2(offset.y, kotlin.math.sqrt(offset.x * offset.x + offset.z * offset.z))).toFloat()
+        level.players().forEach { player ->
+            player.abilities.flying = true; player.onUpdateAbilities()
+            player.teleportTo(level, eye.x, eye.y - player.eyeHeight, eye.z, emptySet(), yaw, pitch)
+        }
+    }
+
+    fun prepareAntennaClient(level: ServerLevel, source: BlockPos): BlockPos {
+        SubLevelPhysicsSystem.require(level).paused = true
+        val ship = SubLevelAssemblyHelper.assembleBlocks(level, source, listOf(source), BoundingBox3i(source, source))
+        ship.logicalPose().orientation().rotateZ(.25)
+        ship.logicalPose().position().add(.2, 0.0, 0.0)
+        ship.updateLastPose()
+        antennaClientShip = ship
+        antennaClientPose = Pose3d(ship.logicalPose())
+        return ship.plot.centerBlock
+    }
+
     @JvmStatic
     fun run(level: ServerLevel): String {
         val source = BlockPos(72, 220, 8)
@@ -333,6 +377,7 @@ object SableVerification {
         DbwAccess.set(anchor, "flight", 11)
         val targetId = UUID.randomUUID()
         (anchor as LinkIdentity).`teutonlib$linkTarget`(targetId)
+        (anchor as LinkIdentity).`teutonlib$linkAntennaSides`(2 or 32)
         level.setBlockAndUpdate(linkSource.below(), Blocks.BARREL.defaultBlockState())
         level.setBlockAndUpdate(linkSource, PeripheralLinks.BLOCK.get().defaultBlockState())
         var link = level.getBlockEntity(linkSource) as PeripheralLinkBlockEntity?
@@ -383,6 +428,7 @@ object SableVerification {
         )
         LinkRegistry.validate()
         check(targetId == (anchor as LinkIdentity).`teutonlib$linkTarget`(), "assembly must preserve target identity")
+        check((anchor as LinkIdentity).`teutonlib$linkAntennaSides`() == (2 or 32), "assembly preserves multiple antenna mount faces")
         check(
             (anchor as ChannelHost).`teutonlib$channels`()
                 .get("flight").value == 11 && (anchor as ChannelHost).`teutonlib$channels`().get("flight").published,
@@ -428,6 +474,16 @@ object SableVerification {
         )
         LinkRegistry.validate()
         check(link.connection != null, "moving sublevel inside range must remain connected")
+        val locations = de.TeutonStudio.TeutonLib.integration.peripheral.LinkLocations.get(level.server)
+        locations.observe(link)
+        check(locations.get(linkId)!!.link.world.distanceTo(LinkRegistry.worldPosition(link)) < 1e-6,
+            "antenna catalog stores moved world position instead of plot coordinates")
+        val mount = de.TeutonStudio.TeutonLib.integration.peripheral.LinkAntennaGeometry.orient(Vec3(.5, 1.3, .5), Direction.EAST)
+        val localOrigin = Vec3.atLowerCornerOf(anchorPos)
+        val hitStart = SubLevelGeometry.projectToWorld(level, localOrigin.add(mount).add(2.0, 0.0, 0.0))
+        val hitEnd = SubLevelGeometry.projectToWorld(level, anchorPos.center)
+        check(de.TeutonStudio.TeutonLib.integration.peripheral.LinkAntennaGeometry.hit(level, anchorPos, Direction.EAST, hitStart, hitEnd) != null,
+            "assembled antenna hitbox follows sublevel transform")
         if (DbwAccess.available()) check(
             dbwRead(level, linkPos.below()) == 11,
             "DbW signals survive motion and rotation"
@@ -475,6 +531,7 @@ object SableVerification {
             targetId == (anchor as LinkIdentity).`teutonlib$linkTarget`() && linkId == link!!.identity(),
             "disassembly must preserve both identities"
         )
+        check((anchor as LinkIdentity).`teutonlib$linkAntennaSides`() == (2 or 32), "disassembly preserves multiple antenna mount faces")
         check(link!!.connection != null, "disassembled blocks must reconnect")
         check(
             (anchor as ChannelHost).`teutonlib$channels`().get("flight").value == 11,

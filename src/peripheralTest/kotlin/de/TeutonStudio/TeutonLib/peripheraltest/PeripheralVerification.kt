@@ -100,6 +100,7 @@ class PeripheralVerification {
         private val COMPUTER = BlockPos(8, 200, 8)
         private val FIRST = BlockPos(12, 201, 8)
         private val SECOND = BlockPos(14, 201, 8)
+        private var clientAnchorPosition = COMPUTER
         private var computer: ServerComputer? = null
         private var savedLink: CompoundTag? = null
         private var firstName: String? = null
@@ -136,6 +137,34 @@ class PeripheralVerification {
             if (action.startsWith("console_")) return ConsoleVerification.run(level, action.substring(8))!!
             if (action.startsWith("sable_gps_")) return SableVerification.runGps(level, action.substring(10))
             if (action == "sable") return SableVerification.run(level)
+            if (action.startsWith("antenna_client_visual_")) {
+                SableVerification.antennaClientVisual(level, action.removePrefix("antenna_client_visual_").toInt())
+                return "PASS $action"
+            }
+            if (action == "antenna_client_focus") {
+                val point = de.TeutonStudio.TeutonLib.api.sable.SubLevelGeometry.projectToWorld(level,
+                    net.minecraft.world.phys.Vec3.atLowerCornerOf(clientAnchorPosition).add(.5, 1.3, .5))
+                level.players().forEach { player ->
+                    player.abilities.flying = true
+                    player.onUpdateAbilities()
+                    player.teleportTo(level, point.x, point.y - 1.3, point.z + 3.0, emptySet(), 180f, 6.1f)
+                }
+                return "PASS antenna_client_focus"
+            }
+            if (action == "antenna_client_setup" || action == "antenna_client_setup_sable") {
+                level.setChunkForced(0, 0, true)
+                for (x in 7..15) for (z in 7..12) level.setBlockAndUpdate(BlockPos(x, 199, z), Blocks.IRON_BLOCK.defaultBlockState())
+                level.setBlockAndUpdate(COMPUTER, block("computercraft:computer_advanced").defaultBlockState())
+                val target = UUID.randomUUID()
+                (level.getBlockEntity(COMPUTER) as LinkIdentity).`teutonlib$linkTarget`(target)
+                val first = link(level, FIRST, target)
+                first.nickname("Cargo inventory")
+                link(level, SECOND, target).nickname("Second inventory")
+                clientAnchorPosition = if (action.endsWith("_sable")) SableVerification.prepareAntennaClient(level, COMPUTER) else COMPUTER
+                LinkRegistry.validate()
+                return "PASS antenna_client_setup"
+            }
+            if (action == "antenna") return verifyAntenna(level)
             if (action == "gearshift") return verifyDirectionalGearshift(level)
             if (action == "chunk_prepare") {
                 level.setChunkForced(CHUNK_TARGET.x shr 4, 0, true)
@@ -157,6 +186,12 @@ class PeripheralVerification {
                     LinkRegistry.connections(level.getBlockEntity(CHUNK_TARGET)).isEmpty(),
                     "actual chunk unload detaches without loading it"
                 )
+                val knownId = UUID.fromString(chunkName!!.removePrefix("cc_aeroworks:link_"))
+                val remembered = LinkLocations.get(level.server).get(knownId)
+                require(remembered != null && remembered.link.position == CHUNK_LINK, "antenna catalog retains unloaded link position")
+                val player = FakePlayerFactory.getMinecraft(level)
+                require(LinkAntennaRuntime.linkLocation(player, knownId)!!.getBoolean("lastKnown"), "unloaded locator explicitly labels last known position")
+                require(!level.hasChunkAt(CHUNK_LINK), "locator does not load remote chunk")
                 return "PASS chunk_unloaded"
             }
             if (action == "chunk_reload") {
@@ -561,9 +596,61 @@ class PeripheralVerification {
                     LinkRegistry.connections(target).isEmpty(),
                     "UUID conflict remains disabled after server restart"
                 )
+                require(LinkLocations.get(level.server).get(first.identity())?.nickname == "Cargo inventory",
+                    "server restart preserves antenna catalog and nickname")
                 return "PASS persistence"
             }
             throw IllegalArgumentException("Unknown action " + action)
+        }
+
+        private fun verifyAntenna(level: ServerLevel): String {
+            val anchor = level.getBlockEntity(COMPUTER)!!
+            val identity = anchor as LinkIdentity
+            val target = identity.`teutonlib$linkTarget`()!!
+            val catalog = LinkLocations.get(level.server)
+            LinkRegistry.links(target).forEach(catalog::observe)
+            val player = FakePlayerFactory.getMinecraft(level)
+            player.setPos(COMPUTER.x + .5, COMPUTER.y + 1.0, COMPUTER.z + 1.5)
+            val menu = LinkAntennaMenu(COMPUTER, target, level, 33)
+            val snapshot = LinkAntennaRuntime.snapshot(player, menu)
+            val rows = snapshot.getList("links", 10).map { it as CompoundTag }
+            require(rows.any { it.getString("nickname") == "Cargo inventory" }, "antenna overview includes persistent nickname")
+            require(rows.size >= 2, "antenna overview includes multiple links")
+            require(rows.all { row -> LinkRegistry.links(target).any { it.identity() == row.getUUID("id") } },
+                "antenna overview removes confirmed broken links in loaded chunks")
+            require(rows.all { it.getCompound("location").contains("distance") }, "antenna overview includes world distance")
+            require(menu.stillValid(player), "nearby antenna menu is valid")
+            val otherLevel = level.server.getLevel(Level.NETHER)!!
+            val otherPlayer = FakePlayerFactory.getMinecraft(otherLevel)
+            val remote = LinkAntennaRuntime.linkLocation(otherPlayer, rows.first().getUUID("id"))!!
+            require(!remote.contains("distance") && remote.getString("dimension") == level.dimension().location().toString(),
+                "cross-dimension locator retains position without inventing distance")
+            require(!menu.stillValid(otherPlayer), "antenna menu rejects a player in another dimension")
+            require(menu.accepts(UUID(0, 1)) && !menu.accepts(UUID(0, 2)), "antenna menu rejects another session")
+            player.setPos(COMPUTER.x + 100.0, COMPUTER.y.toDouble(), COMPUTER.z.toDouble())
+            require(!menu.stillValid(player), "antenna menu rejects out-of-reach player")
+            Direction.entries.forEach { side ->
+                identity.`teutonlib$linkAntennaSide`(side)
+                val tag = anchor.saveWithFullMetadata(level.registryAccess())
+                require(tag.getString("TeutonLibAntennaSide") == side.name, "antenna mount side saved: $side")
+            }
+            val multi = de.TeutonStudio.TeutonLib.integration.peripheral.LinkAntennaSides.bit(Direction.UP) or
+                de.TeutonStudio.TeutonLib.integration.peripheral.LinkAntennaSides.bit(Direction.EAST)
+            identity.`teutonlib$linkAntennaSides`(multi)
+            val saved = anchor.saveWithFullMetadata(level.registryAccess())
+            identity.`teutonlib$linkAntennaSide`(Direction.DOWN)
+            anchor.loadWithComponents(saved, level.registryAccess())
+            require(identity.`teutonlib$linkAntennaSides`() == multi, "multiple antenna faces survive block save/load")
+            require(runCatching { identity.`teutonlib$linkAntennaSides`(0) }.isFailure && identity.`teutonlib$linkAntennaSides`() == multi,
+                "empty antenna selection is rejected without clearing existing faces")
+            player.setPos(COMPUTER.x + .5, COMPUTER.y + 1.0, COMPUTER.z + 1.5)
+            val held = player.mainHandItem.copy()
+            player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY)
+            LinkAntennaRuntime.setSides(player, menu, 63)
+            player.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, held)
+            require(LinkAntennaRuntime.snapshot(player, menu).getInt("sides") == 63, "server menu supports all six antenna faces")
+            identity.`teutonlib$linkAntennaSide`(Direction.UP)
+            return "PASS antenna"
         }
 
         @JvmStatic

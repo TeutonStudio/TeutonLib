@@ -30,6 +30,7 @@ import net.neoforged.neoforge.network.handling.IPayloadHandler
 object PeripheralLinkPayloads {
     @JvmStatic
     fun register(event: RegisterPayloadHandlersEvent) {
+        LinkAntennaPayloads.register(event)
         val registrar = event.registrar("1")
         registrar.playToServer(
             Request.TYPE,
@@ -75,6 +76,7 @@ object PeripheralLinkPayloads {
             error = failure.message ?: "Peripheral Link action failed"
         }
         val snapshot = snapshot(link)
+        link.target()?.let { target -> LinkAntennaRuntime.anchorLocation(player, target)?.let { snapshot.put("anchorLocation", it) } }
         snapshot.putString("error", error.take(256))
         PacketDistributor.sendToPlayer(player, Response(request.menu, request.session, snapshot))
     }

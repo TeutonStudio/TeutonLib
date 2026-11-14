@@ -22,8 +22,15 @@ object PeripheralLinkClient {
     }
 
     @SubscribeEvent
+    fun models(event: net.neoforged.neoforge.client.event.ModelEvent.RegisterAdditional) {
+        if (ModList.get().isLoaded("create") && ModList.get().isLoaded("computercraft")) event.register(LinkAntennaClient.MODEL)
+    }
+
+    @SubscribeEvent
     fun screens(event: RegisterMenuScreensEvent) {
-        if (ModList.get().isLoaded("create") && ModList.get().isLoaded("computercraft"))
+        if (ModList.get().isLoaded("create") && ModList.get().isLoaded("computercraft")) {
             event.register(PeripheralLinks.MENU.get(), ::PeripheralLinkScreen)
+            event.register(PeripheralLinks.ANTENNA_MENU.get(), ::LinkAntennaScreen)
+        }
     }
 }

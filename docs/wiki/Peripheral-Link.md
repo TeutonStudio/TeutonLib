@@ -19,6 +19,18 @@ Schleichen und Benutzen löscht die Auswahl im gehaltenen Item. Nach erfolgreich
 
 Kopplung und Platzierung prüfen serverseitig Interaktionsreichweite, geladene Blöcke und Spielerrechte. Die Platzierung prüft zusätzlich Ziel und Funkreichweite.
 
+## Antenne und Ortung
+
+Am ausgewählten Computer oder Pult erscheint automatisch eine kleine Antenne auf der beim Koppeln angeklickten Seite. Sie benötigt weder ein Item noch einen Nachbarblock. Bestehende Kopplungen verwenden die Oberseite. Alle Antennenseiten zeigen dieselbe Linkliste dieses Ankers; sie bleiben auch sichtbar, wenn deren Chunks entladen sind.
+
+Rechtsklick direkt auf die Antenne öffnet die Linkliste mit Spitznamen, Verbindungsstatus und Entfernung. Der übrige Computer bleibt normal bedienbar; mit gehaltenem Link-Item hat die Kopplung Vorrang. Die Link-UI zeigt umgekehrt die Antennenposition und bietet **Antenne markieren**.
+
+Beide Oberflächen verwenden den CC-Computerrahmen mit dunklem Inhalt. Im Reiter **Antennenseiten** der Antennen-UI lassen sich alle sechs Blockseiten einzeln ein- und ausschalten. Mehrere Seiten sind gleichzeitig möglich; mindestens eine bleibt aktiv. Die Auswahl wird am Computer beziehungsweise ausgewählten Pult gespeichert und bleibt beim Koppeln weiterer Links sowie bei Sable-Assemblierung erhalten.
+
+**Link markieren** beziehungsweise **Antenne markieren** schließt das Fenster und zeigt dem Spieler 15 Sekunden lang eine Zielmarkierung, die auch durch Hindernisse sichtbar ist. Eine neue Markierung ersetzt die vorherige. Geladene Ziele folgen auch auf bewegten Sable-Fahrzeugen ihrer aktuellen Weltposition. Nicht geladene Ziele werden ausdrücklich mit ihrer **letzten bekannten Position** angezeigt. In einer anderen Dimension werden Dimension und Position angezeigt; eine Entfernung oder Weltmarkierung ist dann nicht verfügbar.
+
+Die UI aktualisiert Positionsdaten einmal pro Sekunde. Weltkoordinaten dienen der Ortung, interne Blockpositionen dem Blockzugriff. Bekannte Links und letzte Positionen werden in den Weltdaten gespeichert; Abbau entfernt bestätigte Einträge. Alte Welten ergänzen die Übersicht beim Laden ihrer Links. Weder Übersicht noch Ortung laden entfernte Chunks.
+
 ## Lua verwenden
 
 CraftOS installiert die Peripheral-Erweiterung über einen mitgelieferten ROM-Autorun. Danach funktionieren die normalen CC-Aufrufe auch für Linkgeräte:

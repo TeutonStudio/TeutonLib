@@ -46,6 +46,7 @@ class PeripheralLinkItem(block: Block, properties: Properties) : BlockItem(block
                 if (id == null || LinkConflicts.Companion.get(level.server).contains(id)) {
                     id = UUID.randomUUID()
                     identity.`teutonlib$linkTarget`(id)
+                    identity.`teutonlib$linkAntennaSide`(context.clickedFace)
                 }
                 val selected = id
                 CustomData.update(DataComponents.CUSTOM_DATA, context.itemInHand, Consumer { tag: CompoundTag? ->

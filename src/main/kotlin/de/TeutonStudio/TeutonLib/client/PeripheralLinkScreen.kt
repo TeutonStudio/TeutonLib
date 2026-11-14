@@ -41,10 +41,11 @@ class PeripheralLinkScreen(
     private lateinit var apply: Button
     private lateinit var clear: Button
     private lateinit var api: Button
+    private lateinit var locate: Button
 
     init {
-        imageWidth = 330
-        imageHeight = 224
+        imageWidth = 342
+        imageHeight = 236
         inventoryLabelY = -10_000
         titleLabelY = -10_000
     }
@@ -53,26 +54,27 @@ class PeripheralLinkScreen(
         super.init()
         val editorX = leftPos + 218
         nickname = EditBox(font, editorX, topPos + 52, 104, 18, text("teutonlib.peripheral_link.nickname"))
+        nickname.setTextColor(PeripheralLinkTheme.TEXT)
+        nickname.setTextColorUneditable(PeripheralLinkTheme.MUTED)
         nickname.setMaxLength(32)
         nickname.setHint(text("teutonlib.peripheral_link.nickname"))
         nickname.setValue(if (received) confirmedNickname else "")
         nickname.setResponder { refreshWidgets() }
         addRenderableWidget(nickname)
-        apply = addRenderableWidget(
-            Button.builder(text("teutonlib.peripheral_link.apply")) { send("nickname", nickname.value) }
-                .bounds(editorX, topPos + 76, 104, 18).build()
-        )
-        clear = addRenderableWidget(
-            Button.builder(text("teutonlib.peripheral_link.clear")) { send("clear_nickname", "") }
-                .bounds(editorX, topPos + 98, 104, 18).build()
-        )
-        api = addRenderableWidget(
-            Button.builder(text("teutonlib.peripheral_link.show_api")) {
-                apiOpen = true
-                apiOffset = 0
-                refreshWidgets()
-            }.bounds(editorX, topPos + 126, 104, 18).build()
-        )
+        apply = addRenderableWidget(PeripheralLinkTheme.button(editorX, topPos + 76, 104, 18,
+            text("teutonlib.peripheral_link.apply")) { send("nickname", nickname.value) })
+        clear = addRenderableWidget(PeripheralLinkTheme.button(editorX, topPos + 98, 104, 18,
+            text("teutonlib.peripheral_link.clear")) { send("clear_nickname", "") })
+        api = addRenderableWidget(PeripheralLinkTheme.button(editorX, topPos + 126, 104, 18,
+            text("teutonlib.peripheral_link.show_api")) {
+            apiOpen = true; apiOffset = 0; refreshWidgets()
+        })
+        locate = addRenderableWidget(PeripheralLinkTheme.button(editorX, topPos + 150, 104, 18,
+            text("teutonlib.antenna.mark_anchor")) {
+            PacketDistributor.sendToServer(de.TeutonStudio.TeutonLib.integration.peripheral.LinkAntennaPayloads.Command(CompoundTag().also {
+                it.putString("action", "mark_anchor"); it.putInt("menu", menu.containerId); it.putUUID("session", session)
+            }))
+        })
         refreshWidgets()
         send("snapshot", "")
     }
@@ -94,6 +96,10 @@ class PeripheralLinkScreen(
         clear.active = !pending && (next.isNotEmpty() || confirmedNickname.isNotEmpty())
         api.visible = !apiOpen
         api.active = api.visible
+        if (::locate.isInitialized) {
+            locate.visible = !apiOpen
+            locate.active = received && snapshot.getCompound("anchorLocation").contains("distance")
+        }
     }
 
     private fun send(action: String, value: String) {
@@ -132,14 +138,10 @@ class PeripheralLinkScreen(
     override fun renderBg(graphics: GuiGraphics, partialTick: Float, mouseX: Int, mouseY: Int) {
         val left = leftPos
         val top = topPos
-        graphics.fill(left, top, left + imageWidth, top + imageHeight, 0xff111317.toInt())
-        graphics.fill(left + 4, top + 4, left + imageWidth - 4, top + imageHeight - 4, 0xffeeeeee.toInt())
-        graphics.fill(left + 4, top + 4, left + imageWidth - 4, top + 27, 0xff20242a.toInt())
-        graphics.fill(left + 4, top + 27, left + imageWidth - 4, top + 29, ACCENT)
-        graphics.drawString(font, title, left + 11, top + 11, 0xffffffff.toInt(), false)
+        PeripheralLinkTheme.frame(graphics, left, top, imageWidth, imageHeight, title)
         val status = if (!received) text("teutonlib.computer.scanning")
         else text("teutonlib.peripheral_link.status.${snapshot.getString("status")}")
-        graphics.drawString(font, status, left + imageWidth - 11 - font.width(status), top + 11, statusColor(), false)
+        graphics.drawString(font, status, left + imageWidth - 11 - font.width(status), top + 14, statusColor(), false)
 
         if (apiOpen) renderApi(graphics, mouseX, mouseY)
         else renderOverview(graphics, mouseX, mouseY)
@@ -149,29 +151,39 @@ class PeripheralLinkScreen(
             font,
             font.plainSubstrByWidth(footer.string, imageWidth - 22),
             left + 11,
-            top + imageHeight - 14,
-            if (error.isEmpty()) 0xff777777.toInt() else 0xffb33b3b.toInt(),
+            top + imageHeight - 23,
+            if (error.isEmpty()) PeripheralLinkTheme.MUTED else 0xffb33b3b.toInt(),
             false
         )
     }
 
     private fun renderOverview(graphics: GuiGraphics, mouseX: Int, mouseY: Int) {
-        val listLeft = leftPos + 9
+        val listLeft = leftPos + 13
         val listTop = topPos + 34
         val listRight = leftPos + 210
-        val listBottom = topPos + imageHeight - 22
-        graphics.fill(listLeft, listTop, listRight, listBottom, 0xfff7f7f7.toInt())
-        graphics.fill(leftPos + 214, listTop, leftPos + imageWidth - 8, listBottom, 0xfff7f7f7.toInt())
+        val listBottom = topPos + imageHeight - 30
+        graphics.fill(listLeft, listTop, listRight, listBottom, PeripheralLinkTheme.PANEL)
+        graphics.fill(leftPos + 214, listTop, leftPos + imageWidth - 13, listBottom, PeripheralLinkTheme.PANEL)
         graphics.drawString(font, text("teutonlib.peripheral_link.forwarding"), listLeft + 5, listTop + 5, ACCENT, false)
         graphics.drawString(
             font,
             text("teutonlib.peripheral_link.nickname"),
             leftPos + 218,
             topPos + 39,
-            0xff1f1f1f.toInt(),
+            PeripheralLinkTheme.TEXT,
             false
         )
 
+        val location = snapshot.getCompound("anchorLocation")
+        if (snapshot.contains("anchorLocation")) {
+            val coordinates = BlockPositions.text(location)
+            val distance = if (location.contains("distance")) "%.1f m".format(java.util.Locale.ROOT, location.getDouble("distance")) else location.getString("dimension")
+            graphics.drawString(font, font.plainSubstrByWidth(coordinates, 104), leftPos + 218, topPos + 175, PeripheralLinkTheme.TEXT, false)
+            graphics.drawString(font, font.plainSubstrByWidth(distance, 104), leftPos + 218, topPos + 186, PeripheralLinkTheme.MUTED, false)
+            if (location.getBoolean("lastKnown")) graphics.drawString(font, font.plainSubstrByWidth(text("teutonlib.antenna.last_known").string, 104), leftPos + 218, topPos + 197, 0xffa56a20.toInt(), false)
+            if (mouseX in leftPos + 218..leftPos + 322 && mouseY in topPos + 174..topPos + 207)
+                hoveredText = Component.literal("$coordinates\n${location.getString("dimension")}\n$distance")
+        }
         val rows = rows()
         val rowTop = listTop + 20
         val capacity = max(1, (listBottom - rowTop) / 20)
@@ -181,15 +193,15 @@ class PeripheralLinkScreen(
             rows.drop(rowOffset).take(capacity).forEachIndexed { index, row ->
                 val y = rowTop + index * 20
                 val hovered = mouseX in listLeft until listRight && mouseY in y until y + 19
-                if (hovered) graphics.fill(listLeft + 2, y, listRight - 2, y + 19, 0xffe3e3e3.toInt())
-                graphics.drawString(font, row.first, listLeft + 5, y + 2, 0xff1f1f1f.toInt(), false)
+                if (hovered) graphics.fill(listLeft + 2, y, listRight - 2, y + 19, PeripheralLinkTheme.HOVER)
+                graphics.drawString(font, row.first, listLeft + 5, y + 2, PeripheralLinkTheme.TEXT, false)
                 val value = row.second.ifEmpty { "—" }
                 graphics.drawString(
                     font,
                     font.plainSubstrByWidth(value, listRight - listLeft - 12),
                     listLeft + 5,
                     y + 11,
-                    0xff777777.toInt(),
+                    PeripheralLinkTheme.MUTED,
                     false
                 )
                 if (hovered) hoveredText = Component.literal("${row.first.string}: $value")
@@ -233,20 +245,22 @@ class PeripheralLinkScreen(
 
     private fun renderApi(graphics: GuiGraphics, mouseX: Int, mouseY: Int) {
         val api = snapshot.getCompound("api").takeIf { snapshot.contains("api") }?.let(SourceApi::decode)
-        val left = leftPos + 9
+        val left = leftPos + 13
         val top = topPos + 34
-        val right = leftPos + imageWidth - 9
-        val bottom = topPos + imageHeight - 22
-        graphics.fill(left, top, right, bottom, 0xfff7f7f7.toInt())
-        graphics.fill(left + 3, top + 3, right - 3, top + 22, 0xffe3e3e3.toInt())
+        val right = leftPos + imageWidth - 13
+        val bottom = topPos + imageHeight - 30
+        graphics.fill(left, top, right, bottom, PeripheralLinkTheme.PANEL)
+        graphics.fill(left + 3, top + 3, right - 3, top + 22, PeripheralLinkTheme.HOVER)
+        val apiTitle = api?.let { Component.literal(it.name) } ?: text("teutonlib.computer.api_unavailable")
         graphics.drawString(
             font,
-            api?.let { Component.literal(it.name) } ?: text("teutonlib.computer.api_unavailable"),
+            font.plainSubstrByWidth(apiTitle.string, right - left - 31),
             left + 7,
             top + 9,
             ACCENT,
             false
         )
+        if (mouseX in left + 3 until right - 23 && mouseY in top + 3 until top + 22) hoveredText = apiTitle
         graphics.drawString(font, "×", right - 15, top + 9, ACCENT, false)
         if (mouseX in right - 22 until right && mouseY in top until top + 27)
             hoveredText = text("teutonlib.computer.close_api")
@@ -280,7 +294,7 @@ class PeripheralLinkScreen(
         graphics.enableScissor(left, lineTop, right, bottom)
         try {
             lines.drop(apiOffset).take(capacity).forEachIndexed { index, line ->
-                graphics.drawString(font, line, left + 7, lineTop + index * 11, 0xff1f1f1f.toInt(), false)
+                graphics.drawString(font, line, left + 7, lineTop + index * 11, PeripheralLinkTheme.TEXT, false)
             }
         } finally {
             graphics.disableScissor()
@@ -299,8 +313,8 @@ class PeripheralLinkScreen(
     ) {
         val thumb = max(8, height * capacity / size)
         val thumbY = y + offset * (height - thumb) / max(1, size - capacity)
-        graphics.fill(x, y, x + 1, y + height, 0xffd4d4d4.toInt())
-        graphics.fill(x, thumbY, x + 1, thumbY + thumb, 0xff777777.toInt())
+        graphics.fill(x, y, x + 1, y + height, PeripheralLinkTheme.LINE)
+        graphics.fill(x, thumbY, x + 1, thumbY + thumb, PeripheralLinkTheme.MUTED)
     }
 
     override fun mouseClicked(mouseX: Double, mouseY: Double, button: Int): Boolean {
@@ -344,7 +358,7 @@ class PeripheralLinkScreen(
     }
 
     companion object {
-        private const val ACCENT = 0xff21a9a8.toInt()
+        private const val ACCENT = PeripheralLinkTheme.ACCENT
 
         @JvmStatic
         fun accept(response: PeripheralLinkPayloads.Response) {

@@ -69,6 +69,12 @@ class PeripheralLinkBlock(properties: Properties) : BaseEntityBlock(properties) 
         ) link.invalidatePeripheral()
     }
 
+    override fun onRemove(state: BlockState, level: Level, pos: BlockPos, next: BlockState, moving: Boolean) {
+        if (!level.isClientSide && state.block !== next.block && !moving)
+            (level.getBlockEntity(pos) as? PeripheralLinkBlockEntity)?.let(LinkAntennaRuntime::removed)
+        super.onRemove(state, level, pos, next, moving)
+    }
+
     override fun newBlockEntity(pos: BlockPos, state: BlockState): BlockEntity {
         return PeripheralLinkBlockEntity(pos, state)
     }

@@ -4,6 +4,8 @@ import de.TeutonStudio.TeutonLib.TeutonLib
 import de.TeutonStudio.TeutonLib.api.computer.SourceApi
 import de.TeutonStudio.TeutonLib.api.computer.SourceMethod
 import de.TeutonStudio.TeutonLib.client.PeripheralLinkScreen
+import de.TeutonStudio.TeutonLib.client.LinkAntennaScreen
+import de.TeutonStudio.TeutonLib.integration.peripheral.LinkAntennaMenu
 import de.TeutonStudio.TeutonLib.integration.peripheral.PeripheralLinkMenu
 import de.TeutonStudio.TeutonLib.integration.peripheral.PeripheralLinkPayloads
 import java.nio.file.Files
@@ -32,6 +34,10 @@ object PeripheralLinkUiVerification {
     private var ticks = 0
 
     private fun snapshot() = CompoundTag().also { tag ->
+        tag.put("anchorLocation", CompoundTag().also {
+            it.putString("dimension", "minecraft:overworld"); it.putLong("position", BlockPos(8, 200, 8).asLong())
+            it.putDouble("x", 8.5); it.putDouble("y", 200.5); it.putDouble("z", 8.5); it.putDouble("distance", 4.1)
+        })
         tag.putString("nickname", "Cargo inventory")
         tag.putString("status", "connected")
         tag.putString("address", "cc_aeroworks:link_00000000-0000-0000-0000-000000000001")
@@ -90,6 +96,63 @@ object PeripheralLinkUiVerification {
         }
     }
 
+    private fun openAntenna(mc: Minecraft, scale: Int) {
+        mc.options.guiScale().set(scale)
+        mc.resizeDisplay()
+        val inventory = Inventory(null)
+        val menu = LinkAntennaMenu(BlockPos.ZERO, java.util.UUID(0, 2), null, 19)
+        val screen = LinkAntennaScreen(menu, inventory, Component.translatable("teutonlib.antenna.title"))
+        mc.setScreen(screen)
+        val data = CompoundTag().also { out ->
+            out.putInt("menu", 19); out.putUUID("session", screen.session())
+            out.putInt("sides", 2); out.putBoolean("editable", true)
+            out.put("links", ListTag().also { list ->
+                repeat(16) { index -> list.add(CompoundTag().also { row ->
+                    row.putUUID("id", java.util.UUID(0, index.toLong() + 10))
+                    row.putString("nickname", if (index == 0) "Long cargo inventory name on ship" else "Link $index")
+                    row.putString("status", if (index % 2 == 0) "connected" else "unloaded")
+                    row.put("device", CompoundTag().also { it.putString("block", "computercraft:computer_advanced") })
+                    row.put("location", CompoundTag().also {
+                        it.putString("dimension", "minecraft:overworld"); it.putDouble("distance", 12.5)
+                        it.putLong("position", BlockPos(1000000, 200, 1000000).asLong())
+                        it.putDouble("x", 18.5); it.putDouble("y", 200.5); it.putDouble("z", 8.5)
+                        it.putBoolean("lastKnown", index % 2 == 1)
+                    })
+                }) }
+            })
+        }
+        screen.receive(data)
+        check(screen.children().filterIsInstance<Button>().single { it.message.string == Component.translatable("teutonlib.antenna.mark_link").string }.active) { "Locator button inactive for same dimension" }
+    }
+    private fun finishAntenna(mc: Minecraft) {
+        val screen = mc.screen as LinkAntennaScreen
+        val left = (screen.width - 390) / 2
+        val top = (screen.height - 250) / 2
+        screen.mouseScrolled((left + 30).toDouble(), (top + 65).toDouble(), 0.0, -4.0)
+        screen.mouseClicked((left + 30).toDouble(), (top + 65).toDouble(), 0)
+        mc.resizeDisplay()
+        check(screen.children().filterIsInstance<Button>().single { it.message.string == Component.translatable("teutonlib.antenna.mark_link").string }.active) { "Resize lost selected locator" }
+    }
+
+    private fun settings(mc: Minecraft, scale: Int) {
+        openAntenna(mc, scale)
+        val screen = mc.screen as LinkAntennaScreen
+        val tab = screen.children().filterIsInstance<Button>().single {
+            it.message.string == Component.translatable("teutonlib.antenna.sides").string
+        }
+        screen.mouseClicked((tab.x + 4).toDouble(), (tab.y + 4).toDouble(), 0)
+        val top = screen.children().filterIsInstance<Button>().single { it.message.string.startsWith("[x]") }
+        check(!top.active) { "Last active side can be disabled" }
+        screen.receive(CompoundTag().also {
+            it.putInt("menu", 19); it.putUUID("session", screen.session())
+            it.putInt("sides", 2 or 4 or 32); it.putBoolean("editable", true)
+        })
+        mc.resizeDisplay()
+        check(screen.children().filterIsInstance<Button>().count { it.visible && it.active && it.message.string.startsWith("[x]") } == 3) {
+            "Multi-side selection lost after resize"
+        }
+    }
+
     @SubscribeEvent
     @JvmStatic
     fun tick(event: ClientTickEvent.Post) {
@@ -115,10 +178,17 @@ object PeripheralLinkUiVerification {
                     )
                     finish(mc)
                 }
+                5, 7 -> openAntenna(mc, if (stage == 5) 2 else 3)
+                6, 8 -> {
+                    Screenshot.grab(mc.gameDirectory, "teutonlib-antenna-ui-$stage.png", mc.mainRenderTarget, Consumer { _: Component? -> })
+                    finishAntenna(mc)
+                }
+                9, 11 -> settings(mc, if (stage == 9) 2 else 3)
+                10, 12 -> Screenshot.grab(mc.gameDirectory, "teutonlib-antenna-sides-$stage.png", mc.mainRenderTarget, Consumer { _: Component? -> })
                 else -> {
                     val report = Path.of("../../build/reports/smoke/peripheral-link-ui.txt")
                     Files.createDirectories(report.parent)
-                    Files.writeString(report, "PASS: GUI scales 2/3; nickname, API open/scroll/Escape, resize state\n")
+                    Files.writeString(report, "PASS: GUI scales 2/3; nickname, API open/scroll/Escape; antenna list, selection, locator, side selection, minimum one side and resize state\n")
                     mc.stop()
                 }
             }

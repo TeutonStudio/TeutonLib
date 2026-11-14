@@ -8,6 +8,18 @@ Right-click a placed link to open its status, forwarding details, Lua API, and n
 
 The nickname is stored on the link and used by the connected computer's Sources view. It can be edited in either screen without changing the stable Lua address. Names from existing worlds which are still stored on a computer are migrated to the link on its first connection.
 
+## Antenna and locating endpoints
+
+A small antenna appears automatically on the selected computer or desk, on the face clicked during pairing. It needs no additional item or neighbouring block. Existing pairings use the top face. Every enabled antenna face lists the same links paired to that anchor and remains visible while their chunks are unloaded.
+
+Right-click the antenna itself to see link nicknames, connection states and distances. The rest of the computer retains its normal interaction; holding a Peripheral Link gives pairing priority. The link screen shows the antenna position and provides **Locate antenna**.
+
+Both screens use the CC computer frame with a dark interior. The antenna UI’s **Antenna sides** tab lets you toggle each of the six block faces. Multiple faces can be enabled together; at least one must remain enabled. The selection is saved on the computer or selected desk and survives pairing additional links and Sable assembly.
+
+**Locate link** and **Locate antenna** close the screen and display a target marker to that player for 15 seconds, including through obstacles. A new marker replaces the previous one. Loaded targets follow their current world positions, including moving Sable vehicles. Unloaded targets explicitly show their **last known position**. For another dimension, the UI shows dimension and position, without distance or a world marker.
+
+Positions refresh once per second. World coordinates are used for navigation; internal block positions remain available for block access. Known links and last positions persist in world data; confirmed destruction removes entries. Existing worlds populate the catalog as their links load. Neither the overview nor locating endpoints loads remote chunks.
+
 ## Configuration
 
 The world-specific `serverconfig/teutonlib-server.toml` contains:
@@ -105,3 +117,9 @@ python3 tools/verify_peripheral_links.py console
 Run the server profiles sequentially. The first uses Create and CC without Sable or CC Aeroworks. The second also loads Sable and CC Aeroworks. It exercises a real CraftOS `gps.locate()` against four global hosts before and after moving the Sable sublevel, plus dimension isolation. They use disposable worlds under `run/peripheral`, a localhost-only RCON endpoint, and a development verification mod excluded from the release JAR. Results are saved under `build/reports/smoke`.
 
 For exact supported dependency versions, implementation details, and additional client/device acceptance checks, see the [German documentation](peripheral-link.md).
+
+Run `python3 tools/verify_peripheral_antenna_client.py` for real client/server verification of antenna clicks, both locator directions and marker expiry. Screenshots and results are saved under `build/reports/peripheral-antenna-client/`. The console server check accepts a current local addon build with `python3 tools/verify_peripheral_links.py console --console-addon /absolute/path/cc-aeroworks.jar`.
+
+Add `--sable` to run the same client checks with the antenna on a rotated and translated Sable sublevel.
+
+With `--sable --visual`, the client also captures four world views with all six antenna faces: above, below, and after two further translations and rotations. Use these screenshots to inspect mounting alignment and textures.

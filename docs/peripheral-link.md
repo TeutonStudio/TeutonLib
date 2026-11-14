@@ -18,6 +18,18 @@ Der Spitzname wird am Link gespeichert und in der Quellenansicht des verbundenen
 
 Kopplung und Platzierung prüfen auf dem Server Interaktionsreichweite, Bau-/Interaktionsberechtigung und geladene Blöcke; die Platzierung prüft zusätzlich Ziel und Funkreichweite. Die regulären NeoForge-Interaktions- und Platzierungsereignisse bleiben im normalen Spielerpfad erhalten.
 
+## Antenne und Ortung
+
+Am ausgewählten Computer oder Pult erscheint automatisch eine kleine Antenne auf der beim Koppeln angeklickten Seite. Sie benötigt weder ein Item noch einen Nachbarblock. Bestehende Kopplungen verwenden die Oberseite. Alle Antennenseiten zeigen dieselbe Linkliste dieses Ankers; sie bleiben auch sichtbar, wenn deren Chunks entladen sind.
+
+Rechtsklick direkt auf die Antenne öffnet die Linkliste mit Spitznamen, Verbindungsstatus und Entfernung. Der übrige Computer bleibt normal bedienbar; mit gehaltenem Link-Item hat die Kopplung Vorrang. Die Link-UI zeigt umgekehrt die Antennenposition und bietet **Antenne markieren**.
+
+Beide Oberflächen verwenden den CC-Computerrahmen mit dunklem Inhalt. Im Reiter **Antennenseiten** der Antennen-UI lassen sich alle sechs Blockseiten einzeln ein- und ausschalten. Mehrere Seiten sind gleichzeitig möglich; mindestens eine bleibt aktiv. Die Auswahl wird am Computer beziehungsweise ausgewählten Pult gespeichert und bleibt beim Koppeln weiterer Links sowie bei Sable-Assemblierung erhalten.
+
+**Link markieren** beziehungsweise **Antenne markieren** schließt das Fenster und zeigt dem Spieler 15 Sekunden lang eine Zielmarkierung, die auch durch Hindernisse sichtbar ist. Eine neue Markierung ersetzt die vorherige. Geladene Ziele folgen auch auf bewegten Sable-Fahrzeugen ihrer aktuellen Weltposition. Nicht geladene Ziele werden ausdrücklich mit ihrer **letzten bekannten Position** angezeigt. In einer anderen Dimension werden Dimension und Position angezeigt; eine Entfernung oder Weltmarkierung ist dann nicht verfügbar.
+
+Die UI aktualisiert Positionsdaten einmal pro Sekunde. Weltkoordinaten dienen der Ortung, interne Blockpositionen dem Blockzugriff. Bekannte Links und letzte Positionen werden in den Weltdaten gespeichert; Abbau entfernt bestätigte Einträge. Alte Welten ergänzen die Übersicht beim Laden ihrer Links. Weder Übersicht noch Ortung laden entfernte Chunks.
+
 ## Konfiguration
 
 In der weltbezogenen `serverconfig/teutonlib-server.toml`:
@@ -157,3 +169,9 @@ Der CC-Test läuft ohne CC Aeroworks; das Console-Profil ergänzt Aeroworks und 
 Die Tests prüfen reale normale und erweiterte CC-Computer mit CraftOS, Kopplung/Platzierung, Löschen der Itemauswahl, generische Inventare, mehrere Links, konfiguriertes Netzlimit, persistente Namen, falsche Dimension, exakte Reichweitengrenze, echte Chunk-Entladung, Wiederverbindung, alte Handles, Kabel- und Flüssigkeitstransfers, Monitorereignisse, Mounts sowie UUID-Konflikte und einen Serverneustart. Die Sable-Prüfung verwendet echte Assemblierung und Blockverschiebung mit separaten Sublevels, veränderten Positionen und Drehung. Vier echte GPS-Hosts und ein echter CraftOS-Client prüfen `gps.locate()` vor und nach der Bewegung sowie Dimensionsisolation. Das Console-Profil prüft beide Computervarianten, reale Gimbal-Messwerte, genau ein gemeinsames Laufwerks-Attachment für beide APIs, gemeinsame Namen und Bindungen, Pultbaum, computerlose Reihen sowie Entfernen/Einsetzen des Computers, Reboots und Teilen/Zusammenführen der Reihe.
 
 Zusätzliche Ingame-Abnahme: Erscheinungsbild und Ponder auf einem Client sowie reale Avionics-Stellbefehle mit dessen vorhandenem Interface. Die Beispieltypen oben setzen deren jeweilige Mods voraus. Der Link nimmt keine Avionics-spezifischen Eingriffe vor.
+
+Die echte Client-/Server-Abnahme für Antennenklicks, beide Ortungsrichtungen und den Ablauf der Markierung startet `python3 tools/verify_peripheral_antenna_client.py`. Screenshots und Ergebnis liegen unter `build/reports/peripheral-antenna-client/`. Für einen aktuellen lokalen Pult-Addon-Build unterstützt die Serverprüfung `python3 tools/verify_peripheral_links.py console --console-addon /absoluter/pfad/cc-aeroworks.jar`.
+
+Mit `--sable` prüft dieselbe Client-Abnahme zusätzlich die Antenne auf einem gedrehten und versetzten Sable-Sublevel.
+
+Mit `--sable --visual` werden zusätzlich vier Weltansichten mit allen sechs Antennenseiten aufgenommen: von oben, von unten sowie nach zwei weiteren Verschiebungen und Drehungen. Die Aufnahmen ermöglichen eine visuelle Kontrolle der Montage und Texturen.

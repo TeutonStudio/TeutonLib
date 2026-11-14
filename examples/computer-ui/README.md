@@ -1,6 +1,6 @@
 # PC-UI-Vorlage für Addons
 
-Diese Kotlin-Vorlage wird mit TeutonLib 1.6.0 kompiliert und im opt-in Clienttest
+Diese Kotlin-Vorlage wird mit TeutonLib 1.6.1 kompiliert und im opt-in Clienttest
 gerendert. Zielplattform: Minecraft 1.21.1, NeoForge 21.1.234, Java 21,
 KotlinForForge 5.11.0 und CC:Tweaked 1.120.2.
 
@@ -16,13 +16,13 @@ Die Release-JAR auf Client und Server installieren. Im Addon-Projekt beispielswe
 
 ```kotlin
 dependencies {
-    implementation(files("libs/teutonlib-1.6.0.jar"))
+    implementation(files("libs/teutonlib-1.6.1.jar"))
 }
 ```
 
 Alternativ in TeutonLib `./gradlew publish` ausführen und das erzeugte lokale
 Maven-Repository `repo/` im Addon eintragen. Die Koordinate lautet
-`de.TeutonStudio.TeutonLib:teutonlib:1.6.0`. Minecraft, NeoForge, KotlinForForge und
+`de.TeutonStudio.TeutonLib:teutonlib:1.6.1`. Minecraft, NeoForge, KotlinForForge und
 die Original-JAR von CC:Tweaked muss das Addon selbst bereitstellen; sie werden
 nicht transitiv durch die lokale TeutonLib-Publikation installiert.
 
@@ -32,7 +32,7 @@ Das Addon deklariert TeutonLib in seiner `neoforge.mods.toml`:
 [[dependencies.my_mod]]
 modId="teutonlib"
 type="required"
-versionRange="[1.6.0,2.0.0)"
+versionRange="[1.6.1,2.0.0)"
 ordering="AFTER"
 side="BOTH"
 ```

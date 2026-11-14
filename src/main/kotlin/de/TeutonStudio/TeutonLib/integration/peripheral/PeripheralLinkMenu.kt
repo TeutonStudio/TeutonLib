@@ -34,6 +34,7 @@ class PeripheralLinkMenu private constructor(
 
     fun link(player: ServerPlayer): PeripheralLinkBlockEntity? {
         val serverLevel = level ?: return null
+        if (player.level() !== serverLevel) return null
         if (!serverLevel.hasChunkAt(position) || !SubLevelInteractionGeometry.withinReach(player, serverLevel, position)) return null
         val link = LinkRegistry.blockAt(serverLevel, position) as? PeripheralLinkBlockEntity ?: return null
         return link.takeIf { !it.isRemoved && it.identity() == identity }
