@@ -3,6 +3,7 @@ package de.TeutonStudio.TeutonLib.integration.energy
 import net.minecraft.core.BlockPos
 import net.minecraft.core.Direction
 import net.minecraft.world.level.Level
+import net.minecraft.world.level.BlockGetter
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.state.BlockState
 import net.minecraft.world.level.block.state.properties.BlockStateProperties
@@ -10,7 +11,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty
 import net.minecraft.world.phys.shapes.Shapes
 import net.minecraft.world.phys.shapes.VoxelShape
 
-/** Synced state is the single source of truth for both the multipart model and hit box. */
+/** Keep the saved property names; they now select a fitted extension arm on every input face. */
 object FluxPointConnections {
     @JvmField val REAR = Direction.entries.associateWith { BooleanProperty.create("teutonlib_rear_${it.serializedName}") }
     private val connected = mapOf(Direction.DOWN to BlockStateProperties.DOWN, Direction.UP to BlockStateProperties.UP,
@@ -23,7 +24,7 @@ object FluxPointConnections {
         if (level.isClientSide || !state.hasProperty(REAR.getValue(Direction.DOWN))) return state
         var next = state
         for (side in Direction.entries) next = next.setValue(REAR.getValue(side),
-            state.getValue(connected.getValue(side)) && NewAgeMotorEnergy.isRearMotorExtensionConnection(level, pos, side))
+            state.getValue(connected.getValue(side)) && NewAgeMotorEnergy.isMotorExtensionConnection(level, pos, side))
         return next
     }
 
@@ -33,33 +34,27 @@ object FluxPointConnections {
         if (next !== state) level.setBlock(pos, next, Block.UPDATE_CLIENTS)
     }
 
-    private val shapes = java.util.concurrent.ConcurrentHashMap<Int,VoxelShape>()
-    fun shape(state: BlockState): VoxelShape {
-        // Disconnected rear flags do not alter geometry: 729 distinct shapes instead of 8192.
-        var key=0
-        for (side in Direction.entries) key=key*3+if (!state.getValue(connected.getValue(side))) 0
-            else if (state.getValue(REAR.getValue(side))) 2 else 1
-        return shapes.getOrPut(key) { buildShape(state) }
+    fun facings(state: BlockState, level: BlockGetter?, pos: BlockPos): List<Direction?> = Direction.entries.map { side ->
+        if (state.getValue(connected.getValue(side)) && state.getValue(REAR.getValue(side)))
+            if (level is Level && !level.hasChunkAt(pos.relative(side))) side
+            else level?.let { NewAgeMotorEnergy.extensionFacing(it.getBlockState(pos.relative(side))) } ?: side
+        else null
     }
-    private fun buildShape(state: BlockState): VoxelShape {
+    fun specialized(state: BlockState, side: Direction) = state.getValue(connected.getValue(side)) && state.getValue(REAR.getValue(side))
+    private val shapes = java.util.concurrent.ConcurrentHashMap<Int,VoxelShape>()
+    fun shape(state: BlockState, level: BlockGetter? = null, pos: BlockPos = BlockPos.ZERO): VoxelShape {
+        val facings=facings(state,level,pos)
+        var key=0
+        for (side in Direction.entries) key=key*8+if (!state.getValue(connected.getValue(side))) 0
+            else facings[side.ordinal]?.let { it.ordinal+2 } ?: 1
+        return shapes.getOrPut(key) { buildShape(state,facings) }
+    }
+    private fun buildShape(state: BlockState, facings: List<Direction?>): VoxelShape {
         var result = Block.box(5.5, 5.5, 5.5, 10.5, 10.5, 10.5)
         for (side in Direction.entries) {
             if (!state.getValue(connected.getValue(side))) continue
-            val inset = if (state.getValue(REAR.getValue(side))) 2.0 else 0.0
-            // Rotate the canonical downward shaft and flange, including the displaced plate.
-            fun box(width: Double, start: Double, end: Double): VoxelShape {
-                val low = 8.0 - width / 2
-                val high = 8.0 + width / 2
-                return when (side) {
-                    Direction.DOWN -> Block.box(low, start, low, high, end, high)
-                    Direction.UP -> Block.box(low, 16-end, low, high, 16-start, high)
-                    Direction.NORTH -> Block.box(low, low, start, high, high, end)
-                    Direction.SOUTH -> Block.box(low, low, 16-end, high, high, 16-start)
-                    Direction.WEST -> Block.box(start, low, low, end, high, high)
-                    Direction.EAST -> Block.box(16-end, low, low, 16-start, high, high)
-                }
-            }
-            result = Shapes.or(result, box(2.0, 1-inset, 6.0), box(6.0, -inset, 1-inset))
+            for (box in MotorExtensionConnectionGeometry.arm(side,facings[side.ordinal]))
+                result=Shapes.or(result,Block.box(box.minX,box.minY,box.minZ,box.maxX,box.maxY,box.maxZ))
         }
         return result
     }

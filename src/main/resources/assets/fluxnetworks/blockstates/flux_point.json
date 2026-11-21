@@ -20,7 +20,7 @@
         "teutonlib_rear_down": "true"
       },
       "apply": {
-        "model": "teutonlib:block/flux_connection_rear"
+        "model": "teutonlib:block/flux_connection_adaptive"
       }
     },
     {
@@ -39,7 +39,7 @@
         "teutonlib_rear_up": "true"
       },
       "apply": {
-        "model": "teutonlib:block/flux_connection_rear",
+        "model": "teutonlib:block/flux_connection_adaptive",
         "x": 180
       }
     },
@@ -60,7 +60,7 @@
         "teutonlib_rear_north": "true"
       },
       "apply": {
-        "model": "teutonlib:block/flux_connection_rear",
+        "model": "teutonlib:block/flux_connection_adaptive",
         "x": 90,
         "y": 180
       }
@@ -82,7 +82,7 @@
         "teutonlib_rear_east": "true"
       },
       "apply": {
-        "model": "teutonlib:block/flux_connection_rear",
+        "model": "teutonlib:block/flux_connection_adaptive",
         "x": 90,
         "y": -90
       }
@@ -104,7 +104,7 @@
         "teutonlib_rear_south": "true"
       },
       "apply": {
-        "model": "teutonlib:block/flux_connection_rear",
+        "model": "teutonlib:block/flux_connection_adaptive",
         "x": 90,
         "y": 0
       }
@@ -126,7 +126,7 @@
         "teutonlib_rear_west": "true"
       },
       "apply": {
-        "model": "teutonlib:block/flux_connection_rear",
+        "model": "teutonlib:block/flux_connection_adaptive",
         "x": 90,
         "y": 90
       }

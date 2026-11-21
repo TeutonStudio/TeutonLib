@@ -1,1 +1,1 @@
-TeutonLib · Dokumentationsbasis 1.6.1 · Stand 14.11.2026 · [Deutsch](Home) · [English](English) · [Bildnachweise / evidence](Bildnachweise) · [Downloads](https://github.com/TeutonStudio/TeutonLib/releases)
+TeutonLib · Dokumentationsbasis 1.6.3 · Stand 21.11.2026 · [Deutsch](Home) · [English](English) · [Bildnachweise / evidence](Bildnachweise) · [Downloads](https://github.com/TeutonStudio/TeutonLib/releases)

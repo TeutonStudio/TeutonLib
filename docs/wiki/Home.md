@@ -8,7 +8,7 @@ Minecraft **1.21.1** · NeoForge **ab 21.1.234** · Java **21** · KotlinForForg
 
 [Downloads](https://github.com/TeutonStudio/TeutonLib/releases) · [Kurze englische README](https://github.com/TeutonStudio/TeutonLib#readme) · [Fehler melden](https://github.com/TeutonStudio/TeutonLib/issues)
 
-**Stand: 14.11.2026.** Aktuelles Release ist **1.6.2**. Neu gegenüber 1.6.0 sind [Peripheral-Link-Antennen und Ortung](Peripheral-Link#antenne-und-ortung): gespeicherte Antennenseiten, bekannte Links und private Zielmarkierungen für 15 Sekunden. Weitere Änderungen in 1.6.2 stehen unten und auf den jeweiligen Funktionsseiten.
+**Stand: 21.11.2026.** Aktuelles Release ist **1.6.3**. Neu sind [angepasste Flux-Point-Anschlüsse an allen zugänglichen Motorerweiterungsflächen](New-Age-FE-Eingang) und ein [Absturzfix beim Bahnhofszusammenbau](Bahnhofsbau).
 
 Deutsch ist die Hauptsprache. Jede unten verlinkte Anleitung hat eine englische Fassung und eine direkt eingebundene Abbildung. Spielaufnahmen zeigen die Bedienung; reine Bibliotheks-/Kompatibilitätsfunktionen zeigen ihre tatsächliche Prüfung oder den Diagnosepfad. [Bildherkunft und Grenzen](Bildnachweise).
 
@@ -89,7 +89,7 @@ Unveröffentlichter Quellstand: Die Adapter wurden in TerrArchitectures [Modul m
 
 ## Entwicklung und Dokumentationsstand
 
-Die Anleitungen berücksichtigen **Release 1.6.2**. Historische Bilder und Prüfberichte behalten ihren ursprünglichen Versionsstand; die 160 Tests vom 13.11.2026 gehören zu 1.6.0 und sind kein Prüfergebnis des heutigen Quellstands. Folgende Änderungen sind zusätzlich zur Basis 1.6.1 in **1.6.2 enthalten**:
+Die Anleitungen berücksichtigen **Release 1.6.3**. Gegenüber 1.6.2 kommen angepasste Flux-Point-Modelle samt Auswahl- und Kollisionsformen sowie der Schutz geparkter Sable-Physikkörper beim Bahnhofszusammenbau hinzu. Historische Bilder und Prüfberichte behalten ihren ursprünglichen Versionsstand; die 160 Tests vom 13.11.2026 gehören zu 1.6.0 und sind kein Prüfergebnis des heutigen Quellstands. Folgende Änderungen sind zusätzlich zur Basis 1.6.1 in **1.6.2 enthalten**:
 
 - [Sable-Tankoberfläche](Sable-Tankoberflaeche)
 - [Bahnhofsbau](Bahnhofsbau): native Vorschaupositionen, Leerplot-Speicherung und Wiederanlauf von Lagern beim Abbrechen.

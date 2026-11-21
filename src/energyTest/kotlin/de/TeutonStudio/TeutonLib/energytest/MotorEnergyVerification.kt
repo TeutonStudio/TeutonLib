@@ -286,7 +286,10 @@ class MotorEnergyVerification {
                     val sidePos = ORIGIN.relative(input.opposite)
                     level.setBlockAndUpdate(sidePos,block.defaultBlockState().setValue(sideProperties.getValue(input),true))
                     connections.reconcile(level,sidePos)
-                    require(!level.getBlockState(sidePos).getValue(connections.REAR.getValue(input)), "side input remains normal")
+                    require(level.getBlockState(sidePos).getValue(connections.REAR.getValue(input)), "side input fits the recessed casing")
+                    val fitted=connections.shape(level.getBlockState(sidePos),level,sidePos)
+                    val collision=level.getBlockState(sidePos).getCollisionShape(level,sidePos)
+                    require(fitted.bounds()==collision.bounds(), "collision shape follows extension orientation")
                 }
             }
             clear(level)
@@ -300,6 +303,18 @@ class MotorEnergyVerification {
             level.setBlockAndUpdate(ORIGIN,all)
             connections.reconcile(level,ORIGIN)
             require(connections.REAR.values.all { level.getBlockState(ORIGIN).getValue(it) }, "six simultaneous rear arms")
+            setup(level,"basic_motor_extension","reinforced_motor",Direction.EAST)
+            val point=ORIGIN.south()
+            level.setBlockAndUpdate(point,block.defaultBlockState().setValue(BlockStateProperties.NORTH,true))
+            connections.reconcile(level,point)
+            val before=level.getBlockState(point)
+            val sideShape=before.getCollisionShape(level,point).bounds()
+            level.setBlockAndUpdate(ORIGIN.east(),net.minecraft.world.level.block.Blocks.AIR.defaultBlockState())
+            level.setBlockAndUpdate(ORIGIN,state("basic_motor_extension",Direction.NORTH))
+            level.setBlockAndUpdate(ORIGIN.north(),state("reinforced_motor",Direction.NORTH))
+            connections.reconcile(level,point)
+            require(level.getBlockState(point)===before,"rotation preserves the fitted connection state")
+            require(before.getCollisionShape(level,point).bounds()!=sideShape,"rotation refreshes dynamic collision geometry")
             clear(level)
         }
 

@@ -1,0 +1,5 @@
+{
+  "render_type": "cutout",
+  "textures": { "particle": "fluxnetworks:block/flux_plug_on" },
+  "elements": []
+}

@@ -36,6 +36,7 @@ object HoseCableClientVerification {
         if (!text.startsWith("TEUTONLIB_CABLE_CAPTURE ")) return
         val parts = text.removePrefix("TEUTONLIB_CABLE_CAPTURE ").split(' ')
         require(parts.size == 3 && parts[0].matches(Regex("[a-z-]+")))
+        if (parts[0].startsWith("flux-")) Minecraft.getInstance().options.fov().set(35)
         pending=Capture(parts[0],UUID.fromString(parts[1]),parts[2].toBooleanStrict()); event.isCanceled=true
     }
     @SubscribeEvent @JvmStatic fun tick(event: ClientTickEvent.Post) {
@@ -58,9 +59,12 @@ object HoseCableClientVerification {
         if (mc.screen != null || mc.overlay != null) return
         val result=JsonObject()
         try {
-            val points=HoseCableClient.points(capture.id)
+            if (capture.name.startsWith("flux-")) verifyFluxMatrix(capture.name,result)
+            val points=if (capture.name.startsWith("flux-")) emptyList() else HoseCableClient.points(capture.id)
+            if (!capture.name.startsWith("flux-")) {
             check(points.size >= 2) { "No synchronized strand ${capture.id}" }
             check(HoseCableClient.wasRendered(capture.id)) { "World renderer culled the visible strand" }
+            }
             val tracked=world.entitiesForRendering().any { it.uuid == capture.id }
             check(tracked == capture.tracked) { "Expected entity tracking ${capture.tracked}, got $tracked" }
             if (capture.name == "flux") {
@@ -84,5 +88,28 @@ object HoseCableClientVerification {
             result.addProperty("passed",false); result.addProperty("failure",failure.toString())
             Files.writeString(directory().resolve("${capture.name}.json"),gson.toJson(result)); pending=null
         }
+    }
+    private fun verifyFluxMatrix(name: String, result: JsonObject) {
+        val world=checkNotNull(Minecraft.getInstance().level)
+        val parts=name.split('-'); val type=parts[1]; val facing=Direction.byName(parts[2])!!
+        val pos=BlockPos(40+facing.ordinal*6,220,40+if (type=="basic") 0 else 7)
+        val samples=JsonArray()
+        for (side in Direction.entries.filter { it != facing }) {
+            val point=pos.relative(side); val input=side.opposite; val state=world.getBlockState(point)
+            check(state.getValue(FluxPointConnections.REAR.getValue(input))) { "Unfitted $type/$facing input $side" }
+            val model=Minecraft.getInstance().blockRenderer.blockModelShaper.getBlockModel(state)
+            check(model is de.TeutonStudio.TeutonLib.client.energy.FluxPointModel) { "Adaptive model was not registered" }
+            val data=model.getModelData(world,point,state,net.neoforged.neoforge.client.model.data.ModelData.EMPTY)
+            val quads=model.getQuads(state,null,RandomSource.create(),data,null)
+            check(quads.any { it.tintIndex==1 }) { "Network color overlay missing" }
+            val shape=state.getShape(world,point).bounds()
+            val lows=listOf(shape.minX,shape.minY,shape.minZ); val highs=listOf(shape.maxX,shape.maxY,shape.maxZ)
+            for (axis in 0..2) {
+                val vertices=quads.flatMap { quad -> (0..3).map { Float.fromBits(quad.vertices[it*(quad.vertices.size/4)+axis]).toDouble() } }
+                check(kotlin.math.abs(vertices.min()-lows[axis])<1e-6 && kotlin.math.abs(vertices.max()-highs[axis])<1e-6) { "Model/shape mismatch $type/$facing/$side axis $axis" }
+            }
+            samples.add(JsonObject().also { it.addProperty("side",side.serializedName); it.addProperty("quads",quads.size) })
+        }
+        result.add("inputs",samples)
     }
 }

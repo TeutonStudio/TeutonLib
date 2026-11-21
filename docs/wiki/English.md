@@ -8,7 +8,7 @@ Minecraft **1.21.1**, NeoForge **21.1.234+**, Java **21**, KotlinForForge **5.11
 
 [Downloads](https://github.com/TeutonStudio/TeutonLib/releases) · [README](https://github.com/TeutonStudio/TeutonLib#readme) · [Issues](https://github.com/TeutonStudio/TeutonLib/issues)
 
-**Updated November 14, 2026.** The baseline is source version **1.6.1**. Compared with 1.6.0, it adds [Peripheral Link antennas and endpoint locating](Peripheral-Link-en#antenna-and-locating-endpoints): saved antenna faces, known links and private target markers lasting 15 seconds. Unreleased local changes are listed below and labelled on their guides.
+**Updated November 21, 2026.** The current release is **1.6.3**. It adds [fitted Flux Point connections on every accessible motor-extension face](New-Age-FE-Eingang-en) and a [station assembly crash fix](Bahnhofsbau-en).
 
 Each guide has its own illustration and reciprocal language link. Gameplay captures, addon consumers and nonvisual desktop test/code captures are explicitly distinguished.
 
@@ -89,7 +89,7 @@ Unreleased: These adapters have moved to TerrArchitecture’s [mobilecompat modu
 
 ## Development and documentation scope
 
-Guides now cover **release 1.6.2**. Historical images and reports retain their original version: the 160 tests from November 13 cover 1.6.0, not today's checkout. These changes are included in **1.6.2** in addition to the 1.6.1 baseline:
+Guides now cover **release 1.6.3**. Compared with 1.6.2, it adds fitted Flux Point models, selection and collision shapes, and guards for parked Sable physics bodies during station assembly. Historical images and reports retain their original version: the 160 tests from November 13 cover 1.6.0, not today's checkout. These changes are included in **1.6.2** in addition to the 1.6.1 baseline:
 
 - [Sable tank fluid surfaces](Sable-Tankoberflaeche-en).
 - [Station construction](Bahnhofsbau-en): native preview positions, empty-plot persistence and bearing restart after cancellation.

@@ -6,6 +6,7 @@ import com.llamalad7.mixinextras.sugar.Local
 import de.TeutonStudio.TeutonLib.integration.hybrid.StationBuildRuntime
 import dev.ryanhcode.sable.api.physics.mass.MassData
 import dev.ryanhcode.sable.api.physics.PhysicsPipeline
+import dev.ryanhcode.sable.api.physics.PhysicsPipelineBody
 import dev.ryanhcode.sable.api.physics.mass.MassTracker
 import dev.ryanhcode.sable.api.sublevel.SubLevelContainer
 import dev.ryanhcode.sable.sublevel.ServerSubLevel
@@ -26,6 +27,23 @@ abstract class HybridBuildMassMixin {
 
 @Mixin(SubLevelPhysicsSystem::class, remap = false)
 abstract class HybridBuildMassChangeMixin {
+    /** Staging parks empty native bodies while retaining their owned plots.
+     * Sable can still find those plots while restoring blocks after rejection;
+     * Rapier cannot wake a body that park() already removed. */
+    @WrapOperation(method = ["wakeUpObjectsAt(III)V"], at = [At(value = "INVOKE",
+        target = "Ldev/ryanhcode/sable/api/physics/PhysicsPipeline;wakeUp(Ldev/ryanhcode/sable/api/physics/PhysicsPipelineBody;)V")], require = 1)
+    private fun `teutonlib$noDormantWake`(pipeline: PhysicsPipeline, body: PhysicsPipelineBody, original: Operation<Void>) {
+        if (body !is ServerSubLevel || !StationBuildRuntime.dormant(body)) original.call(pipeline, body)
+    }
+
+    /** Plot disposal still runs all observers, but its parked native body has
+     * already been removed. A second Rapier remove aborts the entire JVM. */
+    @WrapOperation(method = ["onSubLevelRemoved(Ldev/ryanhcode/sable/sublevel/SubLevel;Ldev/ryanhcode/sable/sublevel/storage/SubLevelRemovalReason;)V"],
+        at = [At(value = "INVOKE", target = "Ldev/ryanhcode/sable/api/physics/PhysicsPipeline;remove(Ldev/ryanhcode/sable/sublevel/ServerSubLevel;)V")], require = 1)
+    private fun `teutonlib$noDormantRemoval`(pipeline: PhysicsPipeline, sub: ServerSubLevel, original: Operation<Void>) {
+        if (!StationBuildRuntime.dormant(sub)) original.call(pipeline, sub)
+    }
+
     @WrapOperation(method = ["updateMassDataFromBlockChange"], at = [At(value = "INVOKE",
         target = "Ldev/ryanhcode/sable/api/physics/mass/MassTracker;isInvalid()Z")], require = 1)
     private fun `teutonlib$allowLastBlockRemoval`(mass: MassTracker, original: Operation<Boolean>,

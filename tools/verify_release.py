@@ -46,7 +46,7 @@ with zipfile.ZipFile(jar) as archive:
     assert nested[0]['identifier'] == {'group': 'com.github.bawnorton.mixinsquared', 'artifact': 'mixinsquared-neoforge'}
     assert nested[0]['version']['artifactVersion'] == '0.3.7'
     fixture_packages = ('peripheraltest', 'energytest', 'dockingtest', 'traintest', 'hosetest',
-                        'logisticstest', 'fluidtest', 'mekatest', 'tanktest')
+                        'logisticstest', 'fluidtest', 'mekatest', 'tanktest', 'stationtest')
     assert not any(any('/' + package + '/' in n for package in fixture_packages) or n.startswith('example/') for n in names), 'Verification code shipped'
     for license_name in ('LICENSE', 'TEMPLATE_LICENSE.txt'):
         assert archive.read('META-INF/' + license_name) == (ROOT / license_name).read_bytes()

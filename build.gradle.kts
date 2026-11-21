@@ -32,7 +32,8 @@ val trainPortalTest by sourceSets.creating
 val mekanismModelTest by sourceSets.creating
 val hoseTest by sourceSets.creating
 val tankFluidTest by sourceSets.creating
-listOf(computerUiExample, dockingTest, energyTest, peripheralTest, logisticsTest, fluidPropagationTest, trainPortalTest, mekanismModelTest, hoseTest, tankFluidTest).forEach {
+val stationAssemblyTest by sourceSets.creating
+listOf(computerUiExample, dockingTest, energyTest, peripheralTest, logisticsTest, fluidPropagationTest, trainPortalTest, mekanismModelTest, hoseTest, tankFluidTest, stationAssemblyTest).forEach {
     it.compileClasspath += mainSource.output + mainSource.compileClasspath
     it.runtimeClasspath += mainSource.runtimeClasspath
 }
@@ -131,6 +132,9 @@ neoForge {
         }
         if (providers.gradleProperty("tankFluidTests").isPresent) {
             create("teutonlib_tank_fluid_test") { sourceSet(tankFluidTest) }
+        }
+        if (providers.gradleProperty("stationAssemblyTests").isPresent) {
+            create("teutonlib_station_assembly_test") { sourceSet(stationAssemblyTest) }
         }
     }
 }

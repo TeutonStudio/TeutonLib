@@ -15,6 +15,8 @@ Normal cancellation returns blocks to the world. If that return is obstructed, c
 
 **Included in 1.6.2:** Station construction originated in 1.6.0. The November 12 repairs fix native preview offsets, empty-plot persistence and restored bearing payloads.
 
+**Since 1.6.3:** Parked Sable physics bodies are neither woken during assembly nor removed from the physics simulation twice. This prevents native crashes during rejected assembly and construction-plot disposal. After a rejection, such as missing train controls, construction blocks remain available for another attempt.
+
 The preview, spacing check and actual placement use Create's native track offsets. Construction plots stay fixed at the station; automatic Sable splitting is suspended while building. Separate blocks within a carriage plot therefore stay together.
 
 Empty plots remain saved before the first bogey and after removing the last block, without a helper block or nonzero mass. Plot identity and cargo survive restart. Prepared bearings returned on cancellation restart with their payload in the normal world.
@@ -28,6 +30,8 @@ python3 tools/verify_station_preview.py
 ```
 
 The separate server test covers empty plots, native bogey placement, carriage separation, blocked/failed handover, cargo and running bearings, followed by restart/cancellation checks. The client test compares actual placements with renderer preview positions on four separate track directions. Test mods are not shipped; compiling a test does not establish a successful gameplay run.
+
+The additional client check `tools/verify_station_assembly_client.py --world-metadata <path/level.dat>` copies only generation metadata into an isolated world. It clicks Create's actual assembly button, checks rejection without controls and restoration of the same plot with two bogeys and seven construction blocks, then adds controls and assembles one hybrid carriage. A successful run is available from November 15, 2026; it does not replace full portal verification.
 
 [Current station runtime](https://github.com/TeutonStudio/TeutonLib/blob/master/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/hybrid/StationBuildRuntime.kt) · [Empty-plot serialization](https://github.com/TeutonStudio/TeutonLib/blob/master/src/main/kotlin/de/TeutonStudio/TeutonLib/mixin/hybrid/HybridBuildSerializationMixin.kt).
 

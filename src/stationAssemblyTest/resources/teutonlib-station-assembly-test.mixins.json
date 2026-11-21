@@ -1,0 +1,7 @@
+{
+  "required": true,
+  "package": "de.TeutonStudio.TeutonLib.stationtest.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": ["StationWakeDiagnosticMixin", "StationRemovalDiagnosticMixin"],
+  "injectors": { "defaultRequire": 1 }
+}

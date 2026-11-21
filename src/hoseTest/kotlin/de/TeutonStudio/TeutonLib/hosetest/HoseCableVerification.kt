@@ -23,7 +23,7 @@ import net.neoforged.neoforge.event.RegisterCommandsEvent
 class HoseCableVerification {
     @SubscribeEvent fun commands(event: RegisterCommandsEvent) {
         val command = Commands.literal("teutonlib_cable_test").requires { it.hasPermission(4) }
-        for (action in listOf("prepare","status","sample","retract","released","saved","cleanup","flux","long","long-status","obstacle-move")) command.then(Commands.literal(action).executes { context ->
+        for (action in listOf("prepare","status","sample","retract","released","saved","cleanup","flux","flux-matrix","long","long-status","obstacle-move")) command.then(Commands.literal(action).executes { context ->
             try {
                 val world = context.source.level
                 val result = when (action) {
@@ -31,6 +31,7 @@ class HoseCableVerification {
                     "sample" -> HoseCablePhysics.points(head(world)).joinToString(prefix="[",postfix="]") { "[${it.x},${it.y},${it.z}]" }
                     "obstacle-move" -> moveObstacle(world)
                     "flux" -> flux(world)
+                    "flux-matrix" -> fluxMatrix(world)
                     "long" -> longCable(world)
                     "long-status" -> {
                         val pos=BlockPos(40,220,80)
@@ -116,6 +117,21 @@ class HoseCableVerification {
             world.setBlock(BlockPos(43,213,43),state("create_new_age:advanced_motor_extension").setValue(facing,net.minecraft.core.Direction.WEST),3)
             world.setBlock(BlockPos(44,213,43),state("fluxnetworks:flux_point"),3)
             return "rear Flux Point at 44 213 43"
+        }
+        private fun fluxMatrix(world: ServerLevel): String {
+            val facing=net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING
+            val registry=net.minecraft.core.registries.BuiltInRegistries.BLOCK
+            fun state(id: String)=registry.get(net.minecraft.resources.ResourceLocation.parse(id)).defaultBlockState()
+            for ((row,type) in listOf("basic","advanced").withIndex()) for (direction in net.minecraft.core.Direction.entries) {
+                val pos=BlockPos(40+direction.ordinal*6,220,40+row*7)
+                for (x in -2..2) for (y in -2..2) for (z in -2..2) world.setBlock(pos.offset(x,y,z),Blocks.AIR.defaultBlockState(),3)
+                for (x in -2..2) for (z in -2..2) world.setBlock(pos.offset(x,-2,z),Blocks.SMOOTH_STONE.defaultBlockState(),3)
+                world.setBlock(pos.relative(direction),state("create_new_age:reinforced_motor").setValue(facing,direction),3)
+                world.setBlock(pos,state("create_new_age:${type}_motor_extension").setValue(facing,direction),3)
+                for (side in net.minecraft.core.Direction.entries.filter { it != direction })
+                    world.setBlock(pos.relative(side),state("fluxnetworks:flux_point"),3)
+            }
+            return "12 extensions with five simultaneous Flux inputs each"
         }
         private fun longCable(world: ServerLevel): String {
             val pos = BlockPos(40,220,80); val dock = BlockPos(290,216,80)

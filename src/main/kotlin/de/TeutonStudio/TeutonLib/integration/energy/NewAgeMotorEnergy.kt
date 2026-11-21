@@ -101,11 +101,9 @@ object NewAgeMotorEnergy {
         return resolveMotor(entity) != null
     }
 
-    /** Only the recessed rear face needs a longer arm; side FE inputs stay ordinary. */
-    @JvmStatic
-    fun isRearMotorExtensionConnection(level: Level, pointPos: BlockPos, side: Direction): Boolean =
-        isMotorExtensionConnection(level, pointPos, side) &&
-            level.getBlockState(pointPos.relative(side)).getValue(BlockStateProperties.FACING) == side
+    fun extensionFacing(state: BlockState): Direction? =
+        if (BuiltInRegistries.BLOCK.getKey(state.block) in EXTENSIONS && state.hasProperty(BlockStateProperties.FACING))
+            state.getValue(BlockStateProperties.FACING) else null
 
     @JvmStatic
     private fun id(path: String): ResourceLocation {

@@ -10,9 +10,9 @@ The extension has no separate energy buffer and does not allow extraction. It re
 
 `[compat.createNewAge] motorExtensionEnergyTransfer = true` defaults on. Config reload updates existing source capabilities; native stress amplification remains independent. The historical Flux test exercises real Point detection and transfer against a known network buffer; it does not prove full Plug-to-Point network setup.
 
-**Unreleased local development, November 14, after the 1.6.1 baseline:** Flux Points select an extended arm only at a motor extension’s recessed rear face. The flange reaches 2/16 block into the neighbouring space. The model and selection shape share synchronized blockstate properties and update after motor or configuration changes.
+**Since TeutonLib 1.6.3:** Flux Points fit their flanges to every accessible motor-extension face. The rear inset is 2/16 block; side flanges follow the stepped casing, trim and horizontal mounting foot. Rendering, selection and collision share the same geometry and account for the neighboring extension’s orientation, including subsequent rotations. Existing saved blockstate properties remain compatible; motor and configuration changes update the connections.
 
-The existing images below show the original motor arrangement and do not establish the new recessed flange model. [Current model/state selection](https://github.com/TeutonStudio/TeutonLib/blob/master/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/energy/FluxPointConnections.kt). Combined client run `20261114-203614-8e820559` produced Flux captures for two observers and confirmed a model boundary of −2/16 block. The overall run subsequently timed out during the cable chunk-pause check; it is not a fully passing combined acceptance run.
+The images below show the original motor arrangement. Dedicated Flux model run 20261114-220349-74040066 (tools/verify_flux_models.py) passed for both extension types in all six orientations, each with five simultaneous Flux inputs. It checks actual baked models, network tint overlays and collision bounds and produces twelve close-up screenshots. A separate geometry test compares every flange patch against the original New Age model resources. Server checks also cover rotating an extension without changing the fitted connection state. This run makes no claims about portal or hose physics.
 
 ## Illustration
 

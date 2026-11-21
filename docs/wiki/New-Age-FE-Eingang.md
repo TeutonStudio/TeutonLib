@@ -4,7 +4,7 @@
 
 Grundlegende und fortgeschrittene Motorerweiterungen von Create New Age nehmen Forge Energy von Flux Points, Kabeln und anderen FE-Quellen an. Die Energie fließt direkt in den angeschlossenen Motor.
 
-**Unveröffentlichter lokaler Stand vom 14.11.2026, nach der Basis 1.6.1:** Flux Points unterscheiden rückseitige Anschlüsse an Motorerweiterungen von normalen Seitenanschlüssen. Nur rückseitig wird der Anschlussflansch um 2/16 Block verlängert. Modellwahl und Auswahlform folgen demselben synchronisierten Blockzustand; Motorwechsel und Konfigurationsänderungen werden übernommen.
+**Ab TeutonLib 1.6.3:** Flux Points passen ihre Anschlussplatten an alle zugänglichen Flächen der Motorerweiterung an. Rückseitig beträgt der Rücksprung 2/16 Block; seitlich folgt die Platte dem gestuften Profil aus Gehäuse, Zierplatten und Standfuß. Modell, Auswahl- und Kollisionsform nutzen dieselbe Geometrie und berücksichtigen die Ausrichtung der benachbarten Erweiterung. Motorwechsel, Drehungen und Konfigurationsänderungen werden übernommen. Bestehende Blockstate-Eigenschaften bleiben ladbar.
 
 ## Aufbau und Bedienung
 
@@ -39,7 +39,7 @@ Die opt-in-Energieprüfung deckt beide Erweiterungen, drei Motorarten, sechs Aus
 
 [Wiki-Startseite](Home) · [New-Age-Motordrehzahl auf Sable](New-Age-Motordrehzahl-auf-Sable)
 
-Die vorhandenen Bilder unten zeigen den ursprünglichen Motoraufbau und belegen nicht das neue rückseitige Flanschmodell. [Aktuelle Modell- und Zustandsauswahl](https://github.com/TeutonStudio/TeutonLib/blob/master/src/main/kotlin/de/TeutonStudio/TeutonLib/integration/energy/FluxPointConnections.kt). Der kombinierte Clientlauf `20261114-203614-8e820559` erzeugte Flux-Aufnahmen für zwei Beobachter und bestätigte die Modellgrenze bei −2/16 Block. Der gesamte Lauf scheiterte anschließend an einem Zeitlimit der Schlauch-Chunkprüfung; ein vollständig erfolgreicher kombinierter Prüflauf liegt damit nicht vor.
+Die vorhandenen Bilder unten zeigen den ursprünglichen Motoraufbau. Die separate Flux-Modellprüfung tools/verify_flux_models.py, Lauf 20261114-220349-74040066, bestand für beide Erweiterungen in allen sechs Ausrichtungen mit je fünf gleichzeitig verbundenen Flux Points. Sie prüft die tatsächlich gebackenen Modelle, Netzwerkfarbflächen und Kollisionsgrenzen und erzeugt zwölf Nahaufnahmen. Ein zusätzlicher Geometrietest vergleicht jede Anschlussfläche mit den unveränderten New-Age-Modellressourcen. Die Serverprüfung umfasst außerdem eine Drehung bei unverändertem Anschlusszustand. Diese Prüfung trifft keine Aussage über Portal- oder Schlauchphysik.
 
 ## Abbildung
 

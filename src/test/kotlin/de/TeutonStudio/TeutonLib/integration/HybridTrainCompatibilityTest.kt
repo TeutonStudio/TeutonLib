@@ -55,6 +55,7 @@ class HybridTrainCompatibilityTest {
             assertTrue("de/TeutonStudio/TeutonLib/integration/hybrid/HybridCarriageContraption.class" in entries)
             assertTrue("de/TeutonStudio/TeutonLib/integration/hybrid/HybridTrainRuntime.class" in entries)
             assertFalse(entries.any { it.startsWith("createtrainfunctionality/") || it.startsWith("com/happysg/radar/") ||
+                it.startsWith("de/TeutonStudio/TeutonLib/stationtest/") ||
                 it.contains("HybridTrainVerification") })
         }
     }

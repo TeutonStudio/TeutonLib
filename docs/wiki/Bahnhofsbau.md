@@ -4,6 +4,8 @@
 
 **Enthalten ab 1.6.2:** Bahnhofsbau seit 1.6.0, ergänzt um die Reparaturen vom 12.11.2026 an Vorschau-Offset, Leerplot-Persistenz und Wiederanlauf beim Abbrechen.
 
+**Ab 1.6.3:** Geparkte Sable-Physikkörper werden während des Zusammenbaus weder aufgeweckt noch doppelt aus der Physiksimulation entfernt. Das verhindert native Abstürze bei abgewiesener Montage und beim abschließenden Entfernen des Bauplots. Nach einer Ablehnung, etwa wegen fehlender Zugsteuerung, bleiben die Baublöcke für einen erneuten Versuch erhalten.
+
 Ab TeutonLib 1.6.0 entstehen neue Hybridzüge direkt am Create-Bahnhof auf stationären Sable-Bauplots. Bogeys und Wagenaufbauten sind schon während des Bauens echte Sable-Blöcke. Jeder Wagen erhält einen eigenen Bauplot.
 
 ## Voraussetzungen
@@ -69,6 +71,8 @@ python3 tools/verify_hybrid_trains.py --packaged
 ```
 
 Die separate Testwelt prüft leeren Bauplot, native Bogey-Platzierung, Wagenaufteilung, stationäre Lage, fehlgeschlagenen Zusammenbau, blockierte Übergabe, Fracht und laufende Lager. Ein zweiter Serverstart prüft den gespeicherten Bauplot und die Rückgabe beim Abbrechen. Die Testmod gehört nicht zur veröffentlichten JAR.
+
+Die zusätzliche Clientprüfung `tools/verify_station_assembly_client.py --world-metadata <Pfad/level.dat>` kopiert nur die Generierungsmetadaten in eine isolierte Testwelt. Sie betätigt Creates echten Zusammenbauknopf, prüft die Ablehnung ohne Steuerung und die Wiederherstellung desselben Bauplots mit zwei Bogeys und sieben Baublöcken. Nach dem Ergänzen einer Steuerung muss der Zusammenbau eines Hybridwagens gelingen. Ein erfolgreicher Lauf liegt vom 15.11.2026 vor; er ersetzt keine vollständige Portalprüfung.
 
 Die Clientprüfung verwendet getrennte Gleisstrecken in vier Richtungen, einen
 begehbaren Boden, Kreativflug und eine feste Kamera. Sie vergleicht echte
